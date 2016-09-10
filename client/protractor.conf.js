@@ -6,11 +6,11 @@ exports.config = {
     'browserName': 'chrome',
     'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
     'build': process.env.TRAVIS_BUILD_NUMBER,
-    'name': "PHP " + process.env.TRAVIS_PHP_VERSION + "-" + process.env.TRAVIS_COMMIT_MSG
+    'name': "PHP " + process.env.TRAVIS_PHP_VERSION + "-" + (process.env.TRAVIS_COMMIT_MSG || process.env.CIRCLE_SHA1)
   },
 
   // If we're in travis, use sauce, otherwise use local selenium
-  seleniumAddress: process.env.TRAVIS_JOB_NUMBER ? null : 'http://localhost:4444/wd/hub',
+  seleniumAddress: (process.env.TRAVIS_JOB_NUMBER || process.env.CIRCLE_BUILD_NUM) ? null : 'http://localhost:4444/wd/hub',
 
   // Spec patterns are relative to the current working directly when
   // protractor is called.
