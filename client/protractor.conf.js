@@ -5,7 +5,7 @@ exports.config = {
   capabilities: {
     'browserName': 'chrome',
     'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
-    'build': process.env.TRAVIS_BUILD_NUMBER,
+    'build': process.env.TRAVIS_BUILD_NUMBER || process.env.CIRCLE_BUILD_NUM,
     'name': "PHP " + process.env.TRAVIS_PHP_VERSION + "-" + (process.env.TRAVIS_COMMIT_MSG || process.env.CIRCLE_SHA1)
   },
 
