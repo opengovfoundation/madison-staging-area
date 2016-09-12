@@ -29,6 +29,7 @@ dependencies:
     - sudo a2ensite madison
     - sudo service apache2 restart
     - echo "pdo_mysql.default_socket=/var/run/mysqld/mysqld.sock" > /opt/circleci/php/$(phpenv global)/etc/conf.d/mysql.ini
+    - chgrp www-data $HOME/phabricator-staging-area/
     - wget https://saucelabs.com/downloads/sc-latest-linux.tar.gz
     - tar -xzf sc-latest-linux.tar.gz
 
@@ -52,6 +53,9 @@ test:
 
   post:
     - killall --wait sc # wait for Sauce Connect to close the tunnel
+    - cp /var/log/apache2/error.log $CIRCLE_ARTIFACTS/apache_error.log
+    - cp /var/log/apache2/other_vhosts_acces.log $CIRCLE_ARTIFACTS/apache_traffic.log
+    - cp $HOME/phabricator-staging-area/server/storage/logs/laravel.log $CIRCLE_ARTIFACTS/laravel.log
 
 
 notify:
