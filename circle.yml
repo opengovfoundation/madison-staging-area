@@ -29,8 +29,11 @@ dependencies:
     - sudo a2enmod rewrite actions alias headers negotiation dir vhost_alias deflate
     - sudo a2ensite madison
     - sudo service apache2 restart
+    # Fix connection to MySQL
     - echo "pdo_mysql.default_socket=/var/run/mysqld/mysqld.sock" > /opt/circleci/php/$(phpenv global)/etc/conf.d/mysql.ini
+    # Let Apache write Laravel log files
     - sudo chgrp -R www-data $HOME/phabricator-staging-area/
+    # Prepare SauceLabs connector
     - wget https://saucelabs.com/downloads/sc-latest-linux.tar.gz
     - tar -xzf sc-latest-linux.tar.gz
 
