@@ -26,14 +26,14 @@ dependencies:
     # Make proper link
     - sudo ln -s $PHPENV_ROOT/versions/$(phpenv global)/usr/lib/apache2/modules/libphp5.so /usr/lib/apache2/modules/libphp5.so
     # Setup environment for Apache
-    - sudo echo "export APP_URL=$APP_URL" >> /etc/apache2/envvars
-    - sudo echo "export APP_DEBUG=$APP_DEBUG" >> /etc/apache2/envvars
-    - sudo echo "export APP_ENV=$APP_ENV" >> /etc/apache2/envvars
-    - sudo echo "export TESTING=$TESTING" >> /etc/apache2/envvars
-    - sudo echo "export DB_CONNECTION=$DB_CONNECTION" >> /etc/apache2/envvars
-    - sudo echo "export DB_HOST=$DB_HOST" >> /etc/apache2/envvars
-    - sudo echo "export DB_USERNAME=$DB_USERNAME" >> /etc/apache2/envvars
-    - sudo echo "export DB_DATABASE=$DB_DATABASE" >> /etc/apache2/envvars
+    - echo "export APP_URL=$APP_URL" | sudo tee --append /etc/apache2/envvars > /dev/null
+    - echo "export APP_DEBUG=$APP_DEBUG" | sudo tee --append /etc/apache2/envvars > /dev/null
+    - echo "export APP_ENV=$APP_ENV" | sudo tee --append /etc/apache2/envvars > /dev/null
+    - echo "export TESTING=$TESTING" | sudo tee --append /etc/apache2/envvars > /dev/null
+    - echo "export DB_CONNECTION=$DB_CONNECTION" | sudo tee --append /etc/apache2/envvars > /dev/null
+    - echo "export DB_HOST=$DB_HOST" | sudo tee --append /etc/apache2/envvars > /dev/null
+    - echo "export DB_USERNAME=$DB_USERNAME" | sudo tee --append /etc/apache2/envvars > /dev/null
+    - echo "export DB_DATABASE=$DB_DATABASE" | sudo tee --append /etc/apache2/envvars > /dev/null
     # Install our config and make it active
     - sudo cp -f circleci/apache.conf /etc/apache2/sites-available/madison.conf
     - sudo a2enmod rewrite actions alias headers negotiation dir vhost_alias deflate
