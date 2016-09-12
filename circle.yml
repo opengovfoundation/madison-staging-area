@@ -2,11 +2,12 @@ machine:
   environment:
     APP_URL: http://0.0.0.0:8888
     APP_ENV: testing
-    DB_HOST: localhost
+    DB_HOST: 127.0.0.1
     DB_CONNECTION: mysql_testing
     DB_DATABASE: circle_test
     DB_USERNAME: ubuntu
     APP_DEBUG: true
+    TESTING: true
     CIRCLE_COMMIT_MSG: $(git log --format=%B -n 1 $CIRCLE_SHA1)
 
   node:
