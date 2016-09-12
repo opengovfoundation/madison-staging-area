@@ -29,7 +29,7 @@ dependencies:
     - sudo a2ensite madison
     - sudo service apache2 restart
     - echo "pdo_mysql.default_socket=/var/run/mysqld/mysqld.sock" > /opt/circleci/php/$(phpenv global)/etc/conf.d/mysql.ini
-    - sudo chgrp www-data $HOME/phabricator-staging-area/
+    - sudo chgrp -R www-data $HOME/phabricator-staging-area/
     - wget https://saucelabs.com/downloads/sc-latest-linux.tar.gz
     - tar -xzf sc-latest-linux.tar.gz
 
