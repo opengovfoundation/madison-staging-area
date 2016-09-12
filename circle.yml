@@ -6,6 +6,7 @@ machine:
     DB_DATABASE: madison_testing
     DB_USERNAME: root
     APP_DEBUG: true
+    CIRCLE_COMMIT_MSG: $(git log --format=%B -n 1 $CIRCLE_SHA1)
 
   node:
     version: 4.1
@@ -44,9 +45,6 @@ database:
 
 
 test:
-  pre:
-    - "export CIRCLE_COMMIT_MSG=\"$(git log --format=%B -n 1 $CIRCLE_SHA1)\""
-
   override:
     - cd sc-*-linux && ./bin/sc --user $SAUCE_USERNAME --api-key $SAUCE_ACCESS_KEY --readyfile ~/sauce_is_ready:
         background: true
@@ -58,7 +56,7 @@ test:
     - killall --wait sc # wait for Sauce Connect to close the tunnel
     - cp /var/log/apache2/error.log $CIRCLE_ARTIFACTS/apache_error.log
     - cp /var/log/apache2/other_vhosts_acces.log $CIRCLE_ARTIFACTS/apache_traffic.log
-    - cp $HOME/phabricator-staging-area/server/storage/logs/laravel.log $CIRCLE_ARTIFACTS/laravel.log
+    - cp ./server/storage/logs/laravel.log $CIRCLE_ARTIFACTS/laravel.log
 
 
 notify:
