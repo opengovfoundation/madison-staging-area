@@ -3,8 +3,8 @@ machine:
     APP_URL: http://0.0.0.0:8888
     APP_ENV: testing
     DB_HOST: localhost
-    DB_DATABASE: madison_testing
-    DB_USERNAME: root
+    DB_DATABASE: circle_test
+    DB_USERNAME: ubuntu
     APP_DEBUG: true
     CIRCLE_COMMIT_MSG: $(git log --format=%B -n 1 $CIRCLE_SHA1)
 
@@ -24,6 +24,15 @@ dependencies:
     - sudo unlink /usr/lib/apache2/modules/libphp5.so
     # Make proper link
     - sudo ln -s $PHPENV_ROOT/versions/$(phpenv global)/usr/lib/apache2/modules/libphp5.so /usr/lib/apache2/modules/libphp5.so
+    # Setup environment for Apache
+    - echo "export APP_URL=$APP_URL" >> /etc/apache2/envvars
+    - echo "export APP_DEBUG=$APP_DEBUG" >> /etc/apache2/envvars
+    - echo "export APP_ENV=$APP_ENV" >> /etc/apache2/envvars
+    - echo "export TESTING=$TESTING" >> /etc/apache2/envvars
+    - echo "export DB_CONNECTION=$DB_CONNECTION" >> /etc/apache2/envvars
+    - echo "export DB_HOST=$DB_HOST" >> /etc/apache2/envvars
+    - echo "export DB_USERNAME=$DB_USERNAME" >> /etc/apache2/envvars
+    - echo "export DB_DATABASE=$DB_DATABASE" >> /etc/apache2/envvars
     # Install our config and make it active
     - sudo cp -f circleci/apache.conf /etc/apache2/sites-available/madison.conf
     - sudo a2enmod rewrite actions alias headers negotiation dir vhost_alias deflate
@@ -32,7 +41,7 @@ dependencies:
     # Fix connection to MySQL
     - echo "pdo_mysql.default_socket=/var/run/mysqld/mysqld.sock" > /opt/circleci/php/$(phpenv global)/etc/conf.d/mysql.ini
     # Let Apache write Laravel log files
-    - sudo chgrp -R www-data $HOME/phabricator-staging-area/
+    - sudo chgrp -R www-data ./server/storage
     # Prepare SauceLabs connector
     - wget https://saucelabs.com/downloads/sc-latest-linux.tar.gz
     - tar -xzf sc-latest-linux.tar.gz
@@ -42,9 +51,9 @@ dependencies:
     - "server/vendor"
 
 
-database:
-  override:
-    - mysql -e 'create database madison_testing;'
+# database:
+  # override:
+    # - mysql -e 'create database madison_testing;'
 
 
 test:
