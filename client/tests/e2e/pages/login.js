@@ -23,6 +23,7 @@ var LoginPage = function() {
     emailField.sendKeys('user@example.com');
     passwordField.sendKeys('wrongpassword');
     loginButton.click();
+    browser.sleep(1500);
   };
 
   this.loginUnconfirmed = function() {
@@ -30,6 +31,7 @@ var LoginPage = function() {
     emailField.sendKeys('user2@example.com');
     passwordField.sendKeys('password');
     loginButton.click();
+    browser.sleep(1500);
   };
 
   this.loginInvalid = function() {
