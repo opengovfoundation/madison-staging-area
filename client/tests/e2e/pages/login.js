@@ -14,7 +14,7 @@ var LoginPage = function() {
     loginButton.click();
     browser.driver.wait(
       protractor.until.elementLocated(by.css('.account-dropdown > .dropdown-trigger')),
-      10000
+      100000
     );
   };
 
