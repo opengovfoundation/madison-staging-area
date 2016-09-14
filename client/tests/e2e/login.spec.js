@@ -17,6 +17,7 @@ describe('Auth test', function() {
 
   // Check simple sign in
   it('should be able to sign in', function() {
+    browser.sleep(1500);
     loginPage.loginUser();
 
     expect(pageLayout.accountDropdown().getText())
