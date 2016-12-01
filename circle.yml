@@ -44,30 +44,17 @@ dependencies:
     # Create blank log file and let Apache write to it
     - touch ./server/storage/logs/laravel.log
     - sudo chgrp -R www-data ./server/storage
-    # Prepare SauceLabs connector
-    - wget https://saucelabs.com/downloads/sc-latest-linux.tar.gz
-    - tar -xzf sc-latest-linux.tar.gz
 
   cache_directories:
     - "client/node_modules"
     - "server/vendor"
 
 
-# database:
-  # override:
-    # - mysql -e 'create database madison_testing;'
-
-
 test:
   override:
-    - cd sc-*-linux && ./bin/sc --user $SAUCE_USERNAME --api-key $SAUCE_ACCESS_KEY --readyfile ~/sauce_is_ready:
-        background: true
-    # Wait for tunnel to be ready
-    - while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
-    - make test
+    - make test-server
 
   post:
-    - killall --wait sc # wait for Sauce Connect to close the tunnel
     - cp /var/log/apache2/error.log $CIRCLE_ARTIFACTS/apache_error.log
     - cp /var/log/apache2/other_vhosts_access.log $CIRCLE_ARTIFACTS/apache_traffic.log
     - cp ./server/storage/logs/laravel.log $CIRCLE_ARTIFACTS/laravel.log
