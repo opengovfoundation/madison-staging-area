@@ -14,7 +14,7 @@ var LoginPage = function() {
     loginButton.click();
     browser.driver.wait(
       protractor.until.elementLocated(by.css('.account-dropdown > .dropdown-trigger')),
-      100000
+      5000
     );
   };
 
@@ -23,7 +23,6 @@ var LoginPage = function() {
     emailField.sendKeys('user@example.com');
     passwordField.sendKeys('wrongpassword');
     loginButton.click();
-    browser.sleep(1500);
   };
 
   this.loginUnconfirmed = function() {
@@ -31,7 +30,6 @@ var LoginPage = function() {
     emailField.sendKeys('user2@example.com');
     passwordField.sendKeys('password');
     loginButton.click();
-    browser.sleep(1500);
   };
 
   this.loginInvalid = function() {
