@@ -16,8 +16,7 @@ angular.module('madisonApp.translate', ['pascalprecht.translate'])
   $translateProvider.registerAvailableLanguageKeys(['en', 'es', 'fr'], {
     'en_US': 'en',
     'en_UK': 'en',
-    'es_CO': 'es',
-    'fr'   : 'fr'
+    'es_CO': 'es'
   });
   $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
   $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
