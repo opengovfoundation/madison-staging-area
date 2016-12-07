@@ -72,12 +72,12 @@ return [
     /**
      * Project name: is used on .po header files
      */
-    'project' => 'MultilanguageLaravelApplication',
+    'project' => 'Madison',
 
     /**
      * Translator contact data (used on .po headers too)
      */
-    'translator' => 'James Translator <james@translations.colm>',
+    'translator' => 'OpenGov Foundation <developers@opengovfoundation.org>',
 
     /**
      * Paths where Poedit will search recursively for strings to translate.
@@ -101,18 +101,18 @@ return [
 
         // 'frontend' domain
         'frontend' => [
-			'controllers',
-			'views/frontend',
-		],
+            'controllers',
+            'views/frontend',
+        ],
 
         // 'backend' domain
-		'backend' => [
-			'views/backend',
-		],
+        'backend' => [
+            'views/backend',
+        ],
 
         // 'messages' domain (matches default domain)
-		'storage/views',
-	],
+        'storage/views',
+    ],
     */
 
     /**
