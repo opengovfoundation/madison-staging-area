@@ -25,10 +25,10 @@ class Store extends FormRequest
                     ->find($this->user->id);
 
                 if (!isset($groupUser->id)) {
-                    return false
+                    return false;
                 }
             } else {
-                return false
+                return false;
             }
         }
 

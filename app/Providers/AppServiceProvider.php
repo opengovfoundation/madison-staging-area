@@ -7,6 +7,7 @@ use App\Models\AnnotationTypes;
 use App\Models\Doc;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
+use Form;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +28,20 @@ class AppServiceProvider extends ServiceProvider
             Annotation::TYPE_RANGE => AnnotationTypes\Range::class,
             Annotation::TYPE_SEEN => AnnotationTypes\Seen::class,
             Annotation::TYPE_TAG => AnnotationTypes\Tag::class,
+        ]);
+
+        Form::component('mInput', 'components.form.input', [
+            'type',
+            'name',
+            'displayName',
+            'value' => null,
+            'attributes' => [],
+            'helpText' => null,
+        ]);
+        Form::component('mSubmit', 'components.form.submit', [
+            'text' => 'Submit',
+            'displayName',
+            'attributes' => [],
         ]);
     }
 
