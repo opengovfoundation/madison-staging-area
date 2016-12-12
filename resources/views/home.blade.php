@@ -5,13 +5,21 @@
 
     <div class="row">
         <div class="col-md-6">
-            @include('partials/home/featured-documents')
-            @include('partials/home/active-documents')
+            <section class="home-feature">
+                @each('partials/home/featured-document', $featuredDocuments, 'document')
+            </section>
+
+            @include('partials/home/active-documents', [
+                'mostActiveDocuments' => $mostActiveDocuments,
+                'mostRecentDocuments' => $mostRecentDocuments,
+            ])
         </div>
 
         <div class="col-md-6">
             @include('partials/home/welcome')
-            @include('partials/home/search-list')
+            @include('partials/home/search-list', [
+                'documents' => $documents
+            ])
         </div>
     </div>
 
