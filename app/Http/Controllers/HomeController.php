@@ -44,6 +44,7 @@ class HomeController extends Controller
             ->where('discussion_state', 'open')
             ->where('publish_state', 'published')
             ->where('is_template', '!=', '1')
+            ->take(6)
             ->get();
 
         return view('home', [
