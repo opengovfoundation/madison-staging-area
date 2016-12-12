@@ -522,13 +522,13 @@ class Doc extends Model
         }
 
         // If we don't have a document, just find anything recent.
-        if (empty($docs) && !Input::get('featured_only')) {
+        if (empty($docs)) {
             $docs = [
-                Doc::with('categories')
+                static::with('categories')
                 ->with('sponsors')
                 ->with('statuses')
                 ->with('dates')
-                ->where('publish_state', '=', Doc::PUBLISH_STATE_PUBLISHED)
+                ->where('publish_state', '=', static::PUBLISH_STATE_PUBLISHED)
                 ->where('is_template', '!=', '1')
                 ->orderBy('created_at', 'desc')
                 ->first()

@@ -29,9 +29,10 @@ class HomeController extends Controller
         $limit = $request->input('limit', 5);
         $page = $request->input('page', 1);
 
-        $documents = Doc::where('publish_state', 'published')
+        $documents = Doc::getEager()
+            ->where('publish_state', 'published')
             ->take($limit)
-            ->skip($limit * $page)
+            ->skip($limit * ($page - 1))
             ->get();
 
         $featuredDocuments = Doc::getFeatured();
