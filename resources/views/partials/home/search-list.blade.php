@@ -13,34 +13,8 @@
 </section>
 
 <section class="document-search-results">
-    <!-- TODO: Real pagination! -->
-    <ul class="pagination">
-        <li>
-            <a href="#" title="{{ trans('messages.pagination.first.title') }}">
-                {{ trans('messages.pagination.first.label') }}
-            </a>
-        </li>
-        <li>
-            <a href="#" title="{{ trans('messages.pagination.previous.title') }}">
-                {{ trans('messages.pagination.previous.label') }}
-            </a>
-        </li>
-
-        <li>
-            <a href="#" title="{{ trans('messages.pagination.page') }}">1</a>
-        </li>
-
-        <li>
-            <a href="#" title="{{ trans('messages.pagination.next.title') }}">
-                {{ trans('messages.pagination.next.label') }}
-            </a>
-        </li>
-        <li>
-            <a href="#" title="{{ trans('messages.pagination.last.title') }}">
-                {{ trans('messages.pagination.last.label') }}
-            </a>
-        </li>
-    </ul>
+    <!-- Pagination! Thanks Laravel! -->
+    {{ $documents->links() }}
 
     <h2>{{ trans('messages.recentlegislation') }}</h2>
 

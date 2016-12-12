@@ -26,14 +26,11 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        $limit = $request->input('limit', 5);
         $page = $request->input('page', 1);
 
         $documents = Doc::getEager()
             ->where('publish_state', 'published')
-            ->take($limit)
-            ->skip($limit * ($page - 1))
-            ->get();
+            ->paginate(5);
 
         $featuredDocuments = Doc::getFeatured();
         $mostActiveDocuments = Doc::getActive(6);
