@@ -648,6 +648,21 @@ class Doc extends Model
         });
     }
 
+    /**
+     * Scope to get 6 most recently active documents. Used on the homepage.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSixMostRecent($query)
+    {
+        return $query
+            ->orderBy('updated_at', 'DESC')
+            ->where('discussion_state', 'open')
+            ->where('publish_state', 'published')
+            ->where('is_template', '!=', '1')
+            ->take(6);
+    }
+
 
     public function getImagePath($image = '', $size = null)
     {

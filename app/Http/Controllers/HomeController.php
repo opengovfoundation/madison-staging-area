@@ -36,16 +36,8 @@ class HomeController extends Controller
             ->get();
 
         $featuredDocuments = Doc::getFeatured();
-
         $mostActiveDocuments = Doc::getActive(6);
-
-        $mostRecentDocuments = Doc::getEager()
-            ->orderBy('updated_at', 'DESC')
-            ->where('discussion_state', 'open')
-            ->where('publish_state', 'published')
-            ->where('is_template', '!=', '1')
-            ->take(6)
-            ->get();
+        $mostRecentDocuments = Doc::sixMostRecent()->get();
 
         return view('home', [
             'documents' => $documents,
