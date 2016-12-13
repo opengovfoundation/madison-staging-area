@@ -7,11 +7,91 @@
 
     @include('components.errors')
 
+    {{ Html::linkRoute('documents.create', trans('messages.create_document'), [], ['class' => 'btn btn-default'])}}
+
+    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#queryModal">Query</button>
+
+    <div class="modal fade" id="queryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Query</h4>
+                </div>
+                <div class="modal-body">
+                    {{ Form::open(['route' => 'documents.index', 'method' => 'get']) }}
+                        {{ Form::mInput('text', 'title', trans('messages.document_title_field')) }}
+                        {{ Form::mSelect(
+                               'group_id[]',
+                               trans('messages.document_group'),
+                               $groups->mapWithKeys_v2(function ($item) {return [$item->id => $item->display_name]; })->toArray(),
+                               null,
+                               ['multiple' => true]
+                               )
+                        }}
+                        {{ Form::mSelect(
+                               'category_id[]',
+                               trans('messages.document_category'),
+                               $categories->mapWithKeys_v2(function ($item) {return [$item->id => $item->name]; })->toArray(),
+                               null,
+                               ['multiple' => true]
+                               )
+                        }}
+                        {{ Form::mSelect(
+                               'publish_state[]',
+                               trans('messages.document_publish_state'),
+                               collect($publishStates)->mapWithKeys_v2(function ($item) {return [$item => trans('messages.document_publish_state_'.$item)]; })->toArray(),
+                               null,
+                               ['multiple' => true]
+                               )
+                        }}
+                        {{ Form::mSelect(
+                               'discussion_state[]',
+                               trans('messages.document_discussion_state'),
+                               collect($discussionStates)->mapWithKeys_v2(function ($item) {return [$item => trans('messages.document_discussion_state_'.$item)]; })->toArray(),
+                               null,
+                               ['multiple' => true]
+                               )
+                        }}
+                        {{ Form::mSelect(
+                               'order',
+                               trans('messages.order_by'),
+                               [
+                                   'created_at' => trans('messages.created_at'),
+                                   'updated_at' => trans('messages.updated_at'),
+                                   'title' => trans('messages.document_title_field')
+                               ])
+                        }}
+                        {{ Form::mSelect(
+                               'order_dir',
+                               trans('messages.order_by_direction'),
+                               [
+                                   'DESC' => trans('messages.order_by_dir_desc'),
+                                   'ASC' => trans('messages.order_by_dir_asc')
+                               ])
+                        }}
+                        {{ Form::mSelect(
+                               'limit',
+                               trans('messages.limit'),
+                               array_combine($range = [10, 25, 50], $range)
+                               )
+                        }}
+
+                        <button type="button" class="btn btn-default" data-dismiss="modal">@lang('messages.close')</button>
+                        {{ Form::mSubmit() }}
+                    {{ Form::close() }}
+                </div>
+            </div>
+        </div>
+    </div>
+
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Title</th>
+                <th>Created At</th>
+                <th>Publish State</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -20,18 +100,34 @@
                 <tr>
                     <td>{{ $document->id }}</td>
                     <td>{{ $document->title }}</td>
+                    <td>{{ $document->created_at->toDateTimeString() }}</td>
+                    <td>{{ trans('messages.document_publish_state_'.$document->publish_state) }}</td>
+
                     <td>
-                        {{ Html::linkRoute('documents.edit', trans('messages.edit'), ['document' => $document->id]) }}
-                        &middot;
-                        {{ Form::open(['route' => ['documents.destroy', $document->id], 'method'
-        => 'delete']) }}
-                            <button type="submit">{{ trans('messages.delete') }}</button>
-                        {{ Form::close() }}
+                        <div class="btn-toolbar" role="toolbar">
+                            <div class="btn-group" role="group">
+                                {{ Html::linkRoute(
+                                        'documents.edit',
+                                        trans('messages.edit'),
+                                        ['document' => $document->id],
+                                        ['class' => 'btn btn-default pull-left']
+                                        )
+                                }}
+                            </div>
+
+                            <div class="btn-group" role="group">
+                                {{ Form::open(['route' => ['documents.destroy', $document->id], 'method' => 'delete']) }}
+                                    <button type="submit" class="btn btn-default">{{ trans('messages.delete') }}</button>
+                                {{ Form::close() }}
+                            </div>
+                        </div>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 
-    {{ $documents->links() }}
+    <div class="text-center">
+        @include('components.pagination', ['collection' => $documents])
+    </div>
 @endsection

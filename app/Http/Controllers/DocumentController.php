@@ -3,25 +3,99 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Document as Requests;
+use App\Models\Category;
 use App\Models\Doc as Document;
 use App\Models\DocContent as DocumentContent;
+use App\Models\Group;
+use Auth;
 use Illuminate\Http\Request;
 
 class DocumentController extends Controller
 {
     /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Requests\Index $request)
     {
-        // TODO: filter to only docs user has access to or otherwise more
-        // restricted sets:
-        // - Documents created by user
-        // - Documents user can see (so group docs or all if admin)
-        $documents = Document::paginate(15);
-        return view('documents.list', ['documents' => $documents]);
+        $orderField = $request->input('order', 'updated_at');
+        $orderDir = $request->input('order_dir', 'DESC');
+        $discussionStates = $request->input('discussion_state', null);
+
+        $documentsQuery = Document
+            ::orderby($orderField, $orderDir)
+            ->where('is_template', '!=', '1');
+
+        if ($discussionStates) {
+            $doc->whereIn('discussion_state', $discussionStates);
+        }
+
+        // TODO: the publish state and group id stuff needs some more work,
+        // default behavior should be to filter to only documents that are
+        // public or the user owns (i.e., they are a member of the group that
+        // owns them with sufficient privileges to view the document in it's
+        // current state)
+        //
+        // If the user specifies publish states and no groups, view all
+        // published documents (if that was a publish state requested) and the
+        // publish states allowed for each group the user belongs to
+        //
+        // If the user specifies some groups but no explicit publish states,
+        // should show every document visible to the user in those groups, for
+        // some they might be able to see all the publish states, for others
+        // maybe only published
+
+        $publishStates = $request->input('publish_state', [Document::PUBLISH_STATE_PUBLISHED]);
+        if (in_array('all', $publishStates) || !in_array(Document::PUBLISH_STATE_PUBLISHED, $publishStates)) {
+            if (!Auth::check() || !Auth::user()->isAdmin()) {
+                return abort(403, 'Unauthorized.');
+            }
+        } else {
+            $documentsQuery->where('publish_state', '=', $publishStates);
+        }
+
+        if ($request->has('group_id') && !in_array('any', $request->input('group_id'))) {
+            $documentsQuery->whereHas('sponsors', function ($q) use ($request) {
+                $groupIds = $request->input('group_id');
+                $q->whereIn('id', $groupIds);
+            });
+        }
+
+        if ($request->has('category_id') && !in_array('any', $request->input('category_id'))) {
+            $documentsQuery->whereHas('categories', function ($q) use ($request) {
+                $ids = $request->input('category_id');
+                $q->whereIn('categories.id', $ids);
+            });
+        } elseif ($request->has('category')) {
+            $documentsQuery->whereHas('categories', function ($q) use ($request) {
+                $category = $request->input('category');
+                $q->where('categories.name', 'LIKE', "%$category%");
+            });
+        }
+
+        if ($request->has('title')) {
+            $title = $request->get('title');
+            $documentsQuery->where('title', 'LIKE', "%$title%");
+        }
+
+        $documents = $documentsQuery->paginate($request->input('limit', 10));
+
+        $categories = Category::all();
+        $groups = Group::all();
+        $publishStates = Document::validPublishStates();
+        $discussionStates = Document::validDiscussionStates();
+        return view('documents.list', compact('documents', 'categories', 'groups', 'publishStates', 'discussionStates'));
     }
 
     /**
@@ -29,9 +103,21 @@ class DocumentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('documents.create');
+        $user = $request->user();
+
+        $availableGroups = $user->groups;
+        $availableGroups->filter(function ($group) use ($user) {
+            return $group->userCanCreateDocument($user);
+        });
+
+        $activeGroup = $request->user()->activeGroup();
+        if ($activeGroup && !$activeGroup->userCanCreateDocument($user)) {
+            $activeGroup = null;
+        }
+
+        return view('documents.create', compact('availableGroups', 'activeGroup'));
     }
 
     /**
@@ -61,24 +147,23 @@ class DocumentController extends Controller
             $slug = $new_slug;
         }
 
-        $doc = new Document();
-        $doc->title = $title;
-        $doc->slug = $slug;
-        $doc->save();
+        $document = new Document();
+        $document->title = $title;
+        $document->slug = $slug;
+        $document->save();
 
-        // TODO: set the proper group_id for sponsorship in form
-        $doc->sponsors()->sync([$request->input('group_id')]);
+        $document->sponsors()->sync([$request->input('group_id')]);
 
         $starter = new DocumentContent();
-        $starter->doc_id = $doc->id;
+        $starter->doc_id = $document->id;
         $starter->content = "New Document Content";
         $starter->save();
 
-        $doc->init_section = $starter->id;
-        $doc->save();
+        $document->init_section = $starter->id;
+        $document->save();
 
         flash(trans('messages.document_created'));
-        return redirect()->route('documents.edit', ['document' => $doc->id]);
+        return redirect()->route('documents.edit', ['document' => $document->id]);
     }
 
     /**
@@ -112,7 +197,7 @@ class DocumentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // TODO: implement
     }
 
     /**

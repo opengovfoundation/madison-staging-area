@@ -5,9 +5,10 @@ namespace App\Providers;
 use App\Models\Annotation;
 use App\Models\AnnotationTypes;
 use App\Models\Doc;
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Support\ServiceProvider;
 use Form;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Collection;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -38,11 +39,33 @@ class AppServiceProvider extends ServiceProvider
             'attributes' => [],
             'helpText' => null,
         ]);
-        Form::component('mSubmit', 'components.form.submit', [
-            'text' => 'Submit',
+        Form::component('mSelect', 'components.form.select', [
+            'name',
             'displayName',
+            'list' => [],
+            'selected' => null,
+            'attributes' => [],
+            'helpText' => null,
+        ]);
+        Form::component('mSubmit', 'components.form.submit', [
+            'text',
             'attributes' => [],
         ]);
+
+        // https://github.com/laravel/framework/issues/15409#issuecomment-247083776
+        Collection::macro('mapWithKeys_v2', function ($callback) {
+            $result = [];
+
+            foreach ($this->items as $key => $value) {
+                $assoc = $callback($value, $key);
+
+                foreach ($assoc as $mapKey => $mapValue) {
+                    $result[$mapKey] = $mapValue;
+                }
+            }
+
+            return new static($result);
+        });
     }
 
     /**

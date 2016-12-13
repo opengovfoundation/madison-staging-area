@@ -9,6 +9,6 @@
 
     {{ Form::model($document, ['route' => ['documents.update', $document->id], 'method' => 'put']) }}
         {{ Form::mInput('text', 'title', trans('messages.document_title_field')) }}
-        {{ Form::mSubmit(trans('messages.submit')) }}
+        {{ Form::mSubmit() }}
     {{ Form::close() }}
 @endsection
