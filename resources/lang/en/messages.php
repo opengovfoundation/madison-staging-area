@@ -33,7 +33,7 @@ return [
     'updated_at' => 'Updated At',
     'order_by' => 'Order By',
     'order_by_direction' => 'Order By Direction',
-    'order_by_dir_desc' => 'Decending',
+    'order_by_dir_desc' => 'Descending',
     'order_by_dir_asc' => 'Ascending',
     'create_as' => 'Create As',
     'limit' => 'Limit',
