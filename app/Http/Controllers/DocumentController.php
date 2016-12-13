@@ -41,37 +41,6 @@ class DocumentController extends Controller
             $doc->whereIn('discussion_state', $discussionStates);
         }
 
-        // TODO: the publish state and group id stuff needs some more work,
-        // default behavior should be to filter to only documents that are
-        // public or the user owns (i.e., they are a member of the group that
-        // owns them with sufficient privileges to view the document in it's
-        // current state)
-        //
-        // If the user specifies publish states and no groups, view all
-        // published documents (if that was a publish state requested) and the
-        // publish states allowed for each group the user belongs to
-        //
-        // If the user specifies some groups but no explicit publish states,
-        // should show every document visible to the user in those groups, for
-        // some they might be able to see all the publish states, for others
-        // maybe only published
-
-        $publishStates = $request->input('publish_state', [Document::PUBLISH_STATE_PUBLISHED]);
-        if (in_array('all', $publishStates) || !in_array(Document::PUBLISH_STATE_PUBLISHED, $publishStates)) {
-            if (!Auth::check() || !Auth::user()->isAdmin()) {
-                return abort(403, 'Unauthorized.');
-            }
-        } else {
-            $documentsQuery->where('publish_state', '=', $publishStates);
-        }
-
-        if ($request->has('group_id') && !in_array('any', $request->input('group_id'))) {
-            $documentsQuery->whereHas('sponsors', function ($q) use ($request) {
-                $groupIds = $request->input('group_id');
-                $q->whereIn('id', $groupIds);
-            });
-        }
-
         if ($request->has('category_id') && !in_array('any', $request->input('category_id'))) {
             $documentsQuery->whereHas('categories', function ($q) use ($request) {
                 $ids = $request->input('category_id');
@@ -89,13 +58,117 @@ class DocumentController extends Controller
             $documentsQuery->where('title', 'LIKE', "%$title%");
         }
 
+        // So this part of the query is a little crazy. It basically grabs
+        // documents on a per-group basis. For any given group any one can see
+        // the groups documents that are published, but for users that belong
+        // to a group, they can also see the documents in their groups in
+        // other publish states.
+        //
+        // As the number of groups in the systems grows so does the size of
+        // this query, that could become an issue at some point.
+        //
+        // Default behavior should be to filter to only documents that are
+        // public or the user owns (i.e., they are a member of the group that
+        // owns them with sufficient privileges to view the document in it's
+        // current state)
+        //
+        // If the user specifies publish states and no groups, view all
+        // published documents (if that was a publish state requested) and the
+        // publish states allowed for each group the user belongs to
+        //
+        // If the user specifies some groups but no explicit publish states,
+        // should show every document visible to the user in those groups, for
+        // some they might be able to see all the publish states, for others
+        // maybe only published (e.g., the groups they are not a part of)
+        //
+        // If the user specifies some of both, then of course we want to
+        // restrict ourselves to only documents that belong to that group and
+        // within those, only the ones they have sufficient permission to view
+        // for the each group
+
+        // grab the group ids we want to concern ourselves with, by default we
+        // don't want to limit ourselves at all, i.e., we want to make
+        // available all possible documents, so we default to all groups
+        $groupIds = [];
+        if (!$request->has('group_id')) {
+            $groupIds = Group::select('id')->pluck('id')->toArray();
+        } else {
+            $groupIds = $request->input('group_id');
+        }
+
+        // if the user is logged in, lookup any groups they belong to so we
+        // can widen the possible publish states we will allow for those group
+        // documents
+        $userGroupIds = [];
+        if ($request->user()) {
+            if ($request->user()->isAdmin()) {
+                // we'll just act like an admin is a member of every group
+                $userGroupIds = Group::select('id')->pluck('id')->flip()->toArray();
+            } else {
+                $userGroupIds = $request->user()->groups()->pluck('groups.id')->flip()->toArray();
+            }
+        }
+
+        // drop the 'all' value, get only the valid database publish states
+        $allRealPublishStates = Document::validPublishStates();
+        array_shift($allRealPublishStates);
+
+        // grab all the publish states we want to consider, again, by default
+        // we don't want to limit the possibilities, so default to all
+        // possible states
+        $requestedPublishStates = [];
+        if (!$request->has('publish_state') || ($request->has('publish_state') && in_array('all', $request->input('publish_state')))) {
+            $requestedPublishStates = $allRealPublishStates;
+        } else {
+            $requestedPublishStates = $request->input('publish_state');
+        }
+
+        // build up a map of which publish states the user can see for each group
+        $groupIdsToPubStates = [];
+        foreach ($groupIds as $groupId) {
+            $pubStates = [];
+            // by default, you can only see published documents
+            $possiblePubStates = [Document::PUBLISH_STATE_PUBLISHED];
+            if (isset($userGroupIds[$groupId])) {
+                // if you are a member of the group in any role, you can see
+                // the document in whatever state it's in
+                $possiblePubStates = $allRealPublishStates;
+            }
+            $pubStates = array_intersect($possiblePubStates, $requestedPublishStates);
+            $groupIdsToPubStates[$groupId] = $pubStates;
+        }
+
+        // here's the actually query part, restricting the selected documents
+        // to only those the user has permission to see
+        $documentsQuery->where(function ($documentsQuery) use ($groupIdsToPubStates) {
+            // add an OR clause for every requested group and publish states combo
+            foreach ($groupIdsToPubStates as $groupId => $pubStates) {
+                $documentsQuery->orWhere(function ($query) use ($groupId, $pubStates) {
+                    $query->whereHas('sponsors', function ($q) use ($groupId, $pubStates) {
+                        $q->where('id', $groupId);
+                    });
+                    $query->whereIn('publish_state', $pubStates);
+                });
+            }
+        });
+
+        // execute the query
         $documents = $documentsQuery->paginate($request->input('limit', 10));
 
+        // for the query builder modal
         $categories = Category::all();
         $groups = Group::all();
         $publishStates = Document::validPublishStates();
         $discussionStates = Document::validDiscussionStates();
-        return view('documents.list', compact('documents', 'categories', 'groups', 'publishStates', 'discussionStates'));
+
+        // draw the page
+        return view('documents.list', compact([
+            'documents',
+            'categories',
+            'groups',
+            'publishStates',
+            'discussionStates',
+        ]));
     }
 
     /**
@@ -185,7 +258,7 @@ class DocumentController extends Controller
      */
     public function edit(Requests\Edit $request, Document $document)
     {
-        return view('documents.edit', ['document' => $document]);
+        return view('documents.edit', compact('document'));
     }
 
     /**
