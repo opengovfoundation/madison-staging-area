@@ -28,7 +28,12 @@
         <div class="document-categories">
             <ul>
                 @foreach ($document['categories'] as $category)
-                    <li class="category"><span>{{ $category['name'] }}</span></li>
+                    <li class="category">
+                        <!-- URL to add this category to search query -->
+                        <a href="{{ CategoryHelpers::urlPlusCategory(app('request'), $category['id']) }}">
+                            <span>{{ $category['name'] }}</span>
+                        </a>
+                    </li>
                 @endforeach
             </ul>
             <!-- TODO: This seems hidden in original. Keep it?

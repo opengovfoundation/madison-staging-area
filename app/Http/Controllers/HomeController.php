@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Doc;
+use App\Models\Category;
 
 use Log;
 
@@ -27,16 +28,31 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $page = $request->input('page', 1);
+        $search = $request->input('search');
+        $categories = $request->input('categories');
 
-        $documents = Doc::getEager()
-            ->where('publish_state', 'published')
-            ->paginate(5);
+        $selectedCategories = [];
 
+        $documentQuery = Doc::getEager()->where('publish_state', 'published');
+
+        if ($search) {
+            $documentQuery->where('title', 'like', '%' . $search . '%');
+        }
+
+        if ($categories) {
+            $selectedCategories = Category::whereIn('id', explode(',', $categories))->get();
+            $documentQuery->whereHas('categories', function($q) use ($categories) {
+                $q->whereIn('id', explode(',', $categories));
+            });
+        }
+
+        $documents = $documentQuery->paginate(5);
         $featuredDocuments = Doc::getFeatured();
         $mostActiveDocuments = Doc::getActive(6);
-        $mostRecentDocuments = Doc::sixMostRecent()->get();
+        $mostRecentDocuments = Doc::sixMostRecent();
 
         return view('home', [
+            'selectedCategories' => $selectedCategories,
             'documents' => $documents,
             'featuredDocuments' => $featuredDocuments,
             'mostActiveDocuments' => $mostActiveDocuments,
