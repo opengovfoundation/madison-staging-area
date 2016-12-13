@@ -51,12 +51,12 @@ class HomeController extends Controller
         $mostActiveDocuments = Doc::getActive(6);
         $mostRecentDocuments = Doc::sixMostRecent();
 
-        return view('home', [
-            'selectedCategories' => $selectedCategories,
-            'documents' => $documents,
-            'featuredDocuments' => $featuredDocuments,
-            'mostActiveDocuments' => $mostActiveDocuments,
-            'mostRecentDocuments' => $mostRecentDocuments,
-        ]);
+        return view('home', compact(
+            'selectedCategories',
+            'documents',
+            'featuredDocuments',
+            'mostActiveDocuments',
+            'mostRecentDocuments'
+        ));
     }
 }
