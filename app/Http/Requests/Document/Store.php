@@ -17,16 +17,9 @@ class Store extends FormRequest
         if (!$this->user()->can('admin_manage_documents')) {
             // If there's a group
             if ($this->input('group_id')) {
-                $groupUser = User::with('groups')
-                    ->whereHas('groups', function ($query) {
-                        $query->where('status', 'active');
-                        $query->where('group_id', $this->input('group_id'));
-                    })
-                    ->find($this->user->id);
+                $group = Group::find($this->input('group_id'));
 
-                if (!isset($groupUser->id)) {
-                    return false;
-                }
+                return $group && $group->isActive() && $group->canUserCreateDocument($request->user());
             } else {
                 return false;
             }
