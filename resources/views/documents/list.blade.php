@@ -79,6 +79,7 @@
                         }}
 
                         <button type="button" class="btn btn-default" data-dismiss="modal">@lang('messages.close')</button>
+                        <a href="{{ request()->url() }}" class="btn btn-default">@lang('messages.clear')</a>
                         {{ Form::mSubmit() }}
                     {{ Form::close() }}
                 </div>

@@ -51,5 +51,6 @@ return [
     'pagination' => 'Showing :start to :end of :total entries',
     'actions' => 'Actions',
     'id' => 'Id',
+    'clear' => 'Clear',
 
 ];
