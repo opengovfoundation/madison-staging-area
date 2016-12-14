@@ -14,18 +14,18 @@ return [
         'publish_state' => 'Publish State',
         'publish_states' => [
             'all' => 'All',
-            'published' => 'Published',
-            'unpublished' => 'Unpublished',
-            'private' => 'Private',
-            'deleted-admin' => 'Deleted (by admin)',
-            'deleted-user' => 'Deleted (by user)',
+            \App\Models\Doc::PUBLISH_STATE_PUBLISHED => 'Published',
+            \App\Models\Doc::PUBLISH_STATE_UNPUBLISHED => 'Unpublished',
+            \App\Models\Doc::PUBLISH_STATE_PRIVATE => 'Private',
+            \App\Models\Doc::PUBLISH_STATE_DELETED_ADMIN => 'Deleted (by admin)',
+            \App\Models\Doc::PUBLISH_STATE_DELETED_USER => 'Deleted (by user)',
         ],
 
         'discussion_state' => 'Discussion State',
         'discussion_states' => [
-            'open' => 'Open',
-            'closed' => 'Closed',
-            'hidden' => 'Hidden',
+            \App\Models\Doc::DISCUSSION_STATE_OPEN => 'Open',
+            \App\Models\Doc::DISCUSSION_STATE_CLOSED => 'Closed',
+            \App\Models\Doc::DISCUSSION_STATE_HIDDEN => 'Hidden',
         ],
 
         'create_as' => 'Sponsor As',
