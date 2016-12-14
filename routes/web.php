@@ -48,5 +48,8 @@ Route::get('/', 'HomeController@index');
 
 Route::resource('documents', 'DocumentController');
 
+Route::post('/documents/{document}/page', 'DocumentController@storePage')
+    ->name('documents.page.store');
+
 Route::get('/documents/{documentTrashed}/restore', 'DocumentController@restore')
      ->name('documents.restore');

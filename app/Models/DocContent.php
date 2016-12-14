@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -13,6 +14,18 @@ class DocContent extends Model
 
     protected $table = 'doc_contents';
     protected $dates = ['deleted_at'];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::updated(function ($content) {
+            // Invalidate the cache
+            $format = 'html';
+            $cacheKey = static::cacheKey($content, $format);
+            Cache::forget($cacheKey);
+        });
+    }
 
     public function doc()
     {
@@ -37,5 +50,34 @@ class DocContent extends Model
     public function html()
     {
         return Markdown::convertToHtml($this->content);
+    }
+
+    public function rendered($format = 'html')
+    {
+        $cacheKey = static::cacheKey($this, $format);
+
+        if ($format === 'html' && Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
+        }
+
+        $content = '';
+
+        switch ($format) {
+            case 'html':
+                $content = $this->html();
+            case 'raw':
+                $content = $this->content;
+        }
+
+        if ($format === 'html') {
+            Cache::forever($cacheKey, $content);
+        }
+
+        return $content;
+    }
+
+    protected static function cacheKey(DocContent $content, $format)
+    {
+        return 'doc-'.$content->doc->id.'-'.$content->page.'-'.$format;
     }
 }

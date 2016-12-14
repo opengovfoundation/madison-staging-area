@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Category;
+use App\Models\DocContent as DocumentContent;
 use App\Traits\RootAnnotatableHelpers;
 use Event;
 use Exception;
@@ -50,8 +51,22 @@ class Doc extends Model
         /**
          * Set default value for slug
          */
-        Doc::saving(function($doc) {
-            if (!isset($doc->slug)) $doc->slug = Doc::makeSlug($doc->title);
+        static::saving(function($doc) {
+            if (empty($doc->slug)) $doc->slug = static::makeSlug($doc->title);
+        });
+
+        static::created(function ($document) {
+            $starter = new DocumentContent();
+            $starter->doc_id = $document->id;
+            $starter->content = "New Document Content";
+            $starter->save();
+
+            $document->init_section = $starter->id;
+            $document->save();
+        });
+
+        static::deleted(function ($document) {
+            $document->removeAsFeatured();
         });
     }
 
@@ -149,7 +164,7 @@ class Doc extends Model
     {
         if (in_array(
             $this->publish_state,
-            [Doc::PUBLISH_STATE_PUBLISHED, Doc::PUBLISH_STATE_PRIVATE]
+            [static::PUBLISH_STATE_PUBLISHED, static::PUBLISH_STATE_PRIVATE]
         )) {
             return true;
         }
@@ -160,7 +175,7 @@ class Doc extends Model
             }
 
             if (
-                $this->publish_state == Doc::PUBLISH_STATE_UNPUBLISHED
+                $this->publish_state == static::PUBLISH_STATE_UNPUBLISHED
                 && $this->canUserEdit($user)
             ) {
                 return true;
@@ -431,7 +446,7 @@ class Doc extends Model
      */
     public static function getEager()
     {
-        return Doc::with('categories')
+        return static::with('categories')
             ->with('sponsors')
             ->with('statuses')
             ->with('dates');
@@ -449,7 +464,7 @@ class Doc extends Model
 
         if (count($docsInfo) > 0) {
             //Grab out most active documents
-            $docs = Doc::getEager()->whereIn('id', static::getActiveIds())->get();
+            $docs = static::getEager()->whereIn('id', static::getActiveIds())->get();
 
             //Sort by the sort value descending
             $docs = static::sortByActive($docs)
@@ -513,7 +528,7 @@ class Doc extends Model
                 ->with('dates')
                 ->whereIn('id', $featuredIds)
                 ->where('is_template', '!=', '1')
-                ->where('publish_state', '=', Doc::PUBLISH_STATE_PUBLISHED);
+                ->where('publish_state', '=', static::PUBLISH_STATE_PUBLISHED);
 
             $docs = $docQuery->get();
 
@@ -533,7 +548,6 @@ class Doc extends Model
                 // The line below will restore the order. Ugh.
                 ksort($tempDocs);
                 $docs = $tempDocs;
-
             }
         }
 
@@ -750,5 +764,43 @@ class Doc extends Model
             $size = $size['width'] . 'x' . $size['height'];
         }
         return $size;
+    }
+
+    public function setAsFeatured()
+    {
+        $featuredSetting = static::getFeaturedDocumentsSetting();
+        $docIds = explode(',', $featuredSetting->meta_value);
+
+        if (!in_array($this->id, $docIds)) {
+            array_unshift($docIds, $this->id);
+        }
+
+        $featuredSetting->meta_value = join(',', $docIds);
+        $featuredSetting->save();
+    }
+
+    public function removeAsFeatured()
+    {
+        $featuredSetting = static::getFeaturedDocumentsSetting();
+        $docIds = explode(',', $featuredSetting->meta_value);
+
+        if (in_array($this->id, $docIds)) {
+            $docIds = array_diff($docIds, [$this->id]);
+        }
+
+        $featuredSetting->meta_value = join(',', $docIds);
+        $featuredSetting->save();
+    }
+
+    public static function getFeaturedDocumentsSetting()
+    {
+        // firstOrNew() is not working for some reason, so we do it manually.
+        $featuredSetting = Setting::where(['meta_key' => 'featured-doc'])->first();
+        if (!$featuredSetting) {
+            $featuredSetting = new Setting;
+            $featuredSetting->meta_key = 'featured-doc';
+        }
+
+        return $featuredSetting;
     }
 }

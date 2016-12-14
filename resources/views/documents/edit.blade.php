@@ -9,6 +9,67 @@
 
     {{ Form::model($document, ['route' => ['documents.update', $document->slug], 'method' => 'put']) }}
         {{ Form::mInput('text', 'title', trans('messages.document.title')) }}
+        {{ Form::mInput('text', 'slug', trans('messages.document.slug'), null, [], trans('messages.document.slug_help')) }}
+        {{ Form::mInput('textarea', 'introtext', trans('messages.document.introtext')) }}
+        {{ Form::mInput('checkbox', 'featured', trans('messages.document.featured'), null, request()->user()->isAdmin() ? [] : ['disabled' => true]) }}
+        {{ Form::mSelect(
+                'publish_state',
+                trans('messages.document.publish_state'),
+                collect($publishStates)->mapWithKeys_v2(function ($item) {return [$item => trans('messages.document.publish_states.'.$item)]; })->toArray(),
+                null,
+                [],
+                trans('messages.document.publish_state_help')
+                )
+        }}
+        {{ Form::mSelect(
+                'discussion_state',
+                trans('messages.document.discussion_state'),
+                collect($discussionStates)->mapWithKeys_v2(function ($item) {return [$item => trans('messages.document.discussion_states.'.$item)];})->toArray(),
+                null,
+                [],
+                trans('messages.document.discussion_state_help')
+                )
+        }}
+        {{ Form::mSelect(
+                'group_id[]',
+                trans('messages.document.group'),
+                $groups->mapWithKeys_v2(function ($item) {return [$item->id => $item->display_name]; })->toArray(),
+                $document->sponsors->map(function($group) { return $group->id; })->toArray(),
+                ['multiple' => true]
+                )
+        }}
+        {{ Form::mSelect(
+                'category_id[]',
+                trans('messages.document.category'),
+                $categories->mapWithKeys_v2(function ($item) {return [$item->id => $item->name]; })->toArray(),
+                $document->categories->map(function($cat) { return $cat->id; })->toArray(),
+                ['multiple' => true]
+                )
+        }}
+        {{ Form::mInput('textarea', 'page_content', trans('messages.document.content'), $pages->first()->content) }}
+        <div class="document-pages-toolbar">
+            {{ $pages->appends(request()->query())->fragment('page_content')->links() }}
+
+            {{-- Submits the hidden add page form --}}
+            <button
+                type="button"
+                class="btn btn-default pull-right"
+                onclick="event.preventDefault();document.getElementById('add-page-form').submit();">
+                @lang('messages.document.add_page')
+            </button>
+        </div>
+
         {{ Form::mSubmit() }}
+
+    {{ Form::close() }}
+
+    {{-- Hidden form to submit in order to add a blank page to document --}}
+    {{ Form::open([
+           'route' => ['documents.page.store', $document->slug],
+           'method' => 'post',
+           'style' => 'display: none;',
+           'id' => 'add-page-form',
+           ])
+    }}
     {{ Form::close() }}
 @endsection
