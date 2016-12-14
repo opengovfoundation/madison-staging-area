@@ -653,14 +653,14 @@ class Doc extends Model
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSixMostRecent($query)
+    public function scopeMostRecentPublicWithOpenDiscussion($query, $howMany = 6)
     {
         return $query
             ->orderBy('updated_at', 'DESC')
-            ->where('discussion_state', 'open')
-            ->where('publish_state', 'published')
+            ->where('discussion_state', static::DISCUSSION_STATE_OPEN)
+            ->where('publish_state', static::PUBLISH_STATE_PUBLISHED)
             ->where('is_template', '!=', '1')
-            ->take(6);
+            ->take($howMany);
     }
 
 

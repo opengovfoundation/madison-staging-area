@@ -26,26 +26,6 @@ return [
         'placeholder' => 'Search documents',
     ],
 
-    'pagination' => [
-        'page' => 'Page',
-        'first' => [
-            'title' => 'First Page',
-            'label' => '«',
-        ],
-        'previous' => [
-            'title' => 'Previous Page',
-            'label' => '‹',
-        ],
-        'next' => [
-            'title' => 'Next Page',
-            'label' => '›',
-        ],
-        'last' => [
-            'title' => 'Last Page',
-            'label' => '»',
-        ],
-    ],
-
     // Home
     'home' => [
         'welcome' => 'Add your voice...',

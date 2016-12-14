@@ -13,7 +13,7 @@
             {{ trans('messages.document.sponsoredby') }}
             <ul>
                 @foreach ($document['sponsors'] as $sponsor)
-                    <!-- TODO: Would be cool to link this to a sponsor view page -->
+                    {{-- TODO - Would be cool to link this to a sponsor view page --}}
                     <li class="document-sponsor">{{ $sponsor['display_name'] }}</li>
                 @endforeach
             </ul>
@@ -25,8 +25,6 @@
                 <li>{{ trans('messages.updated') }} {{ date('M d, Y', strtotime($document['updated_at'])) }}</li>
             </ul>
         </div>
-
-        <!-- TODO: conditional "read more" button if no introtext? -->
     </header>
     <div class="document-content">
         <div class="document-summary">

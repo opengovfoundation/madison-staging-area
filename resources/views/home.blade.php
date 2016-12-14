@@ -6,18 +6,18 @@
     <div class="row">
         <div class="col-md-6">
             <section class="home-feature">
-                @each('partials/home/featured-document', $featuredDocuments, 'document')
+                @each('home/partials/featured-document', $featuredDocuments, 'document')
             </section>
 
-            @include('partials/home/active-documents', [
+            @include('home/partials/active-documents', [
                 'mostActiveDocuments' => $mostActiveDocuments,
                 'mostRecentDocuments' => $mostRecentDocuments,
             ])
         </div>
 
         <div class="col-md-6">
-            @include('partials/home/welcome')
-            @include('partials/home/search-list', [
+            @include('home/partials/welcome')
+            @include('home/partials/search-list', [
                 'documents' => $documents
             ])
         </div>

@@ -1,4 +1,3 @@
-<!-- Previously "previous-features" -->
 <section class="active-documents">
     <h2 class="heading">{{ trans('messages.activelegislation') }}</h2>
 
@@ -13,7 +12,7 @@
                 </a>
                 <span class="date">
                     {{ trans('messages.updated') }}
-                    {{ Carbon\Carbon::parse($recentDocument['updated_at'])->diffForHumans() }}
+                    {{ $recentDocument->updated_at->diffForHumans() }}
                 </span>
             </article>
         @endforeach
@@ -22,7 +21,6 @@
     <div class="move-active">
         <h3>{{ trans('messages.mostactive') }}</h3>
 
-        <!-- TODO: Loop through most active docs here -->
         @foreach ($mostActiveDocuments as $activeDocument)
             <article>
                 <a href="/documents/{{ $activeDocument['slug'] }}"
