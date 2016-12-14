@@ -543,24 +543,12 @@ class Doc extends Model
     public static function validPublishStates()
     {
          return [
-            'all',
             self::PUBLISH_STATE_PUBLISHED,
             self::PUBLISH_STATE_UNPUBLISHED,
             self::PUBLISH_STATE_PRIVATE,
             self::PUBLISH_STATE_DELETED_ADMIN,
             self::PUBLISH_STATE_DELETED_USER
         ];
-    }
-
-    public static function validPublishStatesRoutePattern()
-    {
-        $valid_states = self::validPublishStates();
-
-        foreach ($valid_states as $idx => $state) {
-            $valid_states[$idx] = str_replace('-', '\-', $state);
-        }
-
-        return '(' . implode('|', $valid_states) . ')';
     }
 
     public static function validDiscussionStates()

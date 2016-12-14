@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Document;
 
 use App\Models\Doc as Document;
+use App\Http\Controllers\DocumentController;
 use Illuminate\Foundation\Http\FormRequest;
 
 class Index extends FormRequest
@@ -27,7 +28,7 @@ class Index extends FormRequest
         return [
             'order' => 'in:created_at,updated_at,title,activity',
             'order_dir' => 'in:ASC,DESC',
-            'publish_state' => 'array|in:' . implode(',', Document::validPublishStates()),
+            'publish_state' => 'array|in:' . implode(',', DocumentController::validPublishStatesForQuery()),
             'discussion_state' => 'array|in:' . implode(',', Document::validDiscussionStates()),
             'group_id.*' => 'integer',
             'category_id.*' => 'integer',

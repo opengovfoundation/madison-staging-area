@@ -110,16 +110,17 @@ class DocumentController extends Controller
             }
         }
 
-        // drop the 'all' value, get only the valid database publish states
-        $allRealPublishStates = Document::validPublishStates();
-        array_shift($allRealPublishStates);
-
-        // grab all the publish states we want to consider, again, by default
-        // we don't want to limit the possibilities, so default to all
-        // possible states
+        // grab all the publish states we want to consider, by default we'll
+        // include all non-deleted states
         $requestedPublishStates = [];
-        if (!$request->has('publish_state') || ($request->has('publish_state') && in_array('all', $request->input('publish_state')))) {
-            $requestedPublishStates = $allRealPublishStates;
+        if (!$request->has('publish_state')) {
+            $requestedPublishStates = [
+                Document::PUBLISH_STATE_PUBLISHED,
+                Document::PUBLISH_STATE_UNPUBLISHED,
+                Document::PUBLISH_STATE_PRIVATE,
+            ];
+        } elseif ($request->has('publish_state') && in_array('all', $request->input('publish_state'))) {
+            $requestedPublishStates = Document::validPublishStates();
         } else {
             $requestedPublishStates = $request->input('publish_state');
         }
@@ -133,13 +134,13 @@ class DocumentController extends Controller
             if (isset($userGroupIds[$groupId])) {
                 // if you are a member of the group in any role, you can see
                 // the document in whatever state it's in
-                $possiblePubStates = $allRealPublishStates;
+                $possiblePubStates = Document::validPublishStates();
             }
             $pubStates = array_intersect($possiblePubStates, $requestedPublishStates);
             $groupIdsToPubStates[$groupId] = $pubStates;
         }
 
-        // here's the actually query part, restricting the selected documents
+        // here's the actual query part, restricting the selected documents
         // to only those the user has permission to see
         $documentsQuery->where(function ($documentsQuery) use ($groupIdsToPubStates) {
             // add an OR clause for every requested group and publish states combo
@@ -192,7 +193,7 @@ class DocumentController extends Controller
         // for the query builder modal
         $categories = Category::all();
         $groups = Group::all();
-        $publishStates = Document::validPublishStates();
+        $publishStates = static::validPublishStatesForQuery();
         $discussionStates = Document::validDiscussionStates();
 
         // draw the page
@@ -331,5 +332,10 @@ class DocumentController extends Controller
 
         flash(trans('messages.document.deleted'));
         return redirect()->route('documents.index');
+    }
+
+    public static function validPublishStatesForQuery()
+    {
+       return ['all'] + Document::validPublishStates();
     }
 }
