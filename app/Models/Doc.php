@@ -649,7 +649,7 @@ class Doc extends Model
     }
 
     /**
-     * Scope to get 6 most recently active documents. Used on the homepage.
+     * Scope to get most recently active public documents with open discussion.
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
