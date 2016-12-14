@@ -59,7 +59,8 @@
                                [
                                    'created_at' => trans('messages.created_at'),
                                    'updated_at' => trans('messages.updated_at'),
-                                   'title' => trans('messages.document.title')
+                                   'title' => trans('messages.document.title'),
+                                   'activity' => trans('messages.document.activity')
                                ])
                         }}
                         {{ Form::mSelect(

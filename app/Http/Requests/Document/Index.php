@@ -25,7 +25,7 @@ class Index extends FormRequest
     public function rules()
     {
         return [
-            'order' => 'in:created_at,updated_at,title',
+            'order' => 'in:created_at,updated_at,title,activity',
             'order_dir' => 'in:ASC,DESC',
             'publish_state' => 'array|in:' . implode(',', Document::validPublishStates()),
             'discussion_state' => 'array|in:' . implode(',', Document::validDiscussionStates()),

@@ -9,6 +9,8 @@ use App\Models\DocContent as DocumentContent;
 use App\Models\Group;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class DocumentController extends Controller
 {
@@ -34,8 +36,7 @@ class DocumentController extends Controller
         $discussionStates = $request->input('discussion_state', null);
 
         $documentsQuery = Document
-            ::orderby($orderField, $orderDir)
-            ->where('is_template', '!=', '1');
+            ::where('is_template', '!=', '1');
 
         if ($discussionStates) {
             $doc->whereIn('discussion_state', $discussionStates);
@@ -153,7 +154,40 @@ class DocumentController extends Controller
         });
 
         // execute the query
-        $documents = $documentsQuery->paginate($request->input('limit', 10));
+        $documents = null;
+        $limit = $request->input('limit', 10);
+
+        if ($orderField === 'activity') {
+            // ordering by activity is special
+
+            // we limit the query to only the documents that we have activity
+            // data on, which currently means published documents with open
+            // discussion states, we could not do this and simply have all
+            // other documents sorted to the bottom instead of excluded
+            $unorderedDocuments = $documentsQuery
+                ->whereIn('id', Document::getActiveIds())
+                ->get()
+                ;
+
+            $offset = $request->input('page', 0) * $limit;
+            $orderedAndLimitedDocuments = Document::sortByActive($unorderedDocuments)
+                ->slice($offset, $limit);
+
+            $documents = new LengthAwarePaginator(
+                $orderedAndLimitedDocuments,
+                count(Document::getActiveIds()), // total items possible
+                $limit,
+                Paginator::resolveCurrentPage(),
+                [
+                    'path' => Paginator::resolveCurrentPath(),
+                    'pageName' => 'page'
+                ]
+            );
+        } else {
+            $documents = $documentsQuery
+                ->orderby($orderField, $orderDir)
+                ->paginate($limit);
+        }
 
         // for the query builder modal
         $categories = Category::all();
@@ -235,7 +269,7 @@ class DocumentController extends Controller
         $document->init_section = $starter->id;
         $document->save();
 
-        flash(trans('messages.document_created'));
+        flash(trans('messages.document.created'));
         return redirect()->route('documents.edit', ['document' => $document->id]);
     }
 
@@ -295,7 +329,7 @@ class DocumentController extends Controller
 
         $document->delete();
 
-        flash(trans('messages.document_deleted'));
+        flash(trans('messages.document.deleted'));
         return redirect()->route('documents.index');
     }
 }
