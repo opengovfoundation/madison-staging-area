@@ -210,7 +210,7 @@ class DocumentController extends Controller
             $tooMany = 10;
             do {
                 if ($counter > $tooMany) {
-                    flash(trans('messages.document_title_invalid'));
+                    flash(trans('messages.document.title_invalid'));
                     return back()->withInput();
                 }
                 $counter++;

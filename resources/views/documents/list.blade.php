@@ -2,12 +2,12 @@
 
 @section('content')
     <div class="page-header">
-        <h1>{{ trans('messages.list_documents') }}</h1>
+        <h1>{{ trans('messages.document.list') }}</h1>
     </div>
 
     @include('components.errors')
 
-    {{ Html::linkRoute('documents.create', trans('messages.create_document'), [], ['class' => 'btn btn-default'])}}
+    {{ Html::linkRoute('documents.create', trans('messages.document.create'), [], ['class' => 'btn btn-default'])}}
 
     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#queryModal">Query</button>
 
@@ -20,10 +20,10 @@
                 </div>
                 <div class="modal-body">
                     {{ Form::open(['route' => 'documents.index', 'method' => 'get']) }}
-                        {{ Form::mInput('text', 'title', trans('messages.document_title_field')) }}
+                        {{ Form::mInput('text', 'title', trans('messages.document.title')) }}
                         {{ Form::mSelect(
                                'group_id[]',
-                               trans('messages.document_group'),
+                               trans('messages.document.group'),
                                $groups->mapWithKeys_v2(function ($item) {return [$item->id => $item->display_name]; })->toArray(),
                                null,
                                ['multiple' => true]
@@ -31,7 +31,7 @@
                         }}
                         {{ Form::mSelect(
                                'category_id[]',
-                               trans('messages.document_category'),
+                               trans('messages.document.category'),
                                $categories->mapWithKeys_v2(function ($item) {return [$item->id => $item->name]; })->toArray(),
                                null,
                                ['multiple' => true]
@@ -39,16 +39,16 @@
                         }}
                         {{ Form::mSelect(
                                'publish_state[]',
-                               trans('messages.document_publish_state'),
-                               collect($publishStates)->mapWithKeys_v2(function ($item) {return [$item => trans('messages.document_publish_state_'.$item)]; })->toArray(),
+                               trans('messages.document.publish_state'),
+                               collect($publishStates)->mapWithKeys_v2(function ($item) {return [$item => trans('messages.document.publish_states.'.$item)]; })->toArray(),
                                null,
                                ['multiple' => true]
                                )
                         }}
                         {{ Form::mSelect(
                                'discussion_state[]',
-                               trans('messages.document_discussion_state'),
-                               collect($discussionStates)->mapWithKeys_v2(function ($item) {return [$item => trans('messages.document_discussion_state_'.$item)]; })->toArray(),
+                               trans('messages.document.discussion_state'),
+                               collect($discussionStates)->mapWithKeys_v2(function ($item) {return [$item => trans('messages.document.discussion_states.'.$item)]; })->toArray(),
                                null,
                                ['multiple' => true]
                                )
@@ -59,7 +59,7 @@
                                [
                                    'created_at' => trans('messages.created_at'),
                                    'updated_at' => trans('messages.updated_at'),
-                                   'title' => trans('messages.document_title_field')
+                                   'title' => trans('messages.document.title')
                                ])
                         }}
                         {{ Form::mSelect(
@@ -101,7 +101,7 @@
                     <td>{{ $document->id }}</td>
                     <td>{{ $document->title }}</td>
                     <td>{{ $document->created_at->toDateTimeString() }}</td>
-                    <td>{{ trans('messages.document_publish_state_'.$document->publish_state) }}</td>
+                    <td>{{ trans('messages.document.publish_states.'.$document->publish_state) }}</td>
 
                     <td>
                         <div class="btn-toolbar" role="toolbar">

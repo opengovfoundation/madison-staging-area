@@ -2,13 +2,13 @@
 
 @section('content')
     <div class="page-header">
-        <h1>{{ trans('messages.edit_document') }}</h1>
+        <h1>{{ trans('messages.document.edit') }}</h1>
     </div>
 
     @include('components.errors')
 
     {{ Form::model($document, ['route' => ['documents.update', $document->id], 'method' => 'put']) }}
-        {{ Form::mInput('text', 'title', trans('messages.document_title_field')) }}
+        {{ Form::mInput('text', 'title', trans('messages.document.title')) }}
         {{ Form::mSubmit() }}
     {{ Form::close() }}
 @endsection

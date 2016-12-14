@@ -2,28 +2,38 @@
 
 return [
 
-    'list_documents' => 'Documents',
-    'create_document' => 'Create Document',
-    'edit_document' => 'Edit Document',
-    'document_title_field' => 'Title',
-    'document_title_invalid' => 'Can\'t create document with that name, please try another.',
-    'document_created' => 'Document Created',
-    'document_deleted' => 'Document Deleted',
-    'document_category' => 'Category',
-    'document_group' => 'Group',
+    'document' => [
+        'title' => 'Title',
+        'title_invalid' => 'Can\'t create document with that name, please try another.',
+        'category' => 'Category',
+        'group' => 'Group',
 
-    'document_publish_state' => 'Publish State',
-    'document_publish_state_all' => 'All',
-    'document_publish_state_published' => 'Published',
-    'document_publish_state_unpublished' => 'Unpublished',
-    'document_publish_state_private' => 'Private',
-    'document_publish_state_deleted-admin' => 'Deleted (by admin)',
-    'document_publish_state_deleted-user' => 'Deleted (by user)',
+        'created' => 'Document Created',
+        'deleted' => 'Document Deleted',
 
-    'document_discussion_state' => 'Discussion State',
-    'document_discussion_state_open' => 'Open',
-    'document_discussion_state_closed' => 'Closed',
-    'document_discussion_state_hidden' => 'Hidden',
+        'publish_state' => 'Publish State',
+        'publish_states' => [
+            'all' => 'All',
+            'published' => 'Published',
+            'unpublished' => 'Unpublished',
+            'private' => 'Private',
+            'deleted-admin' => 'Deleted (by admin)',
+            'deleted-user' => 'Deleted (by user)',
+        ],
+
+        'discussion_state' => 'Discussion State',
+        'discussion_states' => [
+            'open' => 'Open',
+            'closed' => 'Closed',
+            'hidden' => 'Hidden',
+        ],
+
+        'create_as' => 'Sponsor As',
+
+        'list' => 'Documents',
+        'create' => 'Create Document',
+        'edit' => 'Edit Document',
+    ],
 
     'submit' => 'Submit',
     'edit' => 'Edit',
@@ -35,7 +45,6 @@ return [
     'order_by_direction' => 'Order By Direction',
     'order_by_dir_desc' => 'Descending',
     'order_by_dir_asc' => 'Ascending',
-    'create_as' => 'Create As',
     'limit' => 'Limit',
     'pagination' => 'Showing :start to :end of :total entries',
 
