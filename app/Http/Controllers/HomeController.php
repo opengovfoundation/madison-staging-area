@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Doc;
+use App\Models\Doc as Document;
 use App\Models\Category;
 
 class HomeController extends Controller
@@ -20,7 +20,7 @@ class HomeController extends Controller
 
         $selectedCategories = [];
 
-        $documentQuery = Doc::getEager()->where('publish_state', Doc::PUBLISH_STATE_PUBLISHED);
+        $documentQuery = Document::getEager()->where('publish_state', Document::PUBLISH_STATE_PUBLISHED);
 
         if ($search) {
             $documentQuery->where('title', 'like', '%' . $search . '%');
@@ -34,9 +34,9 @@ class HomeController extends Controller
         }
 
         $documents = $documentQuery->paginate(5);
-        $featuredDocuments = Doc::getFeatured();
-        $mostActiveDocuments = Doc::getActive(6);
-        $mostRecentDocuments = Doc::mostRecentPublicWithOpenDiscussion()->get();
+        $featuredDocuments = Document::getFeatured();
+        $mostActiveDocuments = Document::getActive(6);
+        $mostRecentDocuments = Document::mostRecentPublicWithOpenDiscussion()->get();
 
         return view('home', compact(
             'selectedCategories',
