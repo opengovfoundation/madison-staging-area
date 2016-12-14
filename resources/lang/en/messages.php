@@ -48,5 +48,7 @@ return [
     'order_by_dir_asc' => 'Ascending',
     'limit' => 'Limit',
     'pagination' => 'Showing :start to :end of :total entries',
+    'actions' => 'Actions',
+    'id' => 'Id',
 
 ];

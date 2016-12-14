@@ -89,11 +89,12 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Created At</th>
-                <th>Publish State</th>
-                <th>Actions</th>
+                <th>@lang('messages.id')</th>
+                <th>@lang('messages.document.title')</th>
+                <th>@lang('messages.created_at')</th>
+                <th>@lang('messages.document.group')</th>
+                <th>@lang('messages.document.publish_state')</th>
+                <th>@lang('messages.actions')</th>
             </tr>
         </thead>
         <tbody>
