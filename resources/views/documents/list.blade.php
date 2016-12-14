@@ -103,6 +103,11 @@
                     <td>{{ $document->id }}</td>
                     <td>{{ $document->title }}</td>
                     <td>{{ $document->created_at->toDateTimeString() }}</td>
+                    <td>{{ $document->sponsors->shift()->display_name }}
+                        @if($document->sponsors->count() > 1)
+                            @lang('messages.document.group_others')
+                        @endif
+                    </td>
                     <td>{{ trans('messages.document.publish_states.'.$document->publish_state) }}</td>
 
                     <td>

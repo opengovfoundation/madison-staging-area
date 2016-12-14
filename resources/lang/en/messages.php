@@ -7,6 +7,7 @@ return [
         'title_invalid' => 'Can\'t create document with that name, please try another.',
         'category' => 'Category',
         'group' => 'Group',
+        'group_others' => 'and others',
         'activity' => 'Activity',
 
         'created' => 'Document Created',
