@@ -39,7 +39,7 @@ class DocumentController extends Controller
             ::where('is_template', '!=', '1');
 
         if ($discussionStates) {
-            $doc->whereIn('discussion_state', $discussionStates);
+            $documentsQuery->whereIn('discussion_state', $discussionStates);
         }
 
         if ($request->has('category_id') && !in_array('any', $request->input('category_id'))) {
