@@ -27,9 +27,9 @@ class HomeController extends Controller
         }
 
         if ($categories) {
-            $selectedCategories = Category::whereIn('id', explode(',', $categories))->get();
+            $selectedCategories = Category::whereIn('id', $categories)->get();
             $documentQuery->whereHas('categories', function($q) use ($categories) {
-                $q->whereIn('id', explode(',', $categories));
+                $q->whereIn('id', $categories);
             });
         }
 

@@ -12,13 +12,16 @@ class CategoryHelpers
      */
     public static function urlPlusCategory($request, $categoryId)
     {
-        $categories = static::startingCategoryArray($request->query('categories'));
+        $categories = $request->query('categories') ? $request->query('categories') : [];
 
         array_filter($categories);
-        array_push($categories, $categoryId);
+
+        if (!in_array($categoryId, $categories)) {
+            array_push($categories, $categoryId);
+        }
 
         return $request->fullUrlWithQuery([
-            'categories' => join(',', $categories)
+            'categories' => $categories
         ]);
     }
 
@@ -29,23 +32,14 @@ class CategoryHelpers
      */
     public static function urlMinusCategory($request, $categoryId)
     {
-        $categories = static::startingCategoryArray($request->query('categories'));
+        $categories = $request->query('categories') ? $request->query('categories') : [];
 
         $idIndex = array_search($categoryId, $categories);
         unset($categories[$idIndex]);
 
         return $request->fullUrlWithQuery([
-            'categories' => count($categories) == 0 ? null : join(',', $categories)
+            'categories' => $categories
         ]);
     }
 
-
-    /**
-     * Starts a category query array, ensuring it's empty if there are no
-     * category ID's provided.
-     */
-    private static function startingCategoryArray($categoryQuery)
-    {
-        return $categoryQuery == '' ?  [] : explode(',', $categoryQuery);
-    }
 }
