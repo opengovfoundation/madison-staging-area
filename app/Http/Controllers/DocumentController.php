@@ -335,7 +335,11 @@ class DocumentController extends Controller
 
         $document->delete();
 
-        flash(trans('messages.document.deleted'));
+        $restoreUrl = '/documents/'.$document->id.'/restore';
+        flash(trans('messages.document.deleted', [
+            'restoreLinkOpen' => "<a href='$restoreUrl'>",
+            'restoreLinkClosed' => '</a>',
+        ]))->important();
         return redirect()->route('documents.index');
     }
 

@@ -11,7 +11,7 @@ return [
         'activity' => 'Activity',
 
         'created' => 'Document Created',
-        'deleted' => 'Document Deleted',
+        'deleted' => 'Document Deleted. :restoreLinkOpen Undo :restoreLinkClosed',
 
         'publish_state' => 'Publish State',
         'publish_states' => [
