@@ -6,6 +6,7 @@ use App\Http\Requests\Document as Requests;
 use App\Models\Category;
 use App\Models\Doc as Document;
 use App\Models\DocContent as DocumentContent;
+use App\Models\DocMeta as DocumentMeta;
 use App\Models\Group;
 use Auth;
 use Illuminate\Http\Request;
@@ -341,6 +342,26 @@ class DocumentController extends Controller
             'restoreLinkClosed' => '</a>',
         ]))->important();
         return redirect()->route('documents.index');
+    }
+
+    public function restore(Requests\Edit $request, Document $document)
+    {
+        if ($document->publish_state === Document::PUBLISH_STATE_DELETED_ADMIN) {
+            if (!$request->user()->isAdmin()) {
+                abort(403, 'Unauthorized');
+            }
+        }
+
+        DocumentMeta::withTrashed()->where('doc_id', $document->id)->restore();
+        $document->content()->withTrashed()->restore();
+        $document->annotations()->withTrashed()->restore();
+
+        $document->restore();
+        $document->publish_state = Document::PUBLISH_STATE_UNPUBLISHED;
+        $document->save();
+
+        flash(trans('messages.document.restored'));
+        return redirect()->route('documents.edit', ['document' => $document->id]);
     }
 
     public static function validPublishStatesForQuery()

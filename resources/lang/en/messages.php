@@ -12,6 +12,7 @@ return [
 
         'created' => 'Document Created',
         'deleted' => 'Document Deleted. :restoreLinkOpen Undo :restoreLinkClosed',
+        'restored' => 'Document Restored. It is currently unpublished.',
 
         'publish_state' => 'Publish State',
         'publish_states' => [
