@@ -125,6 +125,11 @@ class DocumentController extends Controller
             $requestedPublishStates = $request->input('publish_state');
         }
 
+        if (in_array(Document::PUBLISH_STATE_DELETED_ADMIN, $requestedPublishStates)
+            || in_array(Document::PUBLISH_STATE_DELETED_USER, $requestedPublishStates)) {
+            $documentsQuery->withTrashed();
+        }
+
         // build up a map of which publish states the user can see for each group
         $groupIdsToPubStates = [];
         foreach ($groupIds as $groupId) {
