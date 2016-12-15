@@ -52,5 +52,8 @@ return [
     'actions' => 'Actions',
     'id' => 'Id',
     'clear' => 'Clear',
+    'login' => 'Login',
+    'logout' => 'Logout',
+    'register' => 'Register',
 
 ];
