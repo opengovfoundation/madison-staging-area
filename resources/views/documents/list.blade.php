@@ -105,7 +105,7 @@
                     <td>{{ $document->title }}</td>
                     <td>{{ $document->created_at->toDateTimeString() }}</td>
                     <td>{{ $document->sponsors->shift()->display_name }}
-                        @if($document->sponsors->count() > 1)
+                        @if ($document->sponsors->count() > 1)
                             @lang('messages.document.group_others')
                         @endif
                     </td>
@@ -113,21 +113,48 @@
 
                     <td>
                         <div class="btn-toolbar" role="toolbar">
-                            <div class="btn-group" role="group">
-                                {{ Html::linkRoute(
-                                        'documents.edit',
-                                        trans('messages.edit'),
-                                        ['document' => $document->id],
-                                        ['class' => 'btn btn-default pull-left']
-                                        )
-                                }}
-                            </div>
+                            @foreach ($documentsCapabilities[$document->id] as $cap => $allowed)
+                                @if (!$allowed)
+                                    {{-- do nothing --}}
+                                @elseif ($cap === 'open')
+                                    <div class="btn-group" role="group">
+                                        {{ Html::linkRoute(
+                                                'documents.show',
+                                                trans('messages.open'),
+                                                ['document' => $document->id],
+                                                ['class' => 'btn btn-default']
+                                                )
+                                        }}
+                                    </div>
+                                @elseif ($cap === 'edit')
+                                    <div class="btn-group" role="group">
+                                        {{ Html::linkRoute(
+                                                'documents.edit',
+                                                trans('messages.edit'),
+                                                ['document' => $document->id],
+                                                ['class' => 'btn btn-default']
+                                                )
+                                        }}
+                                    </div>
+                                @elseif ($cap === 'delete')
+                                    <div class="btn-group" role="group">
+                                        {{ Form::open(['route' => ['documents.destroy', $document->id], 'method' => 'delete']) }}
+                                            <button type="submit" class="btn btn-default">{{ trans('messages.delete') }}</button>
+                                        {{ Form::close() }}
+                                    </div>
+                                @elseif ($cap === 'restore')
+                                    <div class="btn-group" role="group">
+                                        {{ Html::linkRoute(
+                                                'documents.restore',
+                                                trans('messages.restore'),
+                                                ['document' => $document->id],
+                                                ['class' => 'btn btn-default']
+                                                )
+                                        }}
+                                    </div>
+                                @endif
+                            @endforeach
 
-                            <div class="btn-group" role="group">
-                                {{ Form::open(['route' => ['documents.destroy', $document->id], 'method' => 'delete']) }}
-                                    <button type="submit" class="btn btn-default">{{ trans('messages.delete') }}</button>
-                                {{ Form::close() }}
-                            </div>
                         </div>
                     </td>
                 </tr>

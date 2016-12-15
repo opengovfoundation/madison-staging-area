@@ -56,5 +56,7 @@ return [
     'login' => 'Login',
     'logout' => 'Logout',
     'register' => 'Register',
+    'open' => 'Open',
+    'restore' => 'Restore',
 
 ];

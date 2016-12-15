@@ -52,4 +52,5 @@ Route::get('/home', 'HomeController@index');
 
 Route::resource('documents', 'DocumentController');
 
-Route::get('documents/{documentTrashed}/restore', 'DocumentController@restore');
+Route::get('/documents/{documentTrashed}/restore', 'DocumentController@restore')
+     ->name('documents.restore');
