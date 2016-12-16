@@ -387,12 +387,12 @@ class DocumentController extends Controller
 
             $file = $request->file('featured-image');
 
-            // Keep a record of our previous thumbnail.
-            $previousFeaturedImageId = $document->thumbnail;
+            // Keep a record of our previous featuredImage.
+            $previousFeaturedImageId = $document->featuredImage;
 
             $imageId = $this->documentService->generateAllImageSizes($file);
 
-            $document->thumbnail = $imageId;
+            $document->featuredImage = $imageId;
             $document->save();
 
             // Our featured image was saved, so let's remove the old one.
@@ -485,8 +485,8 @@ class DocumentController extends Controller
     {
         $this->documentService->destroyAllImageSizes($image);
 
-        if ($image === $document->thumbnail) {
-            $document->thumbnail = null;
+        if ($image === $document->featuredImage) {
+            $document->featuredImage = null;
             $document->save();
 
             flash(trans('messages.document.featured_image_removed'));

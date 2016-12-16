@@ -575,8 +575,8 @@ class Doc extends Model
             $return_doc['updated_at'] = date('c', strtotime($return_doc['updated_at']));
             $return_doc['created_at'] = date('c', strtotime($return_doc['created_at']));
 
-            if (!$return_doc['thumbnail']) {
-                $return_doc['thumbnailUrl'] = $doc->getFeaturedImageUrl();
+            if (!$return_doc['featuredImage']) {
+                $return_doc['featuredImageUrl'] = $doc->getFeaturedImageUrl();
             }
 
             $return_docs[] = $return_doc;
@@ -722,10 +722,10 @@ class Doc extends Model
 
     public function getFeaturedImageUrl()
     {
-        if ($this->thumbnail) {
+        if ($this->featuredImage) {
             return route('documents.images.show', [
                 'document' => $this->slug,
-                'image' => $this->thumbnail,
+                'image' => $this->featuredImage,
                 'size' => 'featured',
             ]);
         }
