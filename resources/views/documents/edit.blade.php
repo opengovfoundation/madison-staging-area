@@ -7,11 +7,25 @@
 
     @include('components.errors')
 
-    {{ Form::model($document, ['route' => ['documents.update', $document->slug], 'method' => 'put']) }}
+    {{ Form::model($document, ['route' => ['documents.update', $document->slug], 'method' => 'put', 'files' => true]) }}
         {{ Form::mInput('text', 'title', trans('messages.document.title')) }}
         {{ Form::mInput('text', 'slug', trans('messages.document.slug'), null, [], trans('messages.document.slug_help')) }}
         {{ Form::mInput('textarea', 'introtext', trans('messages.document.introtext')) }}
+
         {{ Form::mInput('checkbox', 'featured', trans('messages.document.featured'), null, request()->user()->isAdmin() ? [] : ['disabled' => true]) }}
+        {{ Form::mInput('file', 'featured-image', trans('messages.document.featured_image'), null, request()->user()->isAdmin() ? [] : ['disabled' => true]) }}
+        @if ($document->thumbnail)
+            <img src="{{ $document->thumbnail }}"/>
+
+            {{-- Submits the hidden remove image form --}}
+            <button
+                type="button"
+                class="btn btn-default"
+                onclick="event.preventDefault();document.getElementById('remove-featured-image-form').submit();">
+                @lang('messages.document.featured_image_remove')
+            </button>
+        @endif
+
         {{ Form::mSelect(
                 'publish_state',
                 trans('messages.document.publish_state'),
@@ -69,6 +83,16 @@
            'method' => 'post',
            'style' => 'display: none;',
            'id' => 'add-page-form',
+           ])
+    }}
+    {{ Form::close() }}
+
+    {{-- Hidden form to delete featured image of document --}}
+    {{ Form::open([
+           'route' => ['documents.images.destroy', $document->slug],
+           'method' => 'delete',
+           'style' => 'display: none;',
+           'id' => 'remove-featured-image-form',
            ])
     }}
     {{ Form::close() }}

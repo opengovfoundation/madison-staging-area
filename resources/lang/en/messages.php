@@ -63,6 +63,9 @@ return [
         'collaborators' => 'Collaborators',
         'sponsoredby' => 'Sponsored by',
         'featured' => 'Featured',
+        'featured_image' => 'Featured Image',
+        'featured_image_remove' => 'Remove Featured Image',
+        'featured_image_removed' => 'Featured Image Removed',
 
         'created' => 'Document created.',
         'deleted' => 'Document deleted. :restoreLinkOpen Undo :restoreLinkClosed',

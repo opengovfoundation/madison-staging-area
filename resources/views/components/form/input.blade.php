@@ -11,7 +11,7 @@
         @if ('textarea' === $type)
             {{ Form::textarea($name, $savedValue, array_merge(['class' => 'form-control'], $attributes)) }}
         @else
-            {{ Form::input($type, $name, $savedValue, array_merge(['type' => $type, 'class' => 'form-control'], $attributes)) }}
+            {{ Form::input($type, $name, $savedValue, array_merge(['type' => $type, 'class' => $type !== 'file' ? 'form-control' : ''], $attributes)) }}
         @endif
 
         @if (!empty($helpText))

@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+use File;
+use Image;
+use Storage;
+use Log;
+
 class DocumentController extends Controller
 {
     /**
@@ -349,6 +354,15 @@ class DocumentController extends Controller
         $document->sponsors()->sync($request->input('group_id'));
         $document->syncCategories($request->input('category_id'));
 
+        // update content for correct page
+        $pageContent = $document->content()->where('page', $request->input('page', 1))->first();
+
+        if ($pageContent) {
+            $pageContent->content = $request->input('page_content', '');
+            $pageContent->save();
+        }
+
+        // feature document stuff
         if ($document->featured != (bool) $request->input('featured', false)) {
             if (!$request->user()->isAdmin()) {
                 abort(403, 'Unauthorized.');
@@ -361,12 +375,74 @@ class DocumentController extends Controller
             }
         }
 
-        // update content for correct page
-        $pageContent = $document->content()->where('page', $request->input('page', 1))->first();
+        // TODO: featured image
+        if ($request->hasFile('featured-image')) {
+            if (!$request->user()->isAdmin()) {
+                abort(403, 'Unauthorized.');
+            }
 
-        if ($pageContent) {
-            $pageContent->content = $request->input('page_content', '');
-            $pageContent->save();
+            $file = $request->file('featured-image');
+
+            // Keep a record of our previous thumbnail.
+            $previousThumbnail = $document->thumbnail;
+
+            $result = Storage::put(
+                $document->getImagePath($file->getClientOriginalName()),
+                File::get($file)
+            );
+
+            // Save the multiple sizes of this image.
+            $sizes = config('madison.image_sizes');
+
+            foreach ($sizes as $name => $size) {
+                $img = Image::make($file);
+                if ($size['crop']) {
+                    $img->fit($size['width'], $size['height']);
+                } else {
+                    $img->resize($size['width'], $size['height']);
+                }
+
+                Storage::put(
+                    $document->getImagePath($file->getClientOriginalName(), $size),
+                    $img->stream()->__toString()
+                );
+
+                $result2 = $img->save();
+            }
+
+            // We want the featured image size to be the default.
+            // Otherwise, we use the fullsize.
+            $sizeName = null;
+            if ($sizes['featured']) {
+                $sizeName = 'featured';
+            }
+
+            $document->thumbnail = $document->getImageUrl(
+                $file->getClientOriginalName(),
+                $sizes[$sizeName]
+            );
+            $document->save();
+
+            // Our thumbnail was saved, so let's remove the old one.
+
+            // Only do this if the name has changed, or we'll remove the
+            // image we just uploaded.
+            if ($previousThumbnail && $previousThumbnail !== $document->thumbnail) {
+                // We just want the base name, not the resized one.
+                $imagePath = $document->getImagePathFromUrl($previousThumbnail, true);
+
+                if (Storage::has($imagePath)) {
+                    Storage::delete($imagePath);
+                }
+
+                foreach ($sizes as $name => $size) {
+                    $imagePath = $document->addSizeToImage($imagePath, $size);
+                    if (Storage::has($imagePath)) {
+                        Storage::delete($imagePath);
+                    }
+                }
+            }
+
         }
 
         flash(trans('messages.document.updated'));
@@ -434,6 +510,56 @@ class DocumentController extends Controller
 
         flash(trans('messages.document.page_added'));
         return redirect()->route('documents.edit', ['document' => $document->slug, 'page' => $page]);
+    }
+
+    public function showImage(Requests\View $request, Document $document, $image)
+    {
+        $size = $request->input('size', null);
+
+        $path = $document->getImagePath($image, $size);
+        if (Storage::has($path)) {
+            return response(Storage::get($path), 200)
+                ->header('Content-Type', Storage::mimeType($path));
+        } else {
+            abort(null, 404);
+        }
+    }
+
+    public function destroyImage(Requests\Edit $request, Document $document)
+    {
+        // TODO: remove or support or what?
+        $imagePath = $document->getImagePathFromUrl($document->thumbnail);
+        // $imagePath = $document->getImagePath($image);
+
+        if (Storage::has($imagePath)) {
+            try {
+                Storage::delete($imagePath);
+            } catch (Exception $e) {
+                Log::error("Error deleting document featured image for document id {$document->id}");
+                Log::error($e);
+            }
+        }
+
+        $sizes = config('madison.image_sizes');
+
+        // TODO: delete all sizes of the image
+        foreach ($sizes as $name => $size) {
+            $imagePath = $document->addSizeToImage($imagePath, $size);
+            if (Storage::has($imagePath)) {
+                try {
+                    Storage::delete($imagePath);
+                } catch (Exception $e) {
+                    Log::error("Error deleting document featured image for document id {$document->id}");
+                    Log::error($e);
+                }
+            }
+        }
+
+        $document->thumbnail = null;
+        $document->save();
+
+        flash(trans('messages.document.featured_image_removed'));
+        return redirect()->route('documents.edit', ['document' => $document->slug]);
     }
 
     public static function validPublishStatesForQuery()

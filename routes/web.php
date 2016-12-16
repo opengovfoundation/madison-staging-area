@@ -51,5 +51,11 @@ Route::resource('documents', 'DocumentController');
 Route::post('/documents/{document}/page', 'DocumentController@storePage')
     ->name('documents.page.store');
 
+Route::get('/documents/{document}/images/{image}', 'DocumentController@showImage')
+    ->name('documents.images.show');
+
+Route::delete('/documents/{document}/images/', 'DocumentController@destroyImage')
+    ->name('documents.images.destroy');
+
 Route::get('/documents/{documentTrashed}/restore', 'DocumentController@restore')
      ->name('documents.restore');

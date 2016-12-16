@@ -689,12 +689,12 @@ class Doc extends Model
 
     public function getImageUrl($image = '', $size = null)
     {
-        return '/api/docs/' . $this->id . '/images/' . $this->addSizeToImage($image, $size);
+        return '/documents/' . $this->id . '/images/' . $this->addSizeToImage($image, $size);
     }
 
     public function getImagePathFromUrl($image, $unsized = false)
     {
-        $image_url = str_replace('/api/docs/' . $this->id . '/images/',
+        $image_url = str_replace('/documents/' . $this->id . '/images/',
             'doc-' . $this->id . '/',
             $image);
 
