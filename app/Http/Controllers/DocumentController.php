@@ -8,6 +8,7 @@ use App\Models\Doc as Document;
 use App\Models\DocContent as DocumentContent;
 use App\Models\DocMeta as DocumentMeta;
 use App\Models\Group;
+use App\Services;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -20,13 +21,17 @@ use Log;
 
 class DocumentController extends Controller
 {
+    protected $documentService;
+
     /**
      * Instantiate a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Services\Documents $documentService)
     {
+        $this->documentService = $documentService;
+
         $this->middleware('auth')->except(['index', 'show']);
     }
 
@@ -375,7 +380,6 @@ class DocumentController extends Controller
             }
         }
 
-        // TODO: featured image
         if ($request->hasFile('featured-image')) {
             if (!$request->user()->isAdmin()) {
                 abort(403, 'Unauthorized.');
@@ -384,65 +388,17 @@ class DocumentController extends Controller
             $file = $request->file('featured-image');
 
             // Keep a record of our previous thumbnail.
-            $previousThumbnail = $document->thumbnail;
+            $previousFeaturedImageId = $document->thumbnail;
 
-            $result = Storage::put(
-                $document->getImagePath($file->getClientOriginalName()),
-                File::get($file)
-            );
+            $imageId = $this->documentService->generateAllImageSizes($file);
 
-            // Save the multiple sizes of this image.
-            $sizes = config('madison.image_sizes');
-
-            foreach ($sizes as $name => $size) {
-                $img = Image::make($file);
-                if ($size['crop']) {
-                    $img->fit($size['width'], $size['height']);
-                } else {
-                    $img->resize($size['width'], $size['height']);
-                }
-
-                Storage::put(
-                    $document->getImagePath($file->getClientOriginalName(), $size),
-                    $img->stream()->__toString()
-                );
-
-                $result2 = $img->save();
-            }
-
-            // We want the featured image size to be the default.
-            // Otherwise, we use the fullsize.
-            $sizeName = null;
-            if ($sizes['featured']) {
-                $sizeName = 'featured';
-            }
-
-            $document->thumbnail = $document->getImageUrl(
-                $file->getClientOriginalName(),
-                $sizes[$sizeName]
-            );
+            $document->thumbnail = $imageId;
             $document->save();
 
-            // Our thumbnail was saved, so let's remove the old one.
-
-            // Only do this if the name has changed, or we'll remove the
-            // image we just uploaded.
-            if ($previousThumbnail && $previousThumbnail !== $document->thumbnail) {
-                // We just want the base name, not the resized one.
-                $imagePath = $document->getImagePathFromUrl($previousThumbnail, true);
-
-                if (Storage::has($imagePath)) {
-                    Storage::delete($imagePath);
-                }
-
-                foreach ($sizes as $name => $size) {
-                    $imagePath = $document->addSizeToImage($imagePath, $size);
-                    if (Storage::has($imagePath)) {
-                        Storage::delete($imagePath);
-                    }
-                }
+            // Our featured image was saved, so let's remove the old one.
+            if ($previousFeaturedImageId) {
+                $this->documentService->destroyAllImageSizes($previousFeaturedImageId);
             }
-
         }
 
         flash(trans('messages.document.updated'));
@@ -470,7 +426,7 @@ class DocumentController extends Controller
 
         $document->delete();
 
-        $restoreUrl = '/documents/'.$document->slug.'/restore';
+        $restoreUrl = route('documents.restore', ['document' => $document->slug]);
         flash(trans('messages.document.deleted', [
             'restoreLinkOpen' => "<a href='$restoreUrl'>",
             'restoreLinkClosed' => '</a>',
@@ -515,50 +471,27 @@ class DocumentController extends Controller
     public function showImage(Requests\View $request, Document $document, $image)
     {
         $size = $request->input('size', null);
+        $imageId = $this->documentService->getImageIdForSize($image, $size);
 
-        $path = $document->getImagePath($image, $size);
-        if (Storage::has($path)) {
-            return response(Storage::get($path), 200)
-                ->header('Content-Type', Storage::mimeType($path));
-        } else {
+        if (!Storage::has($imageId)) {
             abort(null, 404);
         }
+
+        return response(Storage::get($imageId), 200)
+            ->header('Content-Type', Storage::mimeType($imageId));
     }
 
-    public function destroyImage(Requests\Edit $request, Document $document)
+    public function destroyImage(Requests\Edit $request, Document $document, $image)
     {
-        // TODO: remove or support or what?
-        $imagePath = $document->getImagePathFromUrl($document->thumbnail);
-        // $imagePath = $document->getImagePath($image);
+        $this->documentService->destroyAllImageSizes($image);
 
-        if (Storage::has($imagePath)) {
-            try {
-                Storage::delete($imagePath);
-            } catch (Exception $e) {
-                Log::error("Error deleting document featured image for document id {$document->id}");
-                Log::error($e);
-            }
+        if ($image === $document->thumbnail) {
+            $document->thumbnail = null;
+            $document->save();
+
+            flash(trans('messages.document.featured_image_removed'));
         }
 
-        $sizes = config('madison.image_sizes');
-
-        // TODO: delete all sizes of the image
-        foreach ($sizes as $name => $size) {
-            $imagePath = $document->addSizeToImage($imagePath, $size);
-            if (Storage::has($imagePath)) {
-                try {
-                    Storage::delete($imagePath);
-                } catch (Exception $e) {
-                    Log::error("Error deleting document featured image for document id {$document->id}");
-                    Log::error($e);
-                }
-            }
-        }
-
-        $document->thumbnail = null;
-        $document->save();
-
-        flash(trans('messages.document.featured_image_removed'));
         return redirect()->route('documents.edit', ['document' => $document->slug]);
     }
 

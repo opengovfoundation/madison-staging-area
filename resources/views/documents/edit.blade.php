@@ -15,7 +15,7 @@
         {{ Form::mInput('checkbox', 'featured', trans('messages.document.featured'), null, request()->user()->isAdmin() ? [] : ['disabled' => true]) }}
         {{ Form::mInput('file', 'featured-image', trans('messages.document.featured_image'), null, request()->user()->isAdmin() ? [] : ['disabled' => true]) }}
         @if ($document->thumbnail)
-            <img src="{{ $document->thumbnail }}"/>
+            <img src="{{ $document->getFeaturedImageUrl() }}"/>
 
             {{-- Submits the hidden remove image form --}}
             <button
@@ -89,7 +89,7 @@
 
     {{-- Hidden form to delete featured image of document --}}
     {{ Form::open([
-           'route' => ['documents.images.destroy', $document->slug],
+           'route' => ['documents.images.destroy', $document->slug, $document->thumbnail],
            'method' => 'delete',
            'style' => 'display: none;',
            'id' => 'remove-featured-image-form',

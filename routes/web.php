@@ -54,7 +54,7 @@ Route::post('/documents/{document}/page', 'DocumentController@storePage')
 Route::get('/documents/{document}/images/{image}', 'DocumentController@showImage')
     ->name('documents.images.show');
 
-Route::delete('/documents/{document}/images/', 'DocumentController@destroyImage')
+Route::delete('/documents/{document}/images/{image}', 'DocumentController@destroyImage')
     ->name('documents.images.destroy');
 
 Route::get('/documents/{documentTrashed}/restore', 'DocumentController@restore')
