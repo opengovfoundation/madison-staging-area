@@ -13,11 +13,7 @@ use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
-
-use File;
-use Image;
 use Storage;
-use Log;
 
 class DocumentController extends Controller
 {
