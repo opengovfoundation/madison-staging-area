@@ -48,8 +48,8 @@ Route::get('/', 'HomeController@index');
 
 Route::resource('documents', 'DocumentController');
 
-Route::post('/documents/{document}/page', 'DocumentController@storePage')
-    ->name('documents.page.store');
+Route::post('/documents/{document}/pages', 'DocumentController@storePage')
+    ->name('documents.pages.store');
 
 Route::get('/documents/{document}/images/{image}', 'DocumentController@showImage')
     ->name('documents.images.show');

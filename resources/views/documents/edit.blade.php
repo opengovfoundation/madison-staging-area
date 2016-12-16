@@ -79,7 +79,7 @@
 
     {{-- Hidden form to submit in order to add a blank page to document --}}
     {{ Form::open([
-           'route' => ['documents.page.store', $document->slug],
+           'route' => ['documents.pages.store', $document->slug],
            'method' => 'post',
            'style' => 'display: none;',
            'id' => 'add-page-form',
