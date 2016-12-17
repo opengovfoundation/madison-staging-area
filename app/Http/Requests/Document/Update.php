@@ -34,7 +34,7 @@ class Update extends Edit
             'discussion_state' => 'in:' . implode(',', Document::validDiscussionStates()),
             'group_id.*' => 'integer',
             'category_id.*' => 'integer',
-            'featured-image' => 'file',
+            'featured-image' => 'image',
         ];
     }
 }
