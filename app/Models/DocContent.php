@@ -65,8 +65,10 @@ class DocContent extends Model
         switch ($format) {
             case 'html':
                 $content = $this->html();
+                break;
             case 'raw':
                 $content = $this->content;
+                break;
         }
 
         if ($format === 'html') {

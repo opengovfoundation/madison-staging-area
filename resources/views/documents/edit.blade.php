@@ -60,6 +60,7 @@
                 ['multiple' => true]
                 )
         }}
+        <input type="hidden" name="page" value="{{ request()->input('page', 1) }}" />
         {{ Form::mInput('textarea', 'page_content', trans('messages.document.content'), $pages->first()->content) }}
         <div class="document-pages-toolbar">
             {{ $pages->appends(request()->query())->fragment('page_content')->links() }}

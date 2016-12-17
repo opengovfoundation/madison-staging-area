@@ -574,10 +574,7 @@ class Doc extends Model
             $return_doc['introtext'] = $doc->introtext()->first()['meta_value'];
             $return_doc['updated_at'] = date('c', strtotime($return_doc['updated_at']));
             $return_doc['created_at'] = date('c', strtotime($return_doc['created_at']));
-
-            if (!$return_doc['featuredImage']) {
-                $return_doc['featuredImageUrl'] = $doc->getFeaturedImageUrl();
-            }
+            $return_doc['featuredImageUrl'] = $doc->getFeaturedImageUrl();
 
             $return_docs[] = $return_doc;
         }
