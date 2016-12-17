@@ -2,7 +2,10 @@
 
 @if ('checkbox' === $type)
     <div class="checkbox">
-        {{ Form::label($name, Form::checkbox($name, $savedValue, null, $attributes) . $displayName, [], false) }}
+        <label>
+            {{ Form::checkbox($name, $savedValue, null, $attributes) }}
+            {{ $displayName }}
+        </label>
     </div>
 @else
     <div class="form-group">
