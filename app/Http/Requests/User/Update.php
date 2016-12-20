@@ -30,14 +30,14 @@ class Update extends FormRequest
         return [
             'fname' => 'string|required',
             'lname' => 'string|required',
-            'email' => 'string|required',
+            'email' => 'email|required',
             'address1' => 'string',
             'address2' => 'string',
             'city' => 'string',
             'state' => 'string',
             'postal_code' => 'string',
             'phone' => 'string',
-            'url' => 'string',
+            'url' => 'url',
             'new_password' => 'string|min:6|confirmed',
         ];
     }
