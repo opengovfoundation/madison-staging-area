@@ -15,16 +15,6 @@ use App\Models\User;
 use App\Models\Doc as Document;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-Route::bind('user', function ($value) {
-    $user = User::find($value);
-
-    if ($user) {
-        return $user;
-    }
-
-    throw new NotFoundHttpException;
-});
-
 Route::bind('document', function ($value) {
     $doc = Document::find($value);
     if ($doc) {
