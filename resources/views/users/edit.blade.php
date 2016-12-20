@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="page-header">
-        <h1>{{ trans('messages.user.edit') }}: {{ $user->fname }} {{ $user->lname }}</h1>
+        <h1>{{ trans('messages.user.edit') }}: {{ $user->displayName }}</h1>
     </div>
 
     @include('components.errors')
