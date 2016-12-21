@@ -352,7 +352,7 @@ class DocumentController extends Controller
     {
         $document->update($request->all());
         $document->setIntroText($request->input('introtext'));
-        $document->sponsors()->sync($request->input('group_id'));
+        $document->sponsors()->sync([$request->input('group_id')]);
         $document->syncCategories($request->input('category_id'));
 
         // update content for correct page

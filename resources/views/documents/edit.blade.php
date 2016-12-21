@@ -45,11 +45,10 @@
                 )
         }}
         {{ Form::mSelect(
-                'group_id[]',
+                'group_id',
                 trans('messages.document.group'),
                 $groups->mapWithKeys_v2(function ($item) {return [$item->id => $item->display_name]; })->toArray(),
-                $document->sponsors->map(function($group) { return $group->id; })->toArray(),
-                ['multiple' => true]
+                $document->sponsors->map(function($group) { return $group->id; })->first()
                 )
         }}
         {{ Form::mSelect(
