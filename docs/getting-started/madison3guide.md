@@ -28,7 +28,7 @@ By governing together your government officials will have better knowledge and b
 
 #### Becoming a Document Sponsor
 1. Click on the drop-down menu (appears when you click on your name)
-2. Scroll down to “Account Settings”
+2. Scroll down to "Account Settings"
 3. At the bottom of the page click the box requesting to be an Individual Sponsor and complete the form provided.
 4. A Madison Administrator will accept your request, and you can begin posting!
 
