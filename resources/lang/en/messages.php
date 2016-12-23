@@ -25,6 +25,9 @@ return [
     'open' => 'Open',
     'restore' => 'Restore',
 
+    'edit_profile' => 'Edit Profile',
+    'edit_sponsors' => 'Edit Sponsors',
+
     // Home Page Stuff
     'home' => [
         'welcome' => 'Add your voice...',
