@@ -454,7 +454,7 @@ class Sponsor extends Model
     {
         $sponsorMember = $this->findMemberByUserId($userId);
 
-        return $sponsorMember->role == static::ROLE_OWNER;
+        return $sponsorMember && $sponsorMember->role == static::ROLE_OWNER;
     }
 
     public function getMemberRole($userId)

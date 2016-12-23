@@ -100,11 +100,7 @@ return [
         'edit' => 'Edit Document',
     ],
 
-    'user' => [
-        'edit' => 'Edit Profile',
-        'fname' => 'First Name',
-        'lname' => 'Last Name',
-        'email' => 'Email Address',
+    'info' => [
         'url' => 'Website',
         'phone' => 'Phone Number',
         'address1' => 'Address 1',
@@ -112,10 +108,28 @@ return [
         'city' => 'City',
         'state' => 'State',
         'postal_code' => 'Zip Code',
+    ],
+
+    'user' => [
+        'edit' => 'Edit Profile',
+        'fname' => 'First Name',
+        'lname' => 'Last Name',
+        'email' => 'Email Address',
         'new_password' => 'New Password',
         'new_password_confirmation' => 'Re-Enter New Password',
         'updated' => 'User updated.',
         'update_failed' => 'User update failed.',
+    ],
+
+    'sponsors' => [
+        'edit' => 'Edit Sponsor',
+        'management' => 'Sponsor Management',
+        'display_name' => 'Display Name',
+        'internal_name' => 'Internal Name',
+        'your_role' => 'Your Role',
+        'status' => 'Status',
+        'updated' => 'Sponsor updated.',
+        'update_failed' => 'Sponsor update failed.',
     ],
 
 ];
