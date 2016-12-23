@@ -65,7 +65,9 @@ Route::delete('/documents/{document}/images/{image}', 'DocumentController@destro
 Route::get('/documents/{documentTrashed}/restore', 'DocumentController@restore')
      ->name('documents.restore');
 
-Route::resource('sponsors', 'SponsorController');
+Route::resource('sponsors', 'SponsorController', ['only' => [
+    'update', 'edit'
+]]);
 
 Route::get('/sponsors/manage', 'SponsorController@manage')
     ->name('sponsors.manage');

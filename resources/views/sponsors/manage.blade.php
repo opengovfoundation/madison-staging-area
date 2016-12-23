@@ -26,7 +26,17 @@
                     <td>{{ $sponsor->getMemberRole(Auth::user()->id) }}</td>
                     <td>{{ $sponsor->status }}</td>
                     <td>{{ $sponsor->created_at->diffForHumans() }}</td>
-                    <td></td>
+                    <td>
+                        <div class="btn-sponsor" role="sponsor">
+                            {{ Html::linkRoute(
+                                    'sponsors.edit',
+                                    trans('messages.edit'),
+                                    ['sponsor' => $sponsor->id],
+                                    ['class' => 'btn btn-default']
+                                    )
+                            }}
+                        </div>
+                    </td>
                 </tr>
             @endforeach
         </tbody>
