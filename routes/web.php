@@ -43,14 +43,13 @@ Route::bind('documentTrashed', function ($value) {
     throw new NotFoundHttpException;
 });
 
+// Authentication
 Auth::routes();
 
+// Home page
 Route::get('/', 'HomeController@index');
 
-Route::resource('users', 'UserController', ['only' => [
-    'edit', 'update'
-]]);
-
+// Documents
 Route::resource('documents', 'DocumentController');
 
 Route::post('/documents/{document}/pages', 'DocumentController@storePage')
@@ -64,3 +63,12 @@ Route::delete('/documents/{document}/images/{image}', 'DocumentController@destro
 
 Route::get('/documents/{documentTrashed}/restore', 'DocumentController@restore')
      ->name('documents.restore');
+
+
+// Sponsors
+Route::resource('sponsors', 'SponsorController');
+
+// Users
+Route::resource('users', 'UserController', ['only' => [
+    'edit', 'update'
+]]);
