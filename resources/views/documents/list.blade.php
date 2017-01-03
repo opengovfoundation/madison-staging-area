@@ -117,7 +117,7 @@
                                 @if (!$allowed)
                                     {{-- do nothing --}}
                                 @elseif ($cap === 'open')
-                                    <div class="btn-sponsor" role="sponsor">
+                                    <div class="btn-group" role="group">
                                         {{ Html::linkRoute(
                                                 'documents.show',
                                                 trans('messages.open'),
@@ -127,7 +127,7 @@
                                         }}
                                     </div>
                                 @elseif ($cap === 'edit')
-                                    <div class="btn-sponsor" role="sponsor">
+                                    <div class="btn-group" role="group">
                                         {{ Html::linkRoute(
                                                 'documents.edit',
                                                 trans('messages.edit'),
@@ -137,13 +137,13 @@
                                         }}
                                     </div>
                                 @elseif ($cap === 'delete')
-                                    <div class="btn-sponsor" role="sponsor">
+                                    <div class="btn-group" role="group">
                                         {{ Form::open(['route' => ['documents.destroy', $document->slug], 'method' => 'delete']) }}
                                             <button type="submit" class="btn btn-default">{{ trans('messages.delete') }}</button>
                                         {{ Form::close() }}
                                     </div>
                                 @elseif ($cap === 'restore')
-                                    <div class="btn-sponsor" role="sponsor">
+                                    <div class="btn-group" role="group">
                                         {{ Html::linkRoute(
                                                 'documents.restore',
                                                 trans('messages.restore'),

@@ -23,17 +23,14 @@ class ChangeGroupsToSponsors extends Migration
         Schema::rename('group_members', 'sponsor_members');
         Schema::rename('doc_group', 'doc_sponsor');
 
-        // TODO: indexes? keys? constraints?
         Schema::table('sponsor_members', function ($table) {
             $table->renameColumn('group_id', 'sponsor_id');
         });
 
-        // TODO: indexes? keys? constraints?
         Schema::table('doc_sponsor', function ($table) {
             $table->renameColumn('group_id', 'sponsor_id');
         });
 
-        // TODO: indexes? keys? constraints?
         Schema::table('notification_preferences', function ($table) {
             $table->renameColumn('group_id', 'sponsor_id');
         });
