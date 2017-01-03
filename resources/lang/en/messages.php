@@ -128,6 +128,10 @@ return [
 
         'updated' => 'Sponsor updated.',
         'update_failed' => 'Sponsor update failed.',
+
+        'create' => 'New Sponsor',
+        'created' => 'Sponsor created',
+        'create_failed' => 'Sponsor creation failed.',
     ],
 
     'info' => [
@@ -150,5 +154,4 @@ return [
         'updated' => 'User updated.',
         'update_failed' => 'User update failed.',
     ],
-
 ];

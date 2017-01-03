@@ -56,6 +56,7 @@
                 {{ Form::mInput('password', 'new_password_confirmation', trans('messages.user.new_password_confirmation')) }}
             </div>
         </div>
+        <hr>
         {{ Form::mSubmit() }}
     {{ Form::close() }}
 @endsection

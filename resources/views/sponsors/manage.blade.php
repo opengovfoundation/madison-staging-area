@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="page-header">
+        {{ Html::linkRoute('sponsors.create', trans('messages.sponsors.create'), [], ['class' => 'btn btn-default pull-right'])}}
         <h1>{{ trans('messages.sponsors.management') }}</h1>
     </div>
 
