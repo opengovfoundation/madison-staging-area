@@ -66,7 +66,7 @@ Route::get('/documents/{documentTrashed}/restore', 'DocumentController@restore')
      ->name('documents.restore');
 
 Route::resource('sponsors', 'SponsorController', ['only' => [
-    'update', 'edit'
+    'create', 'store', 'update', 'edit', 'destroy'
 ]]);
 
 Route::get('/sponsors/manage', 'SponsorController@manage')

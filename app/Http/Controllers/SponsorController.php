@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Sponsor;
 use App\Http\Requests\Sponsor as Requests;
+use App\Events\SponsorCreated;
 use Illuminate\Http\Request;
 use Auth;
+use Event;
 
 class SponsorController extends Controller
 {
@@ -35,9 +37,9 @@ class SponsorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Requests\Create $request)
     {
-        //
+        return view('sponsors.create');
     }
 
     /**
@@ -48,7 +50,19 @@ class SponsorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $sponsor = new Sponsor($request->all());
+        $sponsor->status = Sponsor::STATUS_PENDING;
+
+        if ($sponsor->save()) {
+            $sponsor->addMember(Auth::user()->id, Sponsor::ROLE_OWNER);
+            Event::fire(new SponsorCreated($sponsor));
+
+            flash(trans('messages.sponsors.created'));
+            return redirect()->route('sponsors.manage');
+        } else {
+            flash(trans('messages.sponsors.create_failed'));
+            return back()->withInput();
+        }
     }
 
     /**

@@ -133,6 +133,9 @@ return [
         'status' => 'Status',
         'updated' => 'Sponsor updated.',
         'update_failed' => 'Sponsor update failed.',
+        'create' => 'New Sponsor',
+        'created' => 'Sponsor created',
+        'create_failed' => 'Sponsor creation failed.',
     ],
 
 ];
