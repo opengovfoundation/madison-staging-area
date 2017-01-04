@@ -18,40 +18,58 @@ class SponsorController extends Controller
         $orderField = $request->input('order', 'updated_at');
         $orderDir = $request->input('order_dir', 'DESC');
         $limit = $request->input('limit', 10);
-        $requestedStatuses = $request->input('statuses', null);
 
         $sponsorsQuery = Sponsor
             ::query();
-
-        // TODO: this should probably support something similar to the
-        // document query, where if you can see the status of any sponsor you
-        // are a part of, even if it still pending
-        $statuses = [];
-        if ($requestedStatuses) {
-            if (in_array(Sponsor::STATUS_PENDING, $requestedStatuses)
-                && !($request->user() && $request->user()->isAdmin())
-            ) {
-                $statuses = [Sponsor::STATUS_ACTIVE];
-            } else {
-                $statuses = $requestedStatuses;
-            }
-        } elseif ($request->user() && $request->user()->isAdmin()) {
-            $statuses = Sponsor::getStatuses();
-        } else {
-            $statuses = [Sponsor::STATUS_ACTIVE];
-        }
-
-        $sponsorsQuery->whereIn('status', $statuses);
 
         if ($request->has('name')) {
             $name = $request->get('name');
             $sponsorsQuery->where('name', 'LIKE', "%$name%");
         }
 
+        // if the user is logged in, lookup any sponsors they belong to so we
+        // can widen the verification states we will allow
+        $userSponsorIds = [];
+        if ($request->user()) {
+            if ($request->user()->isAdmin()) {
+                // we'll just act like an admin is a member of every sponsor
+                $userSponsorIds = Sponsor::select('id')->pluck('id')->flip()->toArray();
+            } else {
+                $userSponsorIds = $request->user()->sponsors()->pluck('sponsors.id')->flip()->toArray();
+            }
+        }
+
+        // grab all the verification statuses we want to consider
+        $requestedStatuses = $request->input('statuses', null);
+        if (!$requestedStatuses) {
+            // otherwise the are logged in and didn't specify any specific
+            // statuses, so default to them all
+            $requestedStatuses = Sponsor::getStatuses();
+        }
+
+        // limit the query to the verification statuses
+        $sponsorsQuery->where(function ($sponsorsQuery) use ($requestedStatuses, $userSponsorIds) {
+            foreach ($requestedStatuses as $status) {
+                $sponsorsQuery->orWhere(function ($query) use ($status, $userSponsorIds) {
+                    $query->where('status', $status);
+                    switch($status) {
+                        case Sponsor::STATUS_ACTIVE:
+                            // nothing needed
+                            break;
+                        case Sponsor::STATUS_PENDING:
+                            $query->whereIn('id', $userSponsorIds);
+                            break;
+                    }
+                });
+            }
+        });
+
+        // execute the query
         $sponsors = $sponsorsQuery
             ->orderby($orderField, $orderDir)
             ->paginate($limit);
 
+        // easy list to expose or hide certain features in the UI
         $sponsorsCapabilities = [];
         $baseSponsorCapabilities = [
             'viewDocs' => true,
@@ -75,6 +93,7 @@ class SponsorController extends Controller
             $sponsorsCapabilities[$sponsor->id] = $caps;
         }
 
+        // only really needed if you are an admin, but doesn't hurt anything
         $validStatuses = Sponsor::getStatuses();
 
         return view('sponsors.list', compact([
