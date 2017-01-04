@@ -97,6 +97,7 @@ class SponsorController extends Controller
                     $canSeeAtLeastOneStatus = true;
                 } elseif ($sponsor->isValidUserForGroup($request->user())) {
                     $caps = array_map(function ($item) { return true; }, $caps);
+                    $caps['editStatus'] = false;
                     $canSeeAtLeastOneStatus = true;
                 }
             }
