@@ -185,5 +185,6 @@ class SponsorController extends Controller
     public function updateStatus(Requests\UpdateStatus $request, Sponsor $sponsor)
     {
         $sponsor->status = $request->input('status');
+        $sponsor->save();
     }
 }
