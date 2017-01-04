@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "482fa53a3a41f84862f39d2f418c6ddf",
-    "content-hash": "6b90c8623ee739493da106a6b5e28622",
+    "hash": "54d492425aaccf03e8e6efb099cab012",
+    "content-hash": "e55b643457eaf27584159e308537cfab",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -2877,16 +2877,16 @@
         },
         {
             "name": "zizaco/entrust",
-            "version": "5.2.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Zizaco/entrust.git",
-                "reference": "7455ed41fe448c37c6a5bcd41a584c1f92d428a3"
+                "reference": "992e484f90a4d00b8ec0f42e8a59ba0b07ba1e09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Zizaco/entrust/zipball/7455ed41fe448c37c6a5bcd41a584c1f92d428a3",
-                "reference": "7455ed41fe448c37c6a5bcd41a584c1f92d428a3",
+                "url": "https://api.github.com/repos/Zizaco/entrust/zipball/992e484f90a4d00b8ec0f42e8a59ba0b07ba1e09",
+                "reference": "992e484f90a4d00b8ec0f42e8a59ba0b07ba1e09",
                 "shasum": ""
             },
             "require": {
@@ -2941,7 +2941,7 @@
                 "permission",
                 "roles"
             ],
-            "time": "2016-11-04 16:23:22"
+            "time": "2016-12-29 06:24:46"
         }
     ],
     "packages-dev": [
@@ -3098,12 +3098,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/homestead.git",
-                "reference": "e476cbacf0013204c587c4194591e1b6a645a7a3"
+                "reference": "e805b2007475b75748ab127947cb8a482db969ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/homestead/zipball/e476cbacf0013204c587c4194591e1b6a645a7a3",
-                "reference": "e476cbacf0013204c587c4194591e1b6a645a7a3",
+                "url": "https://api.github.com/repos/laravel/homestead/zipball/e805b2007475b75748ab127947cb8a482db969ac",
+                "reference": "e805b2007475b75748ab127947cb8a482db969ac",
                 "shasum": ""
             },
             "require": {
@@ -3136,7 +3136,7 @@
                 }
             ],
             "description": "A virtual machine for web artisans.",
-            "time": "2016-12-06 21:16:30"
+            "time": "2017-01-02 23:06:34"
         },
         {
             "name": "mockery/mockery",
