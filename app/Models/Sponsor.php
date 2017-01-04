@@ -46,29 +46,6 @@ class Sponsor extends Model
     const ROLE_STAFF = 'staff';
 
     /**
-     *  Validation Rules.
-     */
-    public static $rules = array(
-        'name' => 'required',
-        'address1' => 'required',
-        'city' => 'required',
-        'state' => 'required',
-        'postal_code' => 'required',
-        'phone' => 'required',
-        'display_name' => 'required',
-    );
-
-    protected static $customMessages = array(
-      'name.required'                    => 'The sponsor name is required',
-      'address1.required'            => 'The sponsor address is required',
-      'city.required'                    => 'The sponsor city is required',
-      'state.required'                => 'The sponsor state is required',
-      'postal_code.required'    => 'The sponsor postal code is required',
-      'phone.required'    => 'The sponsor phone number is required',
-      'display_name.required'    => 'The sponsor display name is required',
-    );
-
-    /**
      *  Constructor.
      *
      *  @param array $attributes
@@ -104,63 +81,6 @@ class Sponsor extends Model
         return parent::save($options);
     }
 
-    /**
-     *  getErrors.
-     *
-     *  Returns errors from validation
-     *
-     *  @param void
-     *
-     *  @return MessageBag $this->validationErrors
-     */
-    public function getErrors()
-    {
-        return $this->validationErrors;
-    }
-
-    /**
-     *  beforeSave.
-     *
-     *  Validates before saving.  Returns whether the Sponsor can be saved.
-     *
-     *  @param array $options
-     *
-     *  @return bool
-     */
-    private function beforeSave(array $options = array())
-    {
-        if (!$this->validate()) {
-            Log::error("Unable to validate sponsor: ");
-            Log::error($this->getErrors()->toArray());
-            Log::error($this->attributes);
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     *  Validate.
-     *
-     *  Validate input against merged rules
-     *
-     *  @param array $attributes
-     *
-     *  @return bool
-     */
-    public function validate()
-    {
-        $validation = Validator::make($this->attributes, static::$rules, static::$customMessages);
-
-        if ($validation->passes()) {
-            return true;
-        }
-
-        $this->validationErrors = $validation->messages();
-
-        return false;
-    }
 
     public static function getStatuses()
     {
@@ -193,11 +113,6 @@ class Sponsor extends Model
     public function docs()
     {
         return $this->belongsToMany('App\Models\Doc');
-    }
-
-    public function getDisplayName()
-    {
-        return !empty($this->display_name) ? $this->display_name : !empty($this->name) ? $this->name : "";
     }
 
     /**

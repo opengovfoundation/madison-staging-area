@@ -61,10 +61,10 @@
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <a href="{{ route('users.edit', Auth::user()->id) }}">@lang('messages.edit_profile')</a>
+                                        <a href="{{ route('users.edit', Auth::user()->id) }}">@lang('messages.user.edit')</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('sponsors.manage') }}">@lang('messages.edit_sponsors')</a>
+                                        <a href="{{ route('sponsors.manage') }}">@lang('messages.sponsors.management')</a>
                                     </li>
                                     <li>
                                         <a href="{{ url('/logout') }}"

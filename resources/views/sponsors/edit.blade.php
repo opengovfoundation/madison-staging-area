@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="page-header">
-        <h1>{{ trans('messages.sponsors.edit') }}: {{ $sponsor->getDisplayName() }}</h1>
+        <h1>{{ trans('messages.sponsors.edit') }}: {{ $sponsor->display_name }}</h1>
     </div>
 
     @include('components.errors')

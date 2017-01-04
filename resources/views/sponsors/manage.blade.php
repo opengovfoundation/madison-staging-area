@@ -22,7 +22,7 @@
         <tbody>
             @foreach ($sponsors as $sponsor)
                 <tr>
-                    <td>{{ $sponsor->getDisplayName() }}</td>
+                    <td>{{ $sponsor->display_name }}</td>
                     <td>{{ $sponsor->name }}</td>
                     <td>{{ $sponsor->getMemberRole(Auth::user()->id) }}</td>
                     <td>{{ $sponsor->status }}</td>

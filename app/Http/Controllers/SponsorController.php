@@ -48,7 +48,7 @@ class SponsorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\Store $request)
     {
         $sponsor = new Sponsor($request->all());
         $sponsor->status = Sponsor::STATUS_PENDING;

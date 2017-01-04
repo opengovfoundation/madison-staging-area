@@ -14,7 +14,9 @@ class Edit extends FormRequest
      */
     public function authorize()
     {
-        return Auth::check() && $this->sponsor->isSponsorOwner(Auth::user()->id);
+        return Auth::check() && (
+            $this->sponsor->isSponsorOwner(Auth::user()->id) || Auth::user()->isAdmin()
+        );
     }
 
     /**
