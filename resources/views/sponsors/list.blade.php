@@ -30,6 +30,14 @@
                                )
                         }}
                         {{ Form::mSelect(
+                               'user_id[]',
+                               trans('messages.sponsor.member'),
+                               $users->mapWithKeys_v2(function ($item) {return [$item->id => $item->getDisplayName()]; })->toArray(),
+                               null,
+                               ['multiple' => true]
+                               )
+                        }}
+                        {{ Form::mSelect(
                                'order',
                                trans('messages.order_by'),
                                [

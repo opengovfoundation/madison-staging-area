@@ -106,6 +106,8 @@ return [
         'create' => 'Create Sponsor',
         'view_docs' => 'Documents',
 
+        'member' => 'Member',
+
         'status' => 'Status',
         'name' => 'Name',
         'statuses' => [

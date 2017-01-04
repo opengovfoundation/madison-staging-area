@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Sponsor as Requests;
 use App\Models\Sponsor;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class SponsorController extends Controller
@@ -25,6 +26,14 @@ class SponsorController extends Controller
         if ($request->has('name')) {
             $name = $request->get('name');
             $sponsorsQuery->where('name', 'LIKE', "%$name%");
+        }
+
+        // limit to selected members
+        $userIds = $request->input('user_id', []);
+        if (!empty($userIds)) {
+            $sponsorsQuery->whereHas('members', function ($q) use ($userIds) {
+                $q->whereIn('sponsor_members.user_id', $userIds);
+            });
         }
 
         // if the user is logged in, lookup any sponsors they belong to so we
@@ -93,6 +102,7 @@ class SponsorController extends Controller
             $sponsorsCapabilities[$sponsor->id] = $caps;
         }
 
+        $users = User::all();
         // only really needed if you are an admin, but doesn't hurt anything
         $validStatuses = Sponsor::getStatuses();
 
@@ -100,6 +110,7 @@ class SponsorController extends Controller
             'sponsors',
             'sponsorsCapabilities',
             'canSeeAtLeastOneStatus',
+            'users',
             'validStatuses',
         ]));
     }

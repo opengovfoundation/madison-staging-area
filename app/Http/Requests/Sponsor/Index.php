@@ -27,6 +27,7 @@ class Index extends FormRequest
         return [
             'limit' => 'integer',
             'name' => 'string|nullable',
+            'user_id.*' => 'integer',
             'order' => 'in:created_at,updated_at,name',
             'order_dir' => 'in:ASC,DESC',
             'page' => 'integer',
