@@ -43,11 +43,14 @@ Route::bind('documentTrashed', function ($value) {
     throw new NotFoundHttpException;
 });
 
+
 // Authentication
 Auth::routes();
 
+
 // Home page
 Route::get('/', 'HomeController@index');
+
 
 // Documents
 Route::resource('documents', 'DocumentController');
@@ -67,6 +70,7 @@ Route::get('/documents/{documentTrashed}/restore', 'DocumentController@restore')
 
 // Sponsors
 Route::resource('sponsors', 'SponsorController');
+
 
 // Users
 Route::resource('users', 'UserController', ['only' => [
