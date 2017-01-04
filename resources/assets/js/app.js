@@ -4,7 +4,7 @@ $(function () {
   $('div.alert').not('.alert-important').delay(3000).fadeOut(350);
 });
 
-function sponsorVerificationStatusChange(id, oldStatus, event) {
+window.sponsorVerificationStatusChange = function (id, oldStatus, event) {
   $.ajax({
     url: '/sponsors/'+id+'/status',
     method: 'PUT',
