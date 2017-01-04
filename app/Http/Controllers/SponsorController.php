@@ -58,6 +58,7 @@ class SponsorController extends Controller
             'open' => true,
             'edit' => false,
             'viewStatus' => false,
+            'editStatus' => false,
         ];
         $canSeeAtLeastOneStatus = false;
 
@@ -150,5 +151,10 @@ class SponsorController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function updateStatus(Requests\UpdateStatus $request, Sponsor $sponsor)
+    {
+        $sponsor->status = $request->input('status');
     }
 }
