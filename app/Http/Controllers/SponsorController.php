@@ -187,5 +187,8 @@ class SponsorController extends Controller
     {
         $sponsor->status = $request->input('status');
         $sponsor->save();
+
+        flash(trans('messages.sponsor.status_updated'));
+        return redirect()->route('sponsors.index', ['sponsor' => $sponsor->id]);
     }
 }
