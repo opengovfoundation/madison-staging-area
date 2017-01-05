@@ -104,6 +104,7 @@ return [
     'sponsor' => [
         'list' => 'Sponsors',
         'create' => 'Create Sponsor',
+        'my_sponsors' => 'My Sponsors',
         'edit' => 'Edit Sponsor',
         'view_docs' => 'Documents',
 
@@ -112,7 +113,6 @@ return [
         'name' => 'Name',
         'display_name' => 'Display Name',
         'internal_name' => 'Internal Name',
-        'your_role' => 'Your Role',
 
         'status' => 'Status',
         'statuses' => [
