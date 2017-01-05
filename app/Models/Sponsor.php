@@ -103,36 +103,36 @@ class Sponsor extends Model
     public static function getRoles($forHtml = false)
     {
         if ($forHtml) {
-            return array(
+            return [
                 static::ROLE_OWNER => static::ROLE_OWNER,
                 static::ROLE_EDITOR => static::ROLE_EDITOR,
                 static::ROLE_STAFF => static::ROLE_STAFF,
-            );
+            ];
         }
 
-        return array(static::ROLE_OWNER, static::ROLE_EDITOR, static::ROLE_STAFF);
+        return [static::ROLE_OWNER, static::ROLE_EDITOR, static::ROLE_STAFF];
     }
 
     protected function getPermissionsArray()
     {
-        return array(
-            array(
+        return [
+            [
                 'name' => "sponsor_{$this->id}_create_document",
                 'display_name' => "Create Documents",
-            ),
-            array(
+            ],
+            [
                 'name' => "sponsor_{$this->id}_edit_document",
                 'display_name' => 'Edit Documents',
-            ),
-            array(
+            ],
+            [
                 'name' => "sponsor_{$this->id}_delete_document",
                 'display_name' => "Delete Documents",
-            ),
-            array(
+            ],
+            [
                 'name' => "sponsor_{$this->id}_manage_document",
                 'display_name' => "Manage Documents",
-            ),
-        );
+            ],
+        ];
     }
 
     public function createRbacRules()

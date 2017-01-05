@@ -85,6 +85,7 @@ class SponsorController extends Controller
         $sponsorsCapabilities = [];
         $baseSponsorCapabilities = [
             'viewDocs' => true,
+            'viewMembers' => true,
             'open' => true,
             'edit' => false,
             'viewStatus' => false,
