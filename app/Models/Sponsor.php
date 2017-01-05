@@ -45,42 +45,6 @@ class Sponsor extends Model
     const ROLE_EDITOR = 'editor';
     const ROLE_STAFF = 'staff';
 
-    /**
-     *  Constructor.
-     *
-     *  @param array $attributes
-     *  Extends Eloquent constructor
-     */
-    public function __construct($attributes = array())
-    {
-        parent::__construct($attributes);
-        $this->validationErrors = new MessageBag();
-    }
-
-    /**
-     *  Save.
-     *
-     *  Override Eloquent save() method
-     *      Runs $this->beforeSave()
-     *      Unsets:
-     *          * $this->validationErrors
-     *          * $this->rules
-     *
-     *  @param array $options
-     *  $return bool
-     */
-    public function save(array $options = array())
-    {
-        if (!$this->beforeSave()) {
-            return false;
-        }
-
-        //Don't want Sponsor model trying to save validationErrors field.
-        unset($this->validationErrors);
-
-        return parent::save($options);
-    }
-
 
     public static function getStatuses()
     {
