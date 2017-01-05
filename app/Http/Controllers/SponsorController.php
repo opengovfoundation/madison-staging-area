@@ -45,9 +45,9 @@ class SponsorController extends Controller
         if ($request->user()) {
             if ($request->user()->isAdmin()) {
                 // we'll just act like an admin is a member of every sponsor
-                $userSponsorIds = Sponsor::select('id')->pluck('id')->flip()->toArray();
+                $userSponsorIds = Sponsor::select('id')->pluck('id')->toArray();
             } else {
-                $userSponsorIds = $request->user()->sponsors()->pluck('sponsors.id')->flip()->toArray();
+                $userSponsorIds = $request->user()->sponsors()->pluck('sponsors.id')->toArray();
             }
         }
 
@@ -98,7 +98,7 @@ class SponsorController extends Controller
                 if ($request->user()->isAdmin()) {
                     $caps = array_map(function ($item) { return true; }, $caps);
                     $canSeeAtLeastOneStatus = true;
-                } elseif ($sponsor->isValidUserForGroup($request->user())) {
+                } elseif (Sponsor::isValidUserForSponsor($request->user()->id, $sponsor->id)) {
                     $caps = array_map(function ($item) { return true; }, $caps);
                     $caps['editStatus'] = false;
                     $canSeeAtLeastOneStatus = true;
