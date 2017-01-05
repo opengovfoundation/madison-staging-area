@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-4">
-        {{ Form::mInput('text', 'name', trans('messages.sponsors.internal_name')) }}
-        {{ Form::mInput('text', 'display_name', trans('messages.sponsors.display_name')) }}
+        {{ Form::mInput('text', 'name', trans('messages.sponsor.internal_name')) }}
+        {{ Form::mInput('text', 'display_name', trans('messages.sponsor.display_name')) }}
     </div>
     <div class="col-md-8">
         <div class="row">

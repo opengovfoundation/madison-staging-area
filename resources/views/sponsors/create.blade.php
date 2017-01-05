@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="page-header">
-        <h1>{{ trans('messages.sponsors.create') }}</h1>
+        <h1>{{ trans('messages.sponsor.create') }}</h1>
     </div>
 
     @include('components.errors')

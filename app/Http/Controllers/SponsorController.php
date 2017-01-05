@@ -145,10 +145,10 @@ class SponsorController extends Controller
             $sponsor->addMember(Auth::user()->id, Sponsor::ROLE_OWNER);
             Event::fire(new SponsorCreated($sponsor));
 
-            flash(trans('messages.sponsors.created'));
-            return redirect()->route('sponsors.manage');
+            flash(trans('messages.sponsor.created'));
+            return redirect()->route('sponsors.index');
         } else {
-            flash(trans('messages.sponsors.create_failed'));
+            flash(trans('messages.sponsor.create_failed'));
             return back()->withInput();
         }
     }
@@ -194,10 +194,10 @@ class SponsorController extends Controller
         $sponsor->phone = $request->input('phone') ?: null;
 
         if ($sponsor->save()) {
-            flash(trans('messages.sponsors.updated'));
+            flash(trans('messages.sponsor.updated'));
             return redirect()->route('sponsors.edit', ['sponsor' => $sponsor->id]);
         } else {
-            flash(trans('messages.sponsors.update_failed'));
+            flash(trans('messages.sponsor.update_failed'));
             return redirect()->route('sponsors.edit', ['sponsor' => $sponsor->id]);
         }
     }
