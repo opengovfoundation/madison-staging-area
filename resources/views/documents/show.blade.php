@@ -23,9 +23,15 @@
     {{ $pages->appends(request()->query())->fragment('page_content')->links() }}
 
     @push('scripts')
+        <script src="{{ elixir('js/annotator-madison.js') }}"></script>
         <script src="{{ elixir('js/document.js') }}"></script>
         <script>
-            loadAnnotations("#page_content", {{ $document->id }});
+            loadAnnotations(
+                "#page_content",
+                {{ $document->id }},
+                {{ request()->user() ? request()->user()->id : null }},
+                {{ $document->discussionState === \App\Models\Doc::DISCUSSION_STATE_CLOSED ? 1 : 0 }}
+            );
         </script>
     @endpush
 @endsection
