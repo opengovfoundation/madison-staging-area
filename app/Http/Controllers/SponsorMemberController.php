@@ -43,9 +43,14 @@ class SponsorMemberController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Sponsor $sponsor, Requests\Create $request)
     {
-        //
+        $allRoles = Sponsor::getRoles(true);
+
+        return view('sponsor_members.create', compact([
+            'sponsor',
+            'allRoles',
+        ]));
     }
 
     /**

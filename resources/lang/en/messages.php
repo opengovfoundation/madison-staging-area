@@ -133,6 +133,8 @@ return [
     ],
 
     'sponsor_member' => [
+        'add' => 'Add a Member',
+        'create' => 'New Sponsor Member',
         'list' => 'Sponsor Members',
         'role' => 'Role',
         'joined' => 'Joined',
