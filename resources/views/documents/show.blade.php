@@ -22,4 +22,10 @@
 
     {{ $pages->appends(request()->query())->fragment('page_content')->links() }}
 
+    @push('scripts')
+        <script src="{{ elixir('js/document.js') }}"></script>
+        <script>
+            loadAnnotations("#page_content", {{ $document->id }});
+        </script>
+    @endpush
 @endsection

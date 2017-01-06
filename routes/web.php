@@ -52,6 +52,10 @@ Auth::routes();
 Route::get('/', 'HomeController@index');
 
 
+// Comments
+Route::resource('documents.comments', 'CommentController');
+
+
 // Documents
 Route::resource('documents', 'DocumentController');
 
@@ -66,6 +70,7 @@ Route::delete('/documents/{document}/images/{image}', 'DocumentController@destro
 
 Route::get('/documents/{documentTrashed}/restore', 'DocumentController@restore')
      ->name('documents.restore');
+
 
 // Sponsors
 Route::resource('sponsors', 'SponsorController');
