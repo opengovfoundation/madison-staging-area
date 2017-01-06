@@ -15,7 +15,13 @@ class Index extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $currentUser = $this->user();
+
+        return $this->sponsor->isActive() || (
+            $currentUser && (
+                $currentUser->isAdmin() || $this->sponsor->hasMember($currentUser->id)
+            )
+        );
     }
 
     /**

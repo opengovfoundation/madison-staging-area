@@ -278,25 +278,23 @@ class Sponsor extends Model
         return static::where('id', '=', $sponsorMember->sponsor_id)->first();
     }
 
+    public function hasMember($user_id)
+    {
+        return static::isValidUserForSponsor($user_id, $this->id);
+    }
+
     public static function isValidUserForSponsor($user_id, $sponsor_id)
     {
         $sponsor = static::where('id', '=', $sponsor_id)->first();
 
         if (!$sponsor) {
-            throw new Exception("Invalid Sponsor ID $sponsor_id");
-
+            throw new \Exception("Invalid Sponsor ID $sponsor_id");
             return false;
         }
 
         $member = $sponsor->findMemberByUserId($user_id);
 
-        if (!$member) {
-            throw new Exception("Invalid Member ID");
-
-            return false;
-        }
-
-        return true;
+        return !!$member;
     }
 
     public function findUsersByRole($role)

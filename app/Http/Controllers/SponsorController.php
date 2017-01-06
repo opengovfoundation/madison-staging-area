@@ -99,7 +99,7 @@ class SponsorController extends Controller
                 if ($request->user()->isAdmin()) {
                     $caps = array_map(function ($item) { return true; }, $caps);
                     $canSeeAtLeastOneStatus = true;
-                } elseif (Sponsor::isValidUserForSponsor($request->user()->id, $sponsor->id)) {
+                } elseif ($sponsor->hasMember($request->user()->id)) {
                     $caps = array_map(function ($item) { return true; }, $caps);
                     $caps['editStatus'] = false;
                     $canSeeAtLeastOneStatus = true;
