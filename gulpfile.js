@@ -13,6 +13,7 @@ const elixir = require('laravel-elixir');
 
 elixir((mix) => {
     mix.sass('app.scss')
+       .webpack('annotator-madison.js')
        .webpack('app.js')
        .webpack('document.js')
        .combine(
@@ -27,6 +28,7 @@ elixir((mix) => {
        .copy('resources/assets/annotator.min.css', 'public/css/')
        .version([
          'css/app.css',
+         'js/annotator-madison.js',
          'js/app.js',
          'js/document.js',
          'js/vendor.js'
