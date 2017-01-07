@@ -138,6 +138,9 @@ return [
         'list' => 'Sponsor Members',
         'role' => 'Role',
         'joined' => 'Joined',
+        'failed_invalid_email' => 'User not found by that email address.',
+        'failed_already_member' => 'That user is already a member of this sponsor',
+        'created' => 'Member successfully added to Sponsor',
     ],
 
     'info' => [

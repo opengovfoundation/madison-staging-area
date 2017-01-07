@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Sponsor;
+use App\Models\User;
 use App\Http\Requests\SponsorMember as Requests;
+use App\Events\SponsorMemberAdded;
+use Event;
 
 class SponsorMemberController extends Controller
 {
@@ -59,9 +62,25 @@ class SponsorMemberController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Sponsor $sponsor, Requests\Store $request)
     {
-        //
+        $user = User::where('email', $request->input('email'))->first();
+
+        if (!$user) {
+            flash(trans('messages.sponsor_member.failed_invalid_email'));
+            return back()->withInput();
+        }
+
+        if ($sponsor->hasMember($user->id)) {
+            flash(trans('messages.sponsor_member.failed_already_member'));
+            return back()->withInput();
+        }
+
+        $newMember = $sponsor->addMember($user->id, $request->input('role', null));
+        Event::fire(new SponsorMemberAdded($newMember));
+
+        flash(trans('messages.sponsor_member.created'));
+        return redirect()->route('sponsors.members.index', $sponsor->id);
     }
 
     /**
