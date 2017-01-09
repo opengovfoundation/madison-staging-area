@@ -135,12 +135,14 @@ return [
     'sponsor_member' => [
         'add' => 'Add a Member',
         'create' => 'New Sponsor Member',
+        'remove' => 'Remove',
         'list' => 'Sponsor Members',
         'role' => 'Role',
         'joined' => 'Joined',
         'failed_invalid_email' => 'User not found by that email address.',
         'failed_already_member' => 'That user is already a member of this sponsor',
         'created' => 'Member successfully added to Sponsor',
+        'removed' => 'Member successfully removed from Sponsor',
     ],
 
     'info' => [

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Sponsor;
+use App\Models\SponsorMember;
 use App\Models\User;
 use App\Http\Requests\SponsorMember as Requests;
 use App\Events\SponsorMemberAdded;
@@ -123,8 +124,10 @@ class SponsorMemberController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Sponsor $sponsor, Requests\Destroy $request, SponsorMember $sponsorMember)
     {
-        //
+        $sponsorMember->delete();
+        flash(trans('messages.sponsor_member.removed'));
+        return redirect()->route('sponsors.members.index', $sponsor->id);
     }
 }
