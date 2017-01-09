@@ -23,7 +23,14 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
         annotation.highlights.forEach(function (highlight) {
           $(highlight).attr('id', 'annotation_' + annotation.id);
           $(highlight).attr('name', 'annotation_' + annotation.id);
+
+          annotation.commentsCollapsed = true;
+          annotation.label = 'annotation';
           annotation.link = 'annotation_' + annotation.id;
+          annotation.permalinkBase = 'annotation';
+
+          // TODO: fix this
+          // annotation.html = $sce.trustAsHtml(converter.makeHtml(annotation.text));
         });
       });
 
@@ -31,6 +38,10 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       //Set the annotations in the annotationService
       // annotationService.setAnnotations(annotations);
       // annotationService.broadcastSet();
+
+      // TODO: support scrolling to specific annotation
+
+      this.drawSideAnnotations(annotations);
     });
 
     /**
@@ -156,6 +167,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       }
     }.bind(this);
   },
+
   addEditFields: function (field, annotation) {
     var newField = $(field);
     var toAdd = $('<div class="annotator-editor-edit-wrapper"></div>');
@@ -196,6 +208,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
     toAdd.append(annotationError);
     newField.html(toAdd);
   },
+
   addComments: function (field, annotation) {
     var userId = this.options.userId;
 
@@ -244,6 +257,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
 
     $(field).append(commentsHeader, currentComments);
   },
+
   addNoteActions: function (field, annotation) {
     var userId = this.options.userId;
 
@@ -279,6 +293,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
 
     $(field).append(annotationAction);
   },
+
   addNoteLink: function (field, annotation) {
     // Add link to annotation
     var linkPath = window.location.pathname + '#' + annotation.link;
@@ -288,6 +303,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
     annotationLink.append(noteLink);
     $(field).append(annotationLink);
   },
+
   createComment: function (textElement, annotation) {
     var userId = this.options.userId;
     var docId = this.options.docId;
@@ -306,6 +322,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       return this.annotator.publish('commentCreated', comment);
     }.bind(this));
   },
+
   addLike: function (annotation, element) {
     var docId = this.options.docId;
     $.post('/documents/' + docId + '/comments/' + annotation.id + '/likes', function (data) {
@@ -327,6 +344,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       annotation.user_action = 'like';
     });
   },
+
   addFlag: function (annotation, element) {
     var docId = this.options.docId;
     $.post('/documents/' + docId + '/comments/' + annotation.id + '/flags', function (data) {
@@ -346,5 +364,68 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       annotation.flags = data.flags;
       annotation.user_action = 'flag';
     });
+  },
+
+  drawSideAnnotations: function (annotations) {
+    var annotationGroups = this.groupAnnotations(annotations);
+
+    // TODO: draw annotation group side thing
+  },
+
+  groupAnnotations: function (annotations) {
+    var parentElements = 'h1,h2,h3,h4,h5,h6,li,p';
+    var annotationGroupCount = 0;
+    var annotationGroups = [];
+
+    annotations.forEach(function (annotation) {
+      // Get the first highlight's parent, and show our toolbar link for it next
+      // to it.
+      var annotationParent = $(annotation.highlights[0]).parents(parentElements).first();
+      var annotationParentId;
+      if (annotationParent.prop('id')) {
+        annotationParentId = annotationParent.prop('id');
+      } else {
+        annotationGroupCount++;
+        annotationParentId = 'annotationGroup-' + annotationGroupCount;
+        annotationParent.prop('id', annotationParentId);
+      }
+
+      if ((typeof(annotationGroups[annotationParentId])).toLowerCase() === 'undefined') {
+        var parentTop = annotationParent.offset().top;
+        var containerTop = $('.annotation-container').offset().top;
+        var positionTop = (parentTop - containerTop) + 'px';
+
+        annotationGroups[annotationParentId] = {
+          annotations: [],
+          parent: annotationParent,
+          parentId: annotationParentId,
+          commentCount: 0,
+          top: positionTop,
+          users: []
+        };
+      }
+
+      // Count replies
+      annotationGroups[annotationParentId].commentCount += annotation.comments.length;
+
+      // Count the unique users for our annotations.
+      if (annotationGroups[annotationParentId].users.indexOf(annotation.user.id) < 0) {
+        annotationGroups[annotationParentId].users.push(annotation.user.id);
+      }
+
+      // Then count the unique users for the responses to each annotation.
+      for (var commentIndex in annotation.comments) {
+        var comment = annotation.comments[commentIndex];
+        annotation.comments[commentIndex].permalinkBase ='annsubcomment';
+        annotation.comments[commentIndex].label ='comment';
+        if (annotationGroups[annotationParentId].users.indexOf(comment.user.id) < 0) {
+          annotationGroups[annotationParentId].users.push(comment.user.id);
+        }
+      }
+
+      annotationGroups[annotationParentId].annotations.push(annotation);
+    }, this);
+
+    return annotationGroups;
   }
 });
