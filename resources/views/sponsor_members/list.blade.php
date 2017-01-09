@@ -78,6 +78,11 @@
                     <td>
                         <div class="btn-toolbar" role="toolbar">
                             {{-- action buttons here eventually! --}}
+                            @if ($sponsor->isSponsorOwner(Auth::user()->id) || Auth::user()->isAdmin())
+                                {{ Form::open(['route' => ['sponsors.members.destroy', $sponsor, $member], 'method' => 'delete']) }}
+                                    <button type="submit" class="btn btn-default">{{ trans('messages.sponsor_member.remove') }}</button>
+                                {{ Form::close() }}
+                            @endif
                         </div>
                     </td>
                 </tr>
