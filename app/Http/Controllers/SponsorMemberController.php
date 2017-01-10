@@ -124,7 +124,7 @@ class SponsorMemberController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Sponsor $sponsor, Requests\Destroy $request, SponsorMember $sponsorMember)
+    public function destroy(Requests\Destroy $request, Sponsor $sponsor, SponsorMember $sponsorMember)
     {
         $sponsorMember->delete();
         flash(trans('messages.sponsor_member.removed'));
