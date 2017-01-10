@@ -124,10 +124,18 @@ class SponsorMemberController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Requests\Destroy $request, Sponsor $sponsor, SponsorMember $sponsorMember)
+    public function destroy(Requests\Destroy $request, Sponsor $sponsor, SponsorMember $member)
     {
-        $sponsorMember->delete();
-        flash(trans('messages.sponsor_member.removed'));
+        $ownerCount = $sponsor->members()->where('role', Sponsor::ROLE_OWNER)->count();
+
+        // if member being removed is an owner, make sure it's not the last owner
+        if ($member->role == Sponsor::ROLE_OWNER && $ownerCount < 2) {
+            flash(trans('messages.sponsor_member.need_owner'));
+        } else {
+            $member->delete();
+            flash(trans('messages.sponsor_member.removed'));
+        }
+
         return redirect()->route('sponsors.members.index', $sponsor->id);
     }
 }

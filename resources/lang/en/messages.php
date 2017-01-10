@@ -143,6 +143,7 @@ return [
         'failed_already_member' => 'That user is already a member of this sponsor',
         'created' => 'Member successfully added to Sponsor',
         'removed' => 'Member successfully removed from Sponsor',
+        'need_owner' => 'A sponsor must have at least one owner',
     ],
 
     'info' => [
