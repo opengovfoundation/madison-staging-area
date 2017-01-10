@@ -16,7 +16,7 @@ class SponsorMemberController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Sponsor $sponsor, Requests\Index $request)
+    public function index(Requests\Index $request, Sponsor $sponsor)
     {
         $orderField = $request->input('order', 'updated_at');
         $orderDir = $request->input('order_dir', 'DESC');
@@ -46,7 +46,7 @@ class SponsorMemberController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Sponsor $sponsor, Requests\Create $request)
+    public function create(Requests\Create $request, Sponsor $sponsor)
     {
         $allRoles = Sponsor::getRoles(true);
 
@@ -62,7 +62,7 @@ class SponsorMemberController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Sponsor $sponsor, Requests\Store $request)
+    public function store(Requests\Store $request, Sponsor $sponsor)
     {
         $user = User::where('email', $request->input('email'))->first();
 

@@ -33,25 +33,5 @@ class UsersTableSeeder extends Seeder
             'token' => '12345',
         ]);
 
-        $adminUser = User::where('email', $creds['admin_email'])->first();
-
-        $events = [
-            'madison.comment.created',
-            'madison.feedback.seen',
-            'madison.sponsor.created',
-            'madison.sponsor.member-added',
-            'madison.user.verification.request',
-            'madison.user.verification.changed',
-        ];
-
-        // Default admin to receive all notifications
-        foreach ($events as $event) {
-            DB::table('notification_preferences')->insert([
-                'event' => $event,
-                'type' => 'email',
-                'user_id' => $adminUser->id,
-            ]);
-        }
-
     }
 }
