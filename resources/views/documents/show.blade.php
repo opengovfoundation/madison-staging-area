@@ -33,6 +33,7 @@
         <script src="{{ elixir('js/document.js') }}"></script>
         <script>
             loadTranslations([
+                'messages.close',
                 'messages.none',
                 'messages.document.collaborators_count',
                 'messages.document.replies_count',
