@@ -78,8 +78,14 @@ Route::resource('sponsors', 'SponsorController');
 Route::put('/sponsors/{sponsor}/status', 'SponsorController@updateStatus')
     ->name('sponsors.status.update');
 
+
 // Sponsor Members
 Route::resource('sponsors.members', 'SponsorMemberController');
+
+
+// Translations
+Route::get('/translations', 'TranslationController@index');
+
 
 // Users
 Route::resource('users', 'UserController', ['only' => [
