@@ -13,6 +13,12 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
     // var annotationService = this.options.annotationService;
     // this.showLoginForm = this.options.showLoginForm;
 
+    $(document).on('madison.showNotes', function (e) {
+      let annotationGroup = this.annotationGroups[$(e.target).data('groupId')];
+      this.drawNotesPane(annotationGroup);
+      $('.annotation-pane').addClass('active');
+    }.bind(this));
+
     /**
      *  Subscribe to Store's `annotationsLoaded` event
      *    Stores all annotation objects provided by Store in the window
@@ -41,7 +47,9 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
 
       // TODO: support scrolling to specific annotation
 
-      this.drawSideAnnotations(annotations);
+      annotationGroups = this.groupAnnotations(annotations);
+      this.annotationGroups = annotationGroups;
+      this.drawNotesSideBubbles(annotations, annotationGroups);
     }.bind(this));
 
     /**
@@ -366,8 +374,9 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
     });
   },
 
-  drawSideAnnotations: function (annotations) {
-    var annotationGroups = this.groupAnnotations(annotations);
+  drawNotesSideBubbles: function (annotations, annotationGroups) {
+    // remove any existing content
+    $('#participate-activity').remove();
 
     // draw annotation group side bubbles
     var sideBubbles = '<div id="participate-activity" class="participate-activity">';
@@ -379,7 +388,10 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       for (let index in annotationGroups) {
         let annotationGroup = annotationGroups[index];
 
-        sideBubbles += '<div class="annotation-group" style="top:'+annotationGroup.top+'" onclick=showNotes('+annotationGroup+')>';
+        sideBubbles += '<div class="annotation-group"'
+          + ' style="top:'+annotationGroup.top+'"'
+          + ' onclick=$(this).trigger("madison.showNotes")'
+          + ' data-group-id='+index+'>';
 
         sideBubbles += '<span class="annotation-group-count fa-stack">';
         sideBubbles += '<i class="fa fa-comment fa-stack-2x"></i>';
@@ -409,8 +421,108 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
     sideBubbles += '</div>';
 
     $(this.options.annotationContainerElem).append(sideBubbles);
+  },
 
-    // TODO: draw annotation pane
+  drawNotesPane: function (annotationGroup) {
+    // remove any existing content
+    $('.annotation-pane').remove();
+
+    // build up new content
+    var pane = '';
+    pane += '<aside class="annotation-pane">';
+
+    pane += '<header class="title-header">';
+    pane += '<h2>'+window.trans['messages.document.notes']+'</h2>';
+    pane += '<a class="close-button" onclick="hideNotes()">';
+    pane += window.trans['messages.document.actions.closesidebar'];
+    pane += '</a>';
+    pane += '</header>';
+
+    pane += '<section class="annotation-list">'
+    annotationGroup.annotations.forEach(function (annotation) {
+      pane += '<article class="annotation">';
+
+      pane += '<blockquote>&quot;';
+      annotation.highlights.forEach(function (highlight) {
+        pane += '<span>';
+        pane += highlight.textContent;
+        pane += '</span>';
+      });
+      pane += '&quot;</blockquote>';
+
+      // TODO: this highlighting thing
+      pane += '<div class="comment-body" ng-class="{ highlight: !(subCommentId) && (annotation.id-0) === (annotationId-0) }">'
+
+      pane += '<header class="annotation-header">'
+      pane += '<span class="author">'+annotation.user.display_name+'</span>';
+      // TODO: this time stuff
+      // pane += '<span translate="document.label.date.timeago" translate-values="{ datetime: annotation.created_at }"></span>'
+      pane += '</header>';
+
+      pane += '<section class="content">';
+      pane += annotation.text;
+      pane += '</section>';
+
+      pane += '</div>'; // comment-body
+
+      // TODO: this
+          // <div ng-hide="doc.discussion_state === 'closed'">
+          //   <comment-actions object="annotation" root-target="doc"></comment-actions>
+          //   <footer>
+          //     <div class="reply-action">
+          //       <a ng-click="showCommentForm($event)"
+          //         translate="document.action.addreply"></a>
+          //     </div>
+          //   </footer>
+          // </div>
+
+      pane += '<section class="comments">';
+      annotation.comments.forEach(function (comment) {
+        pane += '<article class="comment"'
+          + 'id="annsubcomment_'+comment.id+'"'
+          + '>';
+
+        pane += '<header class="comment-header">';
+        pane += '<span class="author">'+comment.user.display_name+'</span>';
+        // TODO: this time thing
+        // <span translate="document.label.date.timeago" translate-values="{ datetime: comment.created_at }"></span>
+        pane += '</header>'
+
+        pane += '<section class="content">';
+        pane += comment.text;
+        pane += '</section>';
+
+        // TODO: discussion state
+        // <div ng-hide="doc.discussion_state === 'closed'">
+        // <comment-actions object="comment" root-target="doc"></comment-actions>
+        // </div>
+        pane += '</article>'; // comment
+      });
+      pane += '</section>'; // comments
+
+      // TODO: this
+        //   <section class="subcomment-form">
+        //     <div ng-hide="doc.discussion_state === 'closed'">
+        //       <form name="add-subcomment-form"
+        //         ng-submit="subcommentSubmit(annotation, subcomment)" ng-if="user">
+        //         <h4 translate="document.action.replynote"></h4>
+        //         <input id="comment-form-field" ng-model="subcomment.text" type="text"
+        //           class="form-control centered" required
+        //           placeholder="{{ document.action.commentplaceholder | translate }}" />
+        //         <button class="comment-button" type="submit"
+        //           translate="document.action.postcomment"></button>
+        //       </form>
+        //     </div>
+        // pane += '</section>'; // subcomment-form
+
+        pane += '</article>';
+    });
+
+    pane += '</section>';
+    pane += '</aside>';
+
+    // insert new content
+    $(this.options.annotationContainerElem).append(pane);
   },
 
   groupAnnotations: function (annotations) {
@@ -470,3 +582,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
     return annotationGroups;
   }
 });
+
+window.hideNotes = function () {
+  $('.annotation-pane').removeClass('active');
+};
