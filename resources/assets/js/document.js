@@ -1,12 +1,13 @@
-window.loadAnnotations = function (elem, docId, userId, discussionClosed) {
-  var ann = $(elem).annotator({
+window.loadAnnotations = function (contentElem, annotationContainerElem, docId, userId, discussionClosed) {
+  var ann = $(contentElem).annotator({
     readOnly: !!userId,
     discussionClosed: discussionClosed
   });
   ann.annotator('addPlugin', 'Unsupported');
   ann.annotator('addPlugin', 'Madison', {
     docId: docId,
-    userId: userId
+    userId: userId,
+    annotationContainerElem: annotationContainerElem
   });
   ann.annotator('addPlugin', 'Store', {
     annotationData: {

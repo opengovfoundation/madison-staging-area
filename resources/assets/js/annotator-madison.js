@@ -42,7 +42,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       // TODO: support scrolling to specific annotation
 
       this.drawSideAnnotations(annotations);
-    });
+    }.bind(this));
 
     /**
      *  Subscribe to Annotator's `annotationCreated` event
@@ -369,7 +369,48 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
   drawSideAnnotations: function (annotations) {
     var annotationGroups = this.groupAnnotations(annotations);
 
-    // TODO: draw annotation group side thing
+    // draw annotation group side bubbles
+    var sideBubbles = '<div id="participate-activity" class="participate-activity">';
+    sideBubbles += '<div class="activity-thread">';
+
+    if (annotations.length === 0) {
+      sideBubbles += '<div>' + window.trans['messages.none'] + '</div>';
+    } else {
+      for (let index in annotationGroups) {
+        let annotationGroup = annotationGroups[index];
+
+        sideBubbles += '<div class="annotation-group" style="top:'+annotationGroup.top+'" onclick=showNotes('+annotationGroup+')>';
+
+        sideBubbles += '<span class="annotation-group-count fa-stack">';
+        sideBubbles += '<i class="fa fa-comment fa-stack-2x"></i>';
+        sideBubbles += '<span class="fa-stack-1x">';
+        sideBubbles += annotationGroup.annotations.length;
+        sideBubbles += '</span>';
+        sideBubbles += '</span>';
+
+        sideBubbles += '<div class="annotation-group-statistics">';
+
+        sideBubbles += '<span class="annotation-collaborator-count">';
+        sideBubbles += window.trans['messages.document.collaborators_count']
+          .replace(':count', annotationGroup.users.length);
+        sideBubbles += '</span>';
+
+        sideBubbles += '<span class="annotation-comment-count">';
+        sideBubbles += window.trans['messages.document.replies_count']
+          .replace(':count', annotationGroup.commentCount);
+        sideBubbles += '</span>';
+
+        sideBubbles += '</div>'; // annotation-group-statistics
+        sideBubbles += '</div>'; // annotation-group
+      }
+    }
+
+    sideBubbles += '</div>';
+    sideBubbles += '</div>';
+
+    $(this.options.annotationContainerElem).append(sideBubbles);
+
+    // TODO: draw annotation pane
   },
 
   groupAnnotations: function (annotations) {
@@ -392,7 +433,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
 
       if ((typeof(annotationGroups[annotationParentId])).toLowerCase() === 'undefined') {
         var parentTop = annotationParent.offset().top;
-        var containerTop = $('.annotation-container').offset().top;
+        var containerTop = $(this.options.annotationContainerElem).offset().top;
         var positionTop = (parentTop - containerTop) + 'px';
 
         annotationGroups[annotationParentId] = {

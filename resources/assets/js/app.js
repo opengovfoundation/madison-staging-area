@@ -5,7 +5,7 @@ $(function () {
 });
 
 window.loadTranslations = function (msgIds) {
-  return $.get('/trans', { 'msg_ids[]': msgIds })
+  return $.get('/translations', { 'msg_id[]': msgIds }, null, "json")
     .done(function (data) {
       window.trans = data;
     });
