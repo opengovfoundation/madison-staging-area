@@ -35,7 +35,8 @@
             loadTranslations([
                 'messages.none',
                 'messages.document.collaborators_count',
-                'messages.document.replies_count'
+                'messages.document.replies_count',
+                'messages.document.notes'
             ])
             .done(function () {
                 loadAnnotations(

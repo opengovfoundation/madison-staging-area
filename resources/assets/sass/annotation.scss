@@ -1,5 +1,4 @@
 // Actions
-// TODO: remove or replace
 .activity-actions {
     color: $gray;
 
@@ -83,7 +82,7 @@
     bottom: 0;
     right: 0;
     height: 100%;
-    z-index: 10;
+    z-index: 1000;
     background-color: $gray-lighter;
     // TODO: remove or replace
     /* @extend %simple-shadow; */
@@ -92,7 +91,7 @@
     margin-top: 0;
 
     // Slide in/out
-    margin-right: -50%;
+    margin-right: -66.66666667%;
     // TODO: remove or replace
     /* @include single-transition(all, $transition-duration, $transition-easing); */
     &.active {
@@ -138,7 +137,7 @@
         /* font-family: $fancy-font; */
         font-style: italic;
         line-height: (2 * $line-height-computed);
-        font-size: 0.85rem;
+        /* font-size: 0.85rem; */
     }
 
     blockquote {
@@ -190,7 +189,7 @@
     }
 
     .content {
-        font-size: 0.85rem;
+        /* font-size: 0.85rem; */
     }
 
     .reply-action, .activity-actions {
