@@ -82,7 +82,7 @@
   bottom: 0;
   right: 0;
   height: 100%;
-  z-index: 1000;
+  z-index: $zindex-navbar;
   background-color: $gray-lighter;
   // TODO: remove or replace
   /* @extend %simple-shadow; */
@@ -101,11 +101,8 @@
   .title-header {
     @extend .col-md-8;
     background-color: $gray-dark;
-    // TODO: remove or replace
-    /* color: $white; */
-    padding: 0 20px;
-    line-height: (2 * $line-height-computed);
-    height: (2 * $line-height-computed);
+    color: white;
+    height: $navbar-height;
     position: fixed;
     top: 0;
     z-index: 11;
@@ -113,7 +110,7 @@
 
   .annotation-list {
     position: absolute;
-    top: (2 * $line-height-computed);
+    top: $navbar-height;
     bottom: 0;
     right: 0;
     width: 100%;
@@ -127,7 +124,7 @@
     /* @extend .small-caps; */
     font-weight: bold;
     line-height: (2 * $line-height-computed);
-    margin-bottom: 0;
+    margin: 0;
     display: inline-block;
   }
 

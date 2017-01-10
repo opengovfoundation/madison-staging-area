@@ -434,7 +434,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
     pane += '<header class="title-header">';
     pane += '<h2>'+window.trans['messages.document.notes']+'</h2>';
     pane += '<a class="close-button" onclick="hideNotes()">';
-    pane += window.trans['messages.document.actions.closesidebar'];
+    pane += window.trans['messages.close'];
     pane += '</a>';
     pane += '</header>';
 
@@ -466,15 +466,15 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       pane += '</div>'; // comment-body
 
       // TODO: this
-          // <div ng-hide="doc.discussion_state === 'closed'">
-          //   <comment-actions object="annotation" root-target="doc"></comment-actions>
-          //   <footer>
-          //     <div class="reply-action">
-          //       <a ng-click="showCommentForm($event)"
-          //         translate="document.action.addreply"></a>
-          //     </div>
-          //   </footer>
-          // </div>
+      // <div ng-hide="doc.discussion_state === 'closed'">
+      //   <comment-actions object="annotation" root-target="doc"></comment-actions>
+      //   <footer>
+      //     <div class="reply-action">
+      //       <a ng-click="showCommentForm($event)"
+      //         translate="document.action.addreply"></a>
+      //     </div>
+      //   </footer>
+      // </div>
 
       pane += '<section class="comments">';
       annotation.comments.forEach(function (comment) {
@@ -501,19 +501,19 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       pane += '</section>'; // comments
 
       // TODO: this
-        //   <section class="subcomment-form">
-        //     <div ng-hide="doc.discussion_state === 'closed'">
-        //       <form name="add-subcomment-form"
-        //         ng-submit="subcommentSubmit(annotation, subcomment)" ng-if="user">
-        //         <h4 translate="document.action.replynote"></h4>
-        //         <input id="comment-form-field" ng-model="subcomment.text" type="text"
-        //           class="form-control centered" required
-        //           placeholder="{{ document.action.commentplaceholder | translate }}" />
-        //         <button class="comment-button" type="submit"
-        //           translate="document.action.postcomment"></button>
-        //       </form>
-        //     </div>
-        // pane += '</section>'; // subcomment-form
+      //   <section class="subcomment-form">
+      //     <div ng-hide="doc.discussion_state === 'closed'">
+      //       <form name="add-subcomment-form"
+      //         ng-submit="subcommentSubmit(annotation, subcomment)" ng-if="user">
+      //         <h4 translate="document.action.replynote"></h4>
+      //         <input id="comment-form-field" ng-model="subcomment.text" type="text"
+      //           class="form-control centered" required
+      //           placeholder="{{ document.action.commentplaceholder | translate }}" />
+      //         <button class="comment-button" type="submit"
+      //           translate="document.action.postcomment"></button>
+      //       </form>
+      //     </div>
+      // pane += '</section>'; // subcomment-form
 
         pane += '</article>';
     });
