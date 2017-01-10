@@ -25,6 +25,7 @@ return [
     'open' => 'Open',
     'restore' => 'Restore',
     'none' => 'None',
+    'close' => 'Close',
 
     // Home Page Stuff
     'home' => [
