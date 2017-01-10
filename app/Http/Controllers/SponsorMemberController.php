@@ -119,6 +119,23 @@ class SponsorMemberController extends Controller
     }
 
     /**
+     * Update the role for the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Models\Sponsor  $sponsor
+     * @param  App\Models\SponsorMember $sponsorMember
+     * @return \Illuminate\Http\Response
+     */
+    public function updateRole(Requests\UpdateRole $request, Sponsor $sponsor, SponsorMember $member)
+    {
+        $member->role = $request->input('role');
+        $member->save();
+
+        flash(trans('messages.sponsor_member.role_updated'));
+        return redirect()->route('sponsors.members.index', $sponsor->id);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
