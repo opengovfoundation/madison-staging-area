@@ -78,7 +78,7 @@
                             {{ Form::open(['route' => ['sponsors.members.role.update', $sponsor, $member], 'method' => 'put']) }}
                                 {{ Form::select(
                                     'role',
-                                    collect($allRoles)->mapWithKeys_v2(function ($item) {return [$item => trans('messages.sponsor_member.roles.'.$item)]; })->toArray(),
+                                    $allRoles,
                                     $member->role,
                                     [ 'onchange' => 'if (this.selectedIndex >= 0) this.form.submit();' ]
                                     )
