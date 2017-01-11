@@ -16,7 +16,9 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
     $(document).on('madison.showNotes', function (e) {
       let annotationGroup = this.annotationGroups[$(e.target).data('groupId')];
       this.drawNotesPane(annotationGroup);
-      $('.annotation-pane').addClass('active');
+      window.setTimeout(function () {
+        $('.annotation-pane').addClass('active');
+      }, 100);
     }.bind(this));
 
     /**
@@ -431,9 +433,11 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
     var pane = '';
     pane += '<aside class="annotation-pane">';
 
-    pane += '<header class="title-header">';
+    pane += '<div class="annotation-click-capture" onclick="hideNotes()"></div>';
+
+    pane += '<header class="title-header navbar navbar-default navbar-static-top">';
     pane += '<h2>'+window.trans['messages.document.notes']+'</h2>';
-    pane += '<a class="close-button" onclick="hideNotes()">';
+    pane += '<a class="close-button navbar-link" onclick="hideNotes()">';
     pane += window.trans['messages.close'];
     pane += '</a>';
     pane += '</header>';
@@ -450,8 +454,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       });
       pane += '&quot;</blockquote>';
 
-      // TODO: this highlighting thing
-      pane += '<div class="comment-body" ng-class="{ highlight: !(subCommentId) && (annotation.id-0) === (annotationId-0) }">'
+      pane += '<div class="comment-body">'
 
       pane += '<header class="annotation-header">'
       pane += '<span class="author">'+annotation.user.display_name+'</span>';
@@ -584,5 +587,6 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
 });
 
 window.hideNotes = function () {
+  $('.annotation-click-capture').remove();
   $('.annotation-pane').removeClass('active');
 };

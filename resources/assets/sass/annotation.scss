@@ -1,3 +1,5 @@
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/vendor-prefixes";
+
 // Actions
 .activity-actions {
   color: $gray;
@@ -75,8 +77,16 @@
 
 }
 
-.annotation-pane {
+.annotation-click-capture {
   @extend .col-md-8;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.annotation-pane {
+  @extend .col-md-4;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -84,28 +94,21 @@
   height: 100%;
   z-index: $zindex-navbar;
   background-color: $gray-lighter;
-  // TODO: remove or replace
-  /* @extend %simple-shadow; */
+  @extend %simple-shadow;
   padding: 0 0 (2 * $line-height-computed);
   // Pad the top to allow the header to float above it.
   margin-top: 0;
 
   // Slide in/out
-  margin-right: -66.66666667%;
-  // TODO: remove or replace
-  /* @include single-transition(all, $transition-duration, $transition-easing); */
+  margin-right: -34%;
+  @include transition(all $transition-duration $transition-easing);
   &.active {
     margin-right: 0;
   }
 
   .title-header {
-    @extend .col-md-8;
-    background-color: $gray-dark;
-    color: white;
-    height: $navbar-height;
-    position: fixed;
-    top: 0;
-    z-index: 11;
+    @extend .container;
+    width: 100%;
   }
 
   .annotation-list {
@@ -118,10 +121,7 @@
   }
 
   h2 {
-    // TODO: remove or replace
-    /* font-family: $main-font; */
-    // TODO: remove or replace
-    /* @extend .small-caps; */
+    @extend .small-caps;
     font-weight: bold;
     line-height: (2 * $line-height-computed);
     margin: 0;
@@ -130,11 +130,9 @@
 
   .close-button {
     float: right;
-    // TODO: remove or replace
-    /* font-family: $fancy-font; */
     font-style: italic;
     line-height: (2 * $line-height-computed);
-    /* font-size: 0.85rem; */
+    cursor: pointer;
   }
 
   blockquote {
@@ -145,23 +143,19 @@
     margin-right: 0;
     padding-left: 0;
     padding-right: 0;
-    // TODO: remove or replace
-    /* @extend .title-underline-thin; */
+    @extend .title-underline-thin;
     border-color: $gray;
   }
 }
 
 .annotation-pane {
   article {
-    /*padding: $line-height-computed 0 0;*/
+    padding: $line-height-computed 0 0;
     margin: 0 20px;
   }
 
   article.comment {
     border-bottom: 0;
-    // TODO: remove or replace
-    /* padding-top: $vertical-padding; */
-    /* margin-top: $vertical-padding; */
     margin-right: 0;
     border-top: 1px solid $gray;
   }
@@ -185,10 +179,6 @@
     margin-left: 40px;
   }
 
-  .content {
-    /* font-size: 0.85rem; */
-  }
-
   .reply-action, .activity-actions {
     display: inline-block;
   }
@@ -200,16 +190,14 @@
 }
 
 .annotation:not(:last-child) {
-  // TODO: remove or replace
-  /* @extend .title-underline-medium; */
+  @extend .title-underline-medium;
 }
 
 .subcomment-form {
   margin: $line-height-computed;
 
   h4 {
-    // TODO: remove or replace
-    /* @extend .small-caps; */
+    @extend .small-caps;
   }
 
   .comment-button {
@@ -247,16 +235,6 @@
   }
 
   .annotation-group {
-    // Move these over
-
-    // Make the numbers more visible.
-    .annotation-group-count {
-      background-color: $gray-dark;
-      // TODO: remove or replace
-      /* color: $white; */
-    }
-
-
     // Hide the details on annotations in the sidebar.
     .annotation-group-statistics {
       display: none;
