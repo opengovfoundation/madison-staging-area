@@ -9,10 +9,6 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
   events: {},
   options: {},
   pluginInit: function () {
-    // TODO: remove
-    // var annotationService = this.options.annotationService;
-    // this.showLoginForm = this.options.showLoginForm;
-
     $(document).on('madison.showNotes', function (e) {
       let annotationGroup = this.annotationGroups[$(e.target).data('groupId')];
       this.drawNotesPane(annotationGroup);
@@ -167,9 +163,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       }
 
       if (!this.options.userId) {
-        this.showLoginForm(event);
-        this.annotator.adder.hide();
-        this.annotator.ignoreMouseup = false;
+        window.location.href = '/login';
       } else {
         this.onAdderClickOld(event);
       }
