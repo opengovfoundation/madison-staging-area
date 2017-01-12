@@ -214,7 +214,9 @@ class CommentController extends Controller
         $item['flags'] = $comment->flags_count;
         $item['seen'] = (bool) $comment->seens_count;
         $item['created_at'] = $comment->created_at->toRfc3339String();
+        $item['created_at_relative'] = $comment->created_at->diffForHumans();
         $item['updated_at'] = $comment->updated_at->toRfc3339String();
+        $item['updated_at_relative'] = $comment->updated_at->diffForHumans();
 
         // Pull in all other data
         if ($comment->data) {
@@ -223,7 +225,8 @@ class CommentController extends Controller
 
         // Filter down to just the keys we should send, just to be safe
         $item = array_intersect_key($item, array_flip([
-            'id', 'annotator_schema_version', 'created_at', 'updated_at',
+            'id', 'annotator_schema_version', 'created_at',
+            'created_at_relative', 'updated_at', 'updated_at_relative',
             'text', 'quote', 'uri', 'ranges', 'user', 'consumer', 'tags',
             'permissions', 'likes', 'flags', 'seen', 'comments',
             'comments_count', 'doc_id',

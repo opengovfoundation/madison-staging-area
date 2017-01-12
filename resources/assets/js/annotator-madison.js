@@ -36,9 +36,6 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
           annotation.label = 'annotation';
           annotation.link = 'annotation_' + annotation.id;
           annotation.permalinkBase = 'annotation';
-
-          // TODO: fix this
-          // annotation.html = $sce.trustAsHtml(converter.makeHtml(annotation.text));
         });
       });
 
@@ -458,8 +455,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
 
       pane += '<header class="annotation-header">'
       pane += '<span class="author">'+annotation.user.display_name+'</span>';
-      // TODO: this time stuff
-      // pane += '<span translate="document.label.date.timeago" translate-values="{ datetime: annotation.created_at }"></span>'
+      pane += '<time class="date" datetime="'+annotation.created_at+'">'+annotation.created_at_relative+'</time>'
       pane += '</header>';
 
       pane += '<section class="content">';
@@ -487,8 +483,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
 
         pane += '<header class="comment-header">';
         pane += '<span class="author">'+comment.user.display_name+'</span>';
-        // TODO: this time thing
-        // <span translate="document.label.date.timeago" translate-values="{ datetime: comment.created_at }"></span>
+        pane += '<time class="date" datetime="'+comment.created_at+'">'+comment.created_at_relative+'</time>'
         pane += '</header>'
 
         pane += '<section class="content">';
