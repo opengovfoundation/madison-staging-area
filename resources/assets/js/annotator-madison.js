@@ -176,10 +176,10 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
 
     var buttonGroup = $('<div class="btn-group"></div>');
 
-    var explanation = $('<input id="explanation" type="text" name="explanation" placeholder="Why did you make this edit?" style="display:none;" />');
+    var explanation = $('<input id="explanation" type="text" name="explanation" placeholder="'+window.trans['messages.document.note_edit_explanation_prompt']+'" style="display:none;" />');
     var annotationError = $('<p id="annotation-error" style="display:none; color:red;"></p>');
 
-    var annotateButton = $('<button type="button" class="btn btn-default active">Annotate</button>').click(function () {
+    var annotateButton = $('<button type="button" class="btn btn-default active">'+window.trans['messages.document.note']+'</button>').click(function () {
       $(this).addClass('active');
       $(this).siblings().each(function (sibling) {
         $(this).removeClass('active');
@@ -192,7 +192,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       $('#annotator-field-0').focus();
     });
 
-    var editButton = $('<button type="button" class="btn btn-default">Edit</button>').click(function () {
+    var editButton = $('<button type="button" class="btn btn-default">'+window.trans['messages.edit']+'</button>').click(function () {
       $(this).addClass('active');
       $(this).siblings().each(function (sibling) {
         $(this).removeClass('active');

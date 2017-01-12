@@ -34,7 +34,10 @@
         <script>
             loadTranslations([
                 'messages.close',
+                'messages.edit',
                 'messages.none',
+                'messages.document.note',
+                'messages.document.note_edit_explanation_prompt',
                 'messages.document.collaborators_count',
                 'messages.document.replies_count',
                 'messages.document.notes'

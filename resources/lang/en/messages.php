@@ -61,6 +61,8 @@ return [
 
         'activity' => 'Activity',
         'comments' => 'Comments',
+        'note' => 'Note',
+        'note_edit_explanation_prompt' => 'Why did you make this edit?',
         'notes' => 'Notes',
         'collaborators' => 'Collaborators',
         'collaborators_count' => ':count collaborators',
