@@ -2,22 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CommentCreated;
+use App\Http\Requests\Document\View as DocumentViewRequest;
 use App\Models\Annotation;
 use App\Models\AnnotationPermission;
 use App\Models\Doc as Document;
 use App\Models\User;
+use App\Services;
+use DB;
+use Event;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Response;
 
 class CommentController extends Controller
 {
+    protected $annotationService;
+    protected $commentService;
+
+    public function __construct(Services\Annotations $annotationService, Services\Comments $commentService)
+    {
+        $this->annotationService = $annotationService;
+        $this->commentService = $commentService;
+
+        $this->middleware('auth')->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(\App\Http\Requests\Document\View $request, Document $document)
+    public function index(DocumentViewRequest $request, Document $document)
     {
         $excludeUserIds = [];
         if ($request->query('exclude_sponsors') && $request->query('exclude_sponsors') !== 'false') {
@@ -80,7 +96,7 @@ class CommentController extends Controller
      */
     public function create()
     {
-        //
+        // TODO
     }
 
     /**
@@ -89,9 +105,9 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(DocumentViewRequest $request, Document $document)
     {
-        //
+        return $this->createComment($document, $request->user(), $request->all());
     }
 
     /**
@@ -102,7 +118,7 @@ class CommentController extends Controller
      */
     public function show($id)
     {
-        //
+        // TODO
     }
 
     /**
@@ -113,7 +129,7 @@ class CommentController extends Controller
      */
     public function edit($id)
     {
-        //
+        // TODO
     }
 
     /**
@@ -125,7 +141,7 @@ class CommentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // TODO
     }
 
     /**
@@ -136,8 +152,75 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // TODO
     }
+
+    public function createComment($target, $user, $data)
+    {
+        $newComment = $this->createFromAnnotatorArray($target, $user, $data);
+
+        Event::fire(new CommentCreated($newComment, $target));
+
+        return Response::json($this->toAnnotatorArray($newComment));
+    }
+
+    public function createFromAnnotatorArray($target, $user, array $data)
+    {
+        $isEdit = false;
+        // check for edit tag
+        if (!empty($data['tags']) && in_array('edit', $data['tags'])) {
+            $isEdit = true;
+
+            // if no explanation present, throw error
+            if (!isset($data['explanation'])) {
+                throw new \Exception('Explanation required for edits');
+            }
+        }
+
+        $id = DB::transaction(function () use ($target, $user, $data, $isEdit) {
+            if ((!empty($data['ranges']) && $target instanceof Document)
+                || (empty($data['ranges']) && $target instanceof Annotation && $target->isNote())
+            ) {
+                $data['subtype'] = Annotation::SUBTYPE_NOTE;
+            }
+
+            $annotation = $this->annotationService->createAnnotationComment($target, $user, $data);
+
+            $permissions = new AnnotationPermission();
+            $permissions->annotation_id = $annotation->id;
+            $permissions->user_id = $user->id;
+            $permissions->read = 1;
+            $permissions->update = 0;
+            $permissions->delete = 0;
+            $permissions->admin = 0;
+            $permissions->save();
+
+            if (!empty($data['ranges'])) {
+                foreach ($data['ranges'] as $range) {
+                    $this->annotationService->createAnnotationRange($annotation, $user, $range);
+                }
+            }
+
+            if (!empty($data['tags'])) {
+                foreach ($data['tags'] as $tag) {
+                    $this->annotationService->createAnnotationTag($annotation, $user, ['tag' => $tag]);
+                }
+            }
+
+            if ($isEdit) {
+                $editData = [
+                    'text' => $data['explanation'],
+                    'subtype' => !empty($data['subtype']) ? $data['subtype'] : null,
+                ];
+                $this->annotationService->createAnnotationComment($annotation, $user, $editData);
+            }
+
+            return $annotation->id;
+        });
+
+        return Annotation::find($id);
+    }
+
 
     public function toAnnotatorArray(Annotation $comment, $includeChildren = true, $userId = null)
     {

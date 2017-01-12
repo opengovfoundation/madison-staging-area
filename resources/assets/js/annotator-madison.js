@@ -24,37 +24,21 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
      **/
     this.annotator.subscribe('annotationsLoaded', function (annotations) {
       annotations.forEach(function (annotation) {
-        annotation.highlights.forEach(function (highlight) {
-          $(highlight).attr('id', 'annotation_' + annotation.id);
-          $(highlight).attr('name', 'annotation_' + annotation.id);
-
-          annotation.commentsCollapsed = true;
-          annotation.label = 'annotation';
-          annotation.link = 'annotation_' + annotation.id;
-          annotation.permalinkBase = 'annotation';
-        });
-      });
-
-      // TODO: remove
-      //Set the annotations in the annotationService
-      // annotationService.setAnnotations(annotations);
-      // annotationService.broadcastSet();
+        this.processAnnotation(annotation);
+      }.bind(this));
 
       // TODO: support scrolling to specific annotation
 
-      annotationGroups = this.groupAnnotations(annotations);
-      this.annotationGroups = annotationGroups;
-      this.drawNotesSideBubbles(annotations, annotationGroups);
+      this.setAnnotations(annotations);
     }.bind(this));
 
     /**
      *  Subscribe to Annotator's `annotationCreated` event
      *    Adds new annotation to the sidebar
      */
-    // TODO: remove
-    // this.annotator.subscribe('annotationCreated', function (annotation) {
-    //   annotationService.addAnnotation(annotation);
-    // });
+    this.annotator.subscribe('annotationCreated', function (annotation) {
+      this.addAnnotation(annotation);
+    }.bind(this));
 
     this.annotator.subscribe('commentCreated', function (comment) {
       comment = $('<div class="existing-comment"><blockquote>' + comment.text + '<div class="comment-author">' + comment.user.display_name + '</div></blockquote></div>');
@@ -168,6 +152,38 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
         this.onAdderClickOld(event);
       }
     }.bind(this);
+  },
+
+  processAnnotation: function (annotation) {
+    annotation.highlights.forEach(function (highlight) {
+      $(highlight).attr('id', 'annotation_' + annotation.id);
+      $(highlight).attr('name', 'annotation_' + annotation.id);
+    });
+
+    annotation.commentsCollapsed = true;
+    annotation.label = 'annotation';
+    annotation.link = 'annotation_' + annotation.id;
+    annotation.permalinkBase = 'annotation';
+  },
+
+  setAnnotations: function (annotations) {
+    annotationGroups = this.groupAnnotations(annotations);
+    this.annotations = annotations;
+    this.annotationGroups = annotationGroups;
+    this.drawNotesSideBubbles(annotations, annotationGroups);
+  },
+
+  addAnnotation: function (annotation) {
+    if (annotation.id === undefined) {
+      var interval = window.setInterval(function () {
+        this.addAnnotation(annotation);
+        window.clearInterval(interval);
+      }.bind(this), 500);
+    } else {
+      this.processAnnotation(annotation);
+      this.annotations.push(annotation);
+      this.setAnnotations(this.annotations);
+    }
   },
 
   addEditFields: function (field, annotation) {
