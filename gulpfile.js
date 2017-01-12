@@ -20,12 +20,12 @@ elixir((mix) => {
          [
           'node_modules/jquery/dist/jquery.min.js',
           'node_modules/bootstrap-sass/assets/javascripts/bootstrap.min.js',
-          'resources/assets/js/annotator-full.min.js',
+          'resources/assets/vendor/js/annotator-full.min.js',
          ],
          'public/js/vendor.js'
        )
        .copy('resources/assets/img', 'public/img')
-       .copy('resources/assets/annotator.min.css', 'public/css/')
+       .copy('resources/assets/vendor/css/annotator.min.css', 'public/css/')
        .copy('node_modules/font-awesome/fonts/', 'public/fonts/')
        .version([
          'css/app.css',
