@@ -75,13 +75,14 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       }
 
       annotation.tags.forEach(function (tag) {
-        if (tag === 'edit') {
-          var jField = $(field);
-          var differ = new diff_match_patch();
-          var diffs = differ.diff_main(annotation.quote, annotation.text);
-          var html = differ.diff_prettyHtml(diffs);
-          jField.find('p').html(html);
-        }
+        // TODO: support edits?
+        // if (tag === 'edit') {
+        //   var jField = $(field);
+        //   var differ = new diff_match_patch();
+        //   var diffs = differ.diff_main(annotation.quote, annotation.text);
+        //   var html = differ.diff_prettyHtml(diffs);
+        //   jField.find('p').html(html);
+        // }
       });
     });
 
@@ -532,6 +533,11 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       // Get the first highlight's parent, and show our toolbar link for it next
       // to it.
       var annotationParent = $(annotation.highlights[0]).parents(parentElements).first();
+
+      if (annotationParent.length === 0) {
+        return;
+      }
+
       var annotationParentId;
       if (annotationParent.prop('id')) {
         annotationParentId = annotationParent.prop('id');
