@@ -35,26 +35,12 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
         });
       });
 
-      // TODO: remove
-      //Set the annotations in the annotationService
-      // annotationService.setAnnotations(annotations);
-      // annotationService.broadcastSet();
-
       // TODO: support scrolling to specific annotation
 
       annotationGroups = this.groupAnnotations(annotations);
       this.annotationGroups = annotationGroups;
       this.drawNotesSideBubbles(annotations, annotationGroups);
     }.bind(this));
-
-    /**
-     *  Subscribe to Annotator's `annotationCreated` event
-     *    Adds new annotation to the sidebar
-     */
-    // TODO: remove
-    // this.annotator.subscribe('annotationCreated', function (annotation) {
-    //   annotationService.addAnnotation(annotation);
-    // });
 
     this.annotator.subscribe('commentCreated', function (comment) {
       comment = $('<div class="existing-comment"><blockquote>' + comment.text + '<div class="comment-author">' + comment.user.display_name + '</div></blockquote></div>');
