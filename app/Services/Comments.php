@@ -155,7 +155,7 @@ class Comments
         return $item;
     }
 
-    public function createFromAnnotatorArray($target, $user, array $data)
+    public function createFromAnnotatorArray($target, User $user, array $data)
     {
         $isEdit = false;
         // check for edit tag

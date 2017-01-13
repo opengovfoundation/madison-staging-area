@@ -37,6 +37,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
      *    Adds new annotation to the sidebar
      */
     this.annotator.subscribe('annotationCreated', function (annotation) {
+      // TODO: show success notification or maybe in addAnnotation
       this.addAnnotation(annotation);
     }.bind(this));
 
