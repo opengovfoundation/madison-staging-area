@@ -491,6 +491,38 @@ class DocumentController extends Controller
         return redirect()->route('documents.edit', ['document' => $document->slug]);
     }
 
+    public function putSupport(Requests\PutSupport $request, Document $document)
+    {
+        $support = (bool) $request->input('support');
+
+        $existingDocumentMeta = DocumentMeta::withTrashed()
+            ->where('user_id', $request->user()->id)
+            ->where('meta_key', '=', 'support')
+            ->where('doc_id', '=', $document->id)
+            ->first();
+
+        if ($existingDocumentMeta) {
+            $existingDocumentMeta->meta_value = $support;
+            $existingDocumentMeta->save();
+        } else {
+            // create new one!
+            $documentMeta = new DocumentMeta();
+            $documentMeta->doc_id = $document->id;
+            $documentMeta->user_id = $request->user()->id;
+            $documentMeta->meta_key = 'support';
+            $documentMeta->meta_value = $support;
+            $documentMeta->save();
+        }
+
+        if ($support) {
+            flash(trans('messages.document.supported'));
+        } else {
+            flash(trans('messages.document.opposed'));
+        }
+
+        return redirect()->route('documents.show', ['document' => $document->slug]);
+    }
+
     public static function validPublishStatesForQuery()
     {
        return ['all'] + Document::validPublishStates();
