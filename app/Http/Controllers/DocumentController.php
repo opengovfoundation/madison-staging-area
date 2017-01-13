@@ -312,11 +312,26 @@ class DocumentController extends Controller
      */
     public function show(Requests\View $request, Document $document)
     {
+        $userSupport = null;
+
+        // Get current user support status, if logged in
+        if ($request->user()) {
+            $existingSupportMeta = DocumentMeta::where('user_id', $request->user()->id)
+                ->where('meta_key', '=', 'support')
+                ->where('doc_id', '=', $document->id)
+                ->first();
+
+            if ($existingSupportMeta) {
+                $userSupport = (bool) $existingSupportMeta->meta_value;
+            }
+        }
+
         $pages = $document->content()->paginate(1);
 
         return view('documents.show', compact([
             'document',
             'pages',
+            'userSupport',
         ]));
     }
 
@@ -515,9 +530,9 @@ class DocumentController extends Controller
         }
 
         if ($support) {
-            flash(trans('messages.document.supported'));
+            flash(trans('messages.document.update_supported'));
         } else {
-            flash(trans('messages.document.opposed'));
+            flash(trans('messages.document.update_opposed'));
         }
 
         return redirect()->route('documents.show', ['document' => $document->slug]);

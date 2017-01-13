@@ -74,14 +74,16 @@ return [
         'replies_count' => ':count replies',
         'support' => 'Support',
         'oppose' => 'Oppose',
+        'supported' => 'Supported',
+        'opposed' => 'Opposed',
 
         'created' => 'Document created.',
         'deleted' => 'Document deleted. :restoreLinkOpen Undo :restoreLinkClosed',
         'restored' => 'Document restored. It is currently unpublished.',
         'updated' => 'Document updated.',
         'page_added' => 'Page added.',
-        'supported' => 'Successfully marked your support for this document',
-        'opposed' => 'Successfully marked your opposition to this document',
+        'update_supported' => 'Successfully marked your support for this document',
+        'update_opposed' => 'Successfully marked your opposition to this document',
 
         'publish_state' => 'Publish State',
         'publish_state_help' => 'If a document is set to "unpublished", only sponsors can view it. If it is set to private, anyone with the link can view it. Otherwise it is publicly viewable.',
