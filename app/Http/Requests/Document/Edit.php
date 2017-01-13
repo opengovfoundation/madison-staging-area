@@ -15,6 +15,7 @@ class Edit extends FormRequest
     {
         $user = $this->user();
         $document = null;
+
         foreach (['document', 'documentTrashed'] as $key) {
             if (!empty($this->route()->parameter($key))) {
                 $document = $this->route()->parameter($key);
