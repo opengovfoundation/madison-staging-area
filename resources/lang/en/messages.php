@@ -82,8 +82,8 @@ return [
         'restored' => 'Document restored. It is currently unpublished.',
         'updated' => 'Document updated.',
         'page_added' => 'Page added.',
-        'update_supported' => 'Successfully marked your support for this document',
-        'update_opposed' => 'Successfully marked your opposition to this document',
+
+        'update_support' => 'Updated your support on this document',
 
         'publish_state' => 'Publish State',
         'publish_state_help' => 'If a document is set to "unpublished", only sponsors can view it. If it is set to private, anyone with the link can view it. Otherwise it is publicly viewable.',

@@ -11,24 +11,25 @@
         <div class="col-md-12">
             <p>
                 <div class="btn-group" role="group">
-                    @if ($userSupport === true)
-                        <button disabled class="btn btn-default">{{ trans('messages.document.supported') }}</button>
-                    @else
                         {{ Form::open(['route' => ['documents.support', $document->slug], 'method' => 'put']) }}
                             <input type="hidden" name="support" value="1">
-                            <button type="submit" class="btn btn-default">{{ trans('messages.document.support') }}</button>
+
+                            @if ($userSupport === true)
+                                <button type="submit" class="btn btn-success">{{ trans('messages.document.supported') }}</button>
+                            @else
+                                <button type="submit" class="btn btn-default">{{ trans('messages.document.support') }}</button>
+                            @endif
                         {{ Form::close() }}
-                    @endif
                 </div>
                 <div class="btn-group" role="group">
-                    @if ($userSupport === false)
-                        <button disabled class="btn btn-default">{{ trans('messages.document.opposed') }}</button>
-                    @else
                         {{ Form::open(['route' => ['documents.support', $document->slug], 'method' => 'put']) }}
                             <input type="hidden" name="support" value="0">
-                            <button type="submit" class="btn btn-default">{{ trans('messages.document.oppose') }}</button>
+                            @if ($userSupport === false)
+                                <button type="submit" class="btn btn-warning">{{ trans('messages.document.opposed') }}</button>
+                            @else
+                                <button type="submit" class="btn btn-default">{{ trans('messages.document.oppose') }}</button>
+                            @endif
                         {{ Form::close() }}
-                    @endif
                 </div>
             </p>
         </div>
