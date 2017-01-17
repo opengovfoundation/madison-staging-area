@@ -483,7 +483,6 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
         // <comment-actions object="annotation" root-target="doc"></comment-actions>
         pane += '<footer>';
         pane += '<div class="reply-action">';
-        // TODO: showing comment form? Just have it here and reveal it?
         pane += '<a onclick="showNoteReplyForm('+this.options.userId+', '+annotation.id+')">';
         pane += window.trans['messages.document.add_reply'];
         pane += '</a>';
