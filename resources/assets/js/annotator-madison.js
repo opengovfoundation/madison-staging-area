@@ -331,14 +331,15 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
 
     var comment = {
       text: text,
-      user: userId
+      user: userId,
+      _token: window.Laravel.csrfToken
     };
 
     // Add user's comment
-    $.post('/documents/' + docId + '/comments/' + annotation.id + '/comments', comment, function () {
-      annotation.comments.push(comment);
+    $.post('/documents/' + docId + '/comments/' + annotation.id + '/comments', comment, function (commentResponse) {
+      annotation.comments.push(commentResponse);
 
-      return this.annotator.publish('commentCreated', comment);
+      return this.annotator.publish('commentCreated', commentResponse);
     }.bind(this));
   },
 
