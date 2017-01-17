@@ -64,14 +64,33 @@
         </div>
     @endif
 
-    <div class="row">
-        <section id="page_content" class="col-md-8">
-            {!! $pages->first()->rendered() !!}
-        </section>
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+            <a href="#content" role="tab" data-toggle="tab">@lang('messages.document.content')</a>
+        </li>
+        <li role="presentation">
+            <a href="#comments" role="tab" data-toggle="tab">@lang('messages.document.comments')</a>
+        </li>
+    </ul>
 
-        <aside class="annotation-container col-md-4">
-            <h2>@lang('messages.document.notes')</h2>
-        </aside>
+    <div class="tab-content">
+        <div class="active tab-pane row" id="content" role="tabpanel">
+            <section id="page_content" class="col-md-8">
+                {!! $pages->first()->rendered() !!}
+            </section>
+
+            <aside class="annotation-container col-md-4">
+                <h2>@lang('messages.document.notes')</h2>
+            </aside>
+        </div>
+
+        <div class="tab-pane row comments" id="comments" role="tabpanel">
+            <section class="col-md-8">
+                @each('documents/partials/comment', $comments, 'comment')
+            </section>
+
+            <section class="col-md-4"></section>
+        </div>
     </div>
 
     {{ $pages->appends(request()->query())->fragment('page_content')->links() }}
