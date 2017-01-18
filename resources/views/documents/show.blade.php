@@ -76,7 +76,7 @@
     <div class="tab-content">
         <div class="active tab-pane row" id="content" role="tabpanel">
             <section id="page_content" class="col-md-8">
-                {!! $pages->first()->rendered() !!}
+                {!! $documentPages->first()->rendered() !!}
             </section>
 
             <aside class="annotation-container col-md-4">
@@ -87,13 +87,14 @@
         <div class="tab-pane row comments" id="comments" role="tabpanel">
             <section class="col-md-8">
                 @each('documents/partials/comment', $comments, 'comment')
+                @include('components.pagination', ['collection' => $comments])
             </section>
 
             <section class="col-md-4"></section>
         </div>
     </div>
 
-    {{ $pages->appends(request()->query())->fragment('page_content')->links() }}
+    {{ $documentPages->appends(request()->query())->fragment('page_content')->links() }}
 
     @push('scripts')
         <script src="{{ elixir('js/annotator-madison.js') }}"></script>
@@ -120,6 +121,10 @@
                     {{ request()->user() ? request()->user()->id : 'null' }},
                     {{ $document->discussionState === \App\Models\Doc::DISCUSSION_STATE_CLOSED ? 1 : 0 }}
                 );
+
+                if (window.getQueryParam('comment_page')) {
+                    $('a[href="#comments"]').tab('show');
+                }
         });
         </script>
     @endpush
