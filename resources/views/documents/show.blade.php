@@ -79,9 +79,7 @@
                 {!! $documentPages->first()->rendered() !!}
             </section>
 
-            <aside class="annotation-container col-md-4">
-                <h2>@lang('messages.document.notes')</h2>
-            </aside>
+            <aside class="annotation-container col-md-4"></aside>
         </div>
 
         <div class="tab-pane row comments" id="comments" role="tabpanel">
