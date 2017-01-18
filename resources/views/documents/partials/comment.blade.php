@@ -1,4 +1,4 @@
-<div class="comment">
+<div class="comment" id="comment-{{ $comment->id }}">
     <h4>
         <strong>{{ $comment->user->display_name }}</strong>
         <span class="small">{{ $comment->created_at->diffForHumans() }}</span>
@@ -14,7 +14,20 @@
     </span>
     <span class="replies">
         <span class="fa fa-comments" aria-hidden="true"></span>
-        {{ $comment->comments()->count() }}
+        @if ($comment->comments()->count() > 0)
+            <a href="#" data-comment-id="{{ $comment->id }}">
+                {{ $comment->comments()->count() }}
+            </a>
+        @else
+            {{ $comment->comments()->count() }}
+        @endif
     </span>
+
+    @if ($comment->comments()->count() > 0)
+        <div class="comment-replies hide">
+            <hr>
+            @each ('documents/partials/comment', $comment->comments()->get(), 'comment')
+        </div>
+    @endif
     <hr>
 </div>

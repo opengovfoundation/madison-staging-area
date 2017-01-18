@@ -123,7 +123,13 @@
                 if (window.getQueryParam('comment_page')) {
                     $('a[href="#comments"]').tab('show');
                 }
-        });
+
+                $('.replies a').click(function(e) {
+                    e.preventDefault();
+                    var commentId = $(e.target).data('comment-id');
+                    toggleCommentReplies(commentId);
+                });
+            });
         </script>
     @endpush
 @endsection
