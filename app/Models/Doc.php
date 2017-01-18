@@ -333,7 +333,7 @@ class Doc extends Model
 
     public function getLink()
     {
-        return URL::to('documents/'.$this->slug);
+        return URL::route('documents.show', [$this->slug]);
     }
 
     /*
