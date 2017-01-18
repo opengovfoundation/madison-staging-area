@@ -329,12 +329,12 @@ class DocumentController extends Controller
             }
         }
 
-        $pages = $document->content()->paginate(1);
-        $comments = $document->comments()->get();
+        $documentPages = $document->content()->paginate(1);
+        $comments = $document->comments()->paginate(2, ['*'], 'comment_page');
 
         return view('documents.show', compact([
             'document',
-            'pages',
+            'documentPages',
             'comments',
             'commentCount',
             'noteCount',
