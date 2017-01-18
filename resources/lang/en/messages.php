@@ -62,6 +62,7 @@ return [
         'activity' => 'Activity',
         'participants' => 'Participants',
         'comments' => 'Comments',
+        'add_comment' => 'Add comment',
         'note' => 'Note',
         'note_edit_explanation_prompt' => 'Why did you make this edit?',
         'notes' => 'Notes',
