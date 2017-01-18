@@ -26,6 +26,7 @@ return [
     'restore' => 'Restore',
     'none' => 'None',
     'close' => 'Close',
+    'permalink' => 'Permalink',
 
     // Home Page Stuff
     'home' => [
@@ -79,6 +80,8 @@ return [
         'oppose' => 'Oppose',
         'supported' => 'Supported',
         'opposed' => 'Opposed',
+        'flag' => 'Flag',
+        'like' => 'Like',
 
         'created' => 'Document created.',
         'deleted' => 'Document deleted. :restoreLinkOpen Undo :restoreLinkClosed',
