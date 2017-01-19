@@ -23,6 +23,8 @@ class CommentController extends Controller
         $this->commentService = $commentService;
 
         $this->middleware('auth')->except(['index', 'show']);
+        $this->middleware('discussion_state:!'.Document::DISCUSSION_STATE_HIDDEN);
+        $this->middleware('discussion_state:'.Document::DISCUSSION_STATE_OPEN)->except(['index', 'show']);
     }
 
     /**
@@ -32,8 +34,6 @@ class CommentController extends Controller
      */
     public function index(DocumentViewRequest $request, Document $document)
     {
-        // TODO: and discussion is not hidden?
-
         $excludeUserIds = [];
         if ($request->query('exclude_sponsors') && $request->query('exclude_sponsors') !== 'false') {
             $excludeUserIds = $document->sponsorIds;
@@ -106,8 +106,6 @@ class CommentController extends Controller
      */
     public function store(DocumentViewRequest $request, Document $document)
     {
-        // TODO: and discussion is open?
-
         $jsonResponse = $this->createComment($document, $request->user(), $request->all());
         if ($request->expectsJson()) {
             return $jsonResponse;
@@ -118,8 +116,6 @@ class CommentController extends Controller
 
     public function storeReply(DocumentViewRequest $request, Document $document, Annotation $comment)
     {
-        // TODO: and discussion is open?
-
         $jsonResponse = $this->createComment($comment, $request->user(), $request->all());
         if ($request->expectsJson()) {
             return $jsonResponse;
@@ -130,8 +126,6 @@ class CommentController extends Controller
 
     public function storeLikes(DocumentViewRequest $request, Document $document, Annotation $comment)
     {
-        // TODO: and discussion is open?
-
         if ($comment->likes()->where('user_id', $request->user()->id)->count()) {
             return Response::json($this->commentService->toAnnotatorArray($comment));
         }
@@ -143,8 +137,6 @@ class CommentController extends Controller
 
     public function storeFlags(DocumentViewRequest $request, Document $document, Annotation $comment)
     {
-        // TODO: and discussion is open?
-
         if ($comment->flags()->where('user_id', $request->user()->id)->count()) {
             return Response::json($this->commentService->toAnnotatorArray($comment));
         }
