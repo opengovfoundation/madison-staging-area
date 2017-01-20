@@ -157,9 +157,16 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(DocumentViewRequest $request, Document $document, Annotation $comment)
     {
-        // TODO
+        if ($request->expectsJson()) {
+            $includeReplies = !$request->exists('include_replies') || $request->query('include_replies') && $request->query('include_replies') !== 'false';
+            $results = $this->commentService->toAnnotatorArray($comment, $includeReplies);
+
+            return Response::json($results);
+        } else {
+            // TODO: html view?
+        }
     }
 
     /**
