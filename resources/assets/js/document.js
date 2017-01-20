@@ -33,3 +33,15 @@ window.toggleCommentReplies = function(commentId) {
     $commentReplyDiv.toggleClass('hide');
   }
 };
+
+window.revealComment = function () {
+  // TODO: check for old permalink format
+  var subCommentHash = window.location.hash().match(/^annsubcomment_([0-9]+)-([0-9]+)$/);
+  var annotationHash = window.location.hash().match(/^annotation_([0-9]+)$/);
+  var commentHash = window.location.hash().match(/^comment_([0-9]+)-?([0-9]+)?$/);
+
+  // TODO: make request to get new str_id for old permalink
+
+  // TODO: look in comment pane for hash
+  // TODO: signal annotation plugin to look for hash (in the main document content?)
+}
