@@ -2,17 +2,16 @@
 
 namespace App\Services;
 
-// TODO: move this somewhere else
-const OPEN_GOV_EPOCH_UNIX_OFFSET_SECONDS = 1325376000;
-
 /**
  * https://github.com/recurly/druuid
  */
 class UniqId
 {
+    const OPEN_GOV_EPOCH_UNIX_OFFSET_SECONDS = 1325376000;
+
     public static function gen()
     {
-        $ourMilliseconds = round((microtime(true) - OPEN_GOV_EPOCH_UNIX_OFFSET_SECONDS) * 1000);
+        $ourMilliseconds = round((microtime(true) - self::OPEN_GOV_EPOCH_UNIX_OFFSET_SECONDS) * 1000);
         $randomBytes = random_int(0, pow(2, 64 - 41));
 
         $id = $ourMilliseconds << (64 - 41);

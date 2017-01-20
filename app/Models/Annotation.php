@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Doc;
+use App\Services\UniqId;
+use App\Traits\AnnotatableHelpers;
 use DB;
-use URL;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Doc;
-use App\Traits\AnnotatableHelpers;
-use App\Services\UniqId; // TODO: make facade or put this somewhere else?
+use URL;
 
 class Annotation extends Model implements ActivityInterface
 {
