@@ -27,7 +27,7 @@ window.loadAnnotations = function (contentElem, annotationContainerElem, docId, 
 };
 
 window.toggleCommentReplies = function(commentId) {
-  var $commentDiv = $('#comment-' + commentId);
+  var $commentDiv = $('#comment_' + commentId);
   var $commentReplyDiv = $commentDiv.find('.comment-replies');
   if ($commentReplyDiv) {
     $commentReplyDiv.toggleClass('hide');
