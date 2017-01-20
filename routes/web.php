@@ -15,6 +15,17 @@ use App\Models\User;
 use App\Models\Doc as Document;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+Route::bind('comment', function ($value) {
+    // TODO: use this? Error message includes info about model.
+    // return Annotation::where('str_id', $value)->firstOrFail();
+    $comment = Annotation::where('str_id', $value)->first();
+    if ($comment) {
+        return $comment;
+    }
+
+    throw new NotFoundHttpException;
+});
+
 Route::bind('document', function ($value) {
     $doc = Document::find($value);
     if ($doc) {
