@@ -148,8 +148,11 @@
                         {{ $document->discussion_state === \App\Models\Doc::DISCUSSION_STATE_CLOSED ? 1 : 0 }}
                     );
 
+                    // TODO: wait until annotations are loaded?
+                    revealComment({{ $document->id }});
+
                     if (window.getQueryParam('comment_page')) {
-                        $('a[href="#comments"]').tab('show');
+                        showComments();
                     }
 
                     $('.activity-actions a.comments').click(function(e) {
