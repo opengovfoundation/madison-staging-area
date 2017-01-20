@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
+use App\Services\UniqId;
 use Illuminate\Database\Migrations\Migration;
-use App\Services\UniqId; // TODO: make facade or put this somewhere else?
+use Illuminate\Database\Schema\Blueprint;
 
 class AddStrIdToAnnotations extends Migration
 {
