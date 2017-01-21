@@ -92,25 +92,33 @@ class Annotation extends Model implements ActivityInterface
 
                 if ($root instanceof Doc) {
                     $slug = DB::table('docs')->where('id', $root->id)->pluck('slug')[0];
-
-                    $hash = '';
-                    if ($this->isNote()) {
-                        if ($this->annotatable_type === Annotation::ANNOTATABLE_TYPE) {
-                            $hash = 'annsubcomment';
-                        } else {
-                            $hash = 'annotation';
-                        }
-                    } else {
-                        $hash = 'comment';
-                    }
-
-                    return URL::to('documents/'.$slug.'#'.$hash.'_'.$this->id);
+                    return URL::to('documents/' . $slug . $this->getHash());
                 }
 
-                return;
+                return null;
             default:
-                return;
+                return null;
         }
+    }
+
+    /**
+     * Find the return the hash ending of an annotation's URL
+     *
+     * @return string
+     */
+    public function getHash()
+    {
+        $hash = '';
+        if ($this->isNote()) {
+            if ($this->annotatable_type === Annotation::ANNOTATABLE_TYPE) {
+                $hash = 'annsubcomment';
+            } else {
+                $hash = 'annotation';
+            }
+        } else {
+            $hash = 'comment';
+        }
+        return '#' . $hash . '_' . $this->id;
     }
 
     /**
