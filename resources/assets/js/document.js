@@ -58,6 +58,10 @@ window.revealComment = function (docId) {
       showComments();
       comments[0].scrollIntoView();
       $(comments[0]).addClass('highlight');
+      var parentComment = $(comments[0]).parents('.comment');
+      if (parentComment.length) {
+        toggleCommentReplies(parentComment[0].id);
+      }
       return;
     }
 
