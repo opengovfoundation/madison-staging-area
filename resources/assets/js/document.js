@@ -27,7 +27,7 @@ window.loadAnnotations = function (contentElem, annotationContainerElem, docId, 
 };
 
 window.toggleCommentReplies = function(commentId) {
-  var $commentDiv = $('#comment_' + commentId);
+  var $commentDiv = $('#' + commentId);
   var $commentReplyDiv = $commentDiv.find('.comment-replies');
   if ($commentReplyDiv) {
     $commentReplyDiv.toggleClass('hide');
@@ -57,19 +57,27 @@ window.revealComment = function (docId) {
     if (comments.length) {
       showComments();
       comments[0].scrollIntoView();
+      $(comments[0]).addClass('highlight');
+      return;
     }
 
-    var noteHighlight = $('#content').find('#'+id);
+    // look for highlight in the document content
+    var noteHighlight = $('#content').find('[data-annotation-id='+id+']');
     if (noteHighlight.length) {
       noteHighlight[0].scrollIntoView();
+      $(noteHighlight[0]).addClass('highlight');
+      return;
     }
 
-    // TODO: signal annotation plugin to look for hash (in the main document content?)
+    // might be a reply to a note or on another page
   });
 
   if (commentHash) {
-    // TODO if commentHash[2] is set, is that our real target?
-    lookupNewId(commentHash[1]);
+    if (commentHash[2]) {
+      lookupNewId(commentHash[2]);
+    } else {
+      lookupNewId(commentHash[1]);
+    }
   } else if (noteHash) {
     lookupNewId(noteHash[1]);
   } else if (noteReplyHash) {

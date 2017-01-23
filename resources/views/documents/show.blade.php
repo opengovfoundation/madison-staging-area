@@ -141,7 +141,7 @@
                         {{ $document->discussion_state === \App\Models\Doc::DISCUSSION_STATE_CLOSED ? 1 : 0 }}
                     );
 
-                    // TODO: wait until annotations are loaded?
+                    // potentially race-y with loading annotaions
                     revealComment({{ $document->id }});
 
                     if (window.getQueryParam('comment_page')) {
