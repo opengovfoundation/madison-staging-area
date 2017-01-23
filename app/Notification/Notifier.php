@@ -18,6 +18,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Queue\Queue as QueueContract;
 
+// TODO: remove
 class Notifier
 {
     /**
