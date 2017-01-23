@@ -57,7 +57,7 @@ window.revealComment = function (docId) {
     if (comments.length) {
       showComments();
       comments[0].scrollIntoView();
-      $(comments[0]).addClass('highlight');
+      $(comments[0]).addClass('anchor-target');
       var parentComment = $(comments[0]).parents('.comment');
       if (parentComment.length) {
         toggleCommentReplies(parentComment[0].id);
@@ -69,7 +69,7 @@ window.revealComment = function (docId) {
     var noteHighlight = $('#content').find('[data-annotation-id='+id+']');
     if (noteHighlight.length) {
       noteHighlight[0].scrollIntoView();
-      $(noteHighlight[0]).addClass('highlight');
+      $(noteHighlight[0]).addClass('anchor-target');
       return;
     }
 
