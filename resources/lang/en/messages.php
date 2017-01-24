@@ -27,6 +27,7 @@ return [
     'none' => 'None',
     'close' => 'Close',
     'permalink' => 'Permalink',
+    'admin' => 'Admin',
 
     // Authentication Stuff
     'password' => 'Password',
@@ -205,5 +206,13 @@ return [
         'new_password_confirmation' => 'Re-Enter New Password',
         'updated' => 'User updated.',
         'update_failed' => 'User update failed.',
+    ],
+
+    'pages' => [
+        'manage' => 'Manage Pages',
+        'navigation_title' => 'Navigation Title',
+        'url' => 'URL',
+        'show_in_header' => 'Show in Header?',
+        'show_in_footer' => 'Show in Footer?',
     ],
 ];
