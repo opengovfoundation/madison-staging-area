@@ -111,10 +111,7 @@ class CommentController extends Controller
         if ($request->expectsJson()) {
             return Response::json($this->commentService->toAnnotatorArray($newComment));
         } else {
-            return redirect()->route('documents.show', [
-                'document' => $document->slug,
-                $newComment->getHash()
-            ]);
+            return redirect($newComment->getLink());
         }
     }
 
@@ -125,10 +122,7 @@ class CommentController extends Controller
         if ($request->expectsJson()) {
             return Response::json($this->commentService->toAnnotatorArray($newComment));
         } else {
-            return redirect()->route('documents.show', [
-                'document' => $document->slug,
-                $newComment->getHash()
-            ]);
+            return redirect($newComment->getLink());
         }
     }
 
@@ -205,7 +199,6 @@ class CommentController extends Controller
 
         Event::fire(new CommentCreated($newComment, $target));
 
-        //return Response::json($this->commentService->toAnnotatorArray($newComment));
         return $newComment;
     }
 }
