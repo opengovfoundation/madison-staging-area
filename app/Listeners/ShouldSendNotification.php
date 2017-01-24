@@ -2,6 +2,10 @@
 
 namespace App\Listeners;
 
+use App\Models\NotificationPreference;
+use App\Models\Sponsor;
+use App\Models\User;
+
 use Illuminate\Notifications\Events\NotificationSending;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -26,51 +30,63 @@ class ShouldSendNotification
      */
     public function handle(NotificationSending $event)
     {
-        // // determine if the recipient wants notifications from this kind of event
-        // $recipientNotificationPreference = [];
-        // foreach ($message->getRecipients() as $recipient) {
-        //     // if the event is not in the set of valid notifications for the
-        //     // recipient, then skip it
-        //     if (empty(NotificationPreference::getValidNotificationsForUser($recipient)[$event::getName()])) {
-        //         continue;
-        //     }
+        $recipient = $event->notifiable;
+        $notification = $event->notification;
 
-        //     $recipientNotificationPreference[$recipient->id] = NotificationPreference
-        //         ::where('user_id', $recipient->id)
-        //         ->where('event', $event::getName())
-        //         ->get();
-        // }
+        // determine if the recipient *is allowed to receive* notifications from
+        // this kind of event, i.e., if the event is not in the set of valid
+        // notifications for the recipient, then skip it
+        if (empty(NotificationPreference::getValidNotificationsForUser($recipient)[$notification::getName()])) {
+            return false;
+        }
 
-        // if (empty($recipientNotificationPreference)) {
-        //     // they don't want notifications for this event type
-        //     return;
-        // }
+        // determine if the recipient *wants* notifications from this kind of event
+        $recipientNotificationPreferenceQuery = NotificationPreference
+            ::where('event', $notification::getName());
 
-    //     foreach ($recipientNotificationPreference as $userId => $prefs) {
-    //         foreach ($prefs as $pref) {
-    //             switch ($pref->type) {
-    //                 case NotificationPreference::TYPE_EMAIL:
-    //                     $recipient = User::find($userId);
+        if ($recipient instanceof User) {
+            $recipientNotificationPreferenceQuery
+                ::where('user_id', $recipient->id);
+        } elseif ($recipient instanceof Sponsor) {
+            // TODO: we have some support for Sponsors having notification
+            // preferences, which seems like a sane thing to support at some
+            // point, but Sponsors are not currently notifiable
+            $recipientNotificationPreferenceQuery
+                ::where('sponsor_id', $recipient->id);
+        } else {
+            throw new \InvalidArgumentException('Notifications only support Users or Sponsors as recipients');
+        }
 
-    //                     // if the email is not verified, don't send a message to
-    //                     // it regardless of if the user has it selected
-    //                     if (!empty($recipient->token) || empty($recipient->email)) {
-    //                         continue;
-    //                     }
+        switch ($event->channel) {
+            case 'mail':
+                // if their email is not verified, don't send a message to it
+                // regardless of if the user has it selected
+                if (!empty($recipient->token) || empty($recipient->email)) {
+                    return false;
+                }
 
-    //                     $this->mailer->raw($message->getBody(), function ($swiftMessage) use ($message, $recipient) {
-    //                         $swiftMessage->setContentType('text/html');
-    //                         $swiftMessage->subject($message->getSubject());
-    //                         $swiftMessage->from('sayhello@opengovfoundation.org', 'Madison');
-    //                         $swiftMessage->to($recipient->email);
-    //                     });
-    //                     break;
-    //                 case NotificationPreference::TYPE_TEXT:
-    //                     // unsupported
-    //                 default:
-    //                     // do nothing
-    //             }
-    //         }
-    //     }
-    // }
+                $recipientNotificationPreferenceQuery
+                    ::where('type', NotificationPreference::TYPE_EMAIL);
+                break;
+            case 'database':
+                // unsupported at the moment
+                // $recipientNotificationPreferenceQuery
+                //     ::where('type', NotificationPreference::TYPE_IN_APP);
+                return false;
+                break;
+            case 'nexmo':
+                // unsupported at the moment
+                // $recipientNotificationPreferenceQuery
+                //     ::where('type', NotificationPreference::TYPE_TEXT);
+                return false;
+                break;
+            default:
+                return false;
+        }
+
+        if (empty($recipientNotificationPreferenceQuery->get())) {
+            // they don't want notifications for this event type
+            return false;
+        }
+    }
 }

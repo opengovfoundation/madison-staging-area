@@ -45,7 +45,7 @@ class SponsorNeedsApproval extends Notification implements ShouldQueue
         $url = route('sponsors.edit', $this->sponsor->id);
 
         return (new MailMessage)
-                    ->line(trans('messages.notifications.sponsor_needs_approval'))
+                    ->line(trans('messages.notifications.sponsor_needs_approval', ['name' => $this->sponsor->name]))
                     ->action(trans('messages.notifications.review_sponsor'), $url)
                     ->line(trans('messages.notifications.thank_you'));
     }
