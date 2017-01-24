@@ -8,6 +8,8 @@
 
     @include('components.errors')
 
+    {{ Html::linkRoute('pages.create', trans('messages.pages.create'), [], ['class' => 'btn btn-default'])}}
+
     <table class="table">
         <thead>
             <tr>

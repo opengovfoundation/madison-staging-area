@@ -4,7 +4,7 @@ namespace App\Http\Requests\Page;
 
 use App\Http\Requests\AdminRequest;
 
-class Index extends AdminRequest
+class Create extends AdminRequest
 {
     /**
      * Get the validation rules that apply to the request.

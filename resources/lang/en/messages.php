@@ -210,8 +210,12 @@ return [
 
     'pages' => [
         'manage' => 'Manage Pages',
-        'navigation_title' => 'Navigation Title',
+        'create' => 'Create New Page',
+
+        'title' => 'Title',
         'url' => 'URL',
+        'navigation_title' => 'Navigation Title',
+        'page_title' => 'Page Title',
         'show_in_header' => 'Show in Header?',
         'show_in_footer' => 'Show in Footer?',
     ],

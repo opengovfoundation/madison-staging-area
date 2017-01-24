@@ -31,9 +31,9 @@ class PageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Requests\Create $request)
     {
-        //
+        return view('pages.create');
     }
 
     /**
