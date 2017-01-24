@@ -103,15 +103,7 @@ class Annotation extends Model implements ActivityInterface
                 $root = $this->rootAnnotatable;
 
                 if ($root instanceof Doc) {
-                    $hash = '';
-                    if (!empty($this->data['old_permalink_type'])) {
-                        // TODO: is the annsubcomment structure different?
-                        $hash = $this->data['old_permalink_type'].'_'.$this->data['old_id'];
-                    } else {
-                        $hash = $this->str_id;
-                    }
-
-                    return URL::to('documents/'.$root->slug.'#'.$hash);
+                    return URL::to('documents/'.$root->slug.'#'.$this->str_id);
                 }
 
                 return null;
