@@ -71,7 +71,9 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
         this.processAnnotation(annotation);
       }.bind(this));
 
-      // TODO: support showing notes pane for requested permalink
+      revealComment(this.options.docId);
+
+      // TODO: support showing notes pane for requested permalink?
 
       this.setAnnotations(annotations);
     }.bind(this));

@@ -39,8 +39,7 @@ window.showComments = function () {
 };
 
 window.revealComment = function (docId) {
-  // TODO: not sure the annotation subcomments were really in this format
-  var noteReplyHash = window.location.hash.match(/^#annsubcomment_([0-9]+)-([0-9]+)$/);
+  var noteReplyHash = window.location.hash.match(/^#annsubcomment_([0-9]+)-?([0-9]+)?$/);
   var noteHash = window.location.hash.match(/^#annotation_([0-9]+)$/);
   var commentHash = window.location.hash.match(/^#comment_([0-9]+)-?([0-9]+)?$/);
   var hash = jQuery.Deferred();
@@ -57,6 +56,7 @@ window.revealComment = function (docId) {
     if (comments.length) {
       showComments();
       comments[0].scrollIntoView();
+      $('.anchor-target').removeClass('anchor-target');
       $(comments[0]).addClass('anchor-target');
       var parentComment = $(comments[0]).parents('.comment');
       if (parentComment.length) {
@@ -69,6 +69,7 @@ window.revealComment = function (docId) {
     var noteHighlight = $('#content').find('[data-annotation-id='+id+']');
     if (noteHighlight.length) {
       noteHighlight[0].scrollIntoView();
+      $('.anchor-target').removeClass('anchor-target');
       $(noteHighlight[0]).addClass('anchor-target');
       return;
     }
@@ -85,7 +86,11 @@ window.revealComment = function (docId) {
   } else if (noteHash) {
     lookupNewId(noteHash[1]);
   } else if (noteReplyHash) {
-    lookupNewId(noteReplyHash[1]);
+    if (noteReplyHash[2]) {
+      lookupNewId(noteReplyHash[2]);
+    } else {
+      lookupNewId(noteReplyHash[1]);
+    }
   } else {
     hash.resolve(window.location.hash.slice(1));
   }

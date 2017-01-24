@@ -150,6 +150,7 @@
 
                     // potentially race-y with loading annotaions
                     revealComment({{ $document->id }});
+                    window.onhashchange = revealComment.bind(this, {{$document->id }});
 
                     if (window.getQueryParam('comment_page')) {
                         showComments();
