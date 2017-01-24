@@ -60,8 +60,7 @@ class NotificationPreference extends Model
     public static function getAdminNotifications()
     {
         $validNotifications = [
-            'SponsorCreated',
-            'UserVerificationRequest',
+            'SponsorNeedsApproval',
         ];
 
         return static::buildNotificationsFromEventNames($validNotifications);
@@ -75,9 +74,6 @@ class NotificationPreference extends Model
     public static function getUserNotifications()
     {
         $validNotifications = [
-            'CommentCreated',
-            'SponsorMemberAdded',
-            'FeedbackSeen',
         ];
 
         return static::buildNotificationsFromEventNames($validNotifications);
@@ -87,7 +83,7 @@ class NotificationPreference extends Model
     {
         $ret = [];
         foreach ($names as $name) {
-            $class = '\App\Events\\'.$name;
+            $class = '\App\Notifications\\'.$name;
             $ret[$class::getName()] = $class;
         }
 

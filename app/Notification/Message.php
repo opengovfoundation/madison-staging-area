@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 
+// TODO: remove
 class Message
 {
     use SerializesModels;
