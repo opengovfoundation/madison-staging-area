@@ -236,7 +236,7 @@ return [
 
         // actual notification content
         'thank_you' => 'Thank you!',
-        'sponsor_needs_approval' => 'A sponsor needs approval.',
+        'sponsor_needs_approval' => 'A sponsor (:name) needs approval.',
         'review_sponsor' => 'Review sponsor',
     ],
 ];
