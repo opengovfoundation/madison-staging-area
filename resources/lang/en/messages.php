@@ -217,6 +217,7 @@ return [
         'having_trouble' => ' If you’re having trouble clicking the ":actionText" button, copy and paste the URL below into your web browser:',
 
         // actual notification content
+        'thank_you' => 'Thank you!',
         'sponsor_needs_approval' => 'A sponsor needs approval.',
         'review_sponsor' => 'Review sponsor',
     ],
