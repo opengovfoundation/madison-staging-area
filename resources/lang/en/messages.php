@@ -206,4 +206,18 @@ return [
         'updated' => 'User updated.',
         'update_failed' => 'User update failed.',
     ],
+
+    'notifications' => [
+        // boilerplate stuff
+        'greeting' => [
+            'normal' => 'Hello!',
+            'error' => 'Whoops!',
+        ],
+        'salutation' => 'Regards, :name',
+        'having_trouble' => ' If you’re having trouble clicking the ":actionText" button, copy and paste the URL below into your web browser:',
+
+        // actual notification content
+        'sponsor_needs_approval' => 'A sponsor needs approval.',
+        'review_sponsor' => 'Review sponsor',
+    ],
 ];
