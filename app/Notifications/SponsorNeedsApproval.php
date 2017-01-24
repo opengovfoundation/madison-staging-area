@@ -59,7 +59,7 @@ class SponsorNeedsApproval extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
-            //
+            'sponsor_id' => $this->sponsor->id,
         ];
     }
 
