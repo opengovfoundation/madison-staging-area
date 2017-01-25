@@ -4,6 +4,7 @@ return [
     // General Stuff
     'created' => 'Created',
     'updated' => 'Updated',
+    'update_failed' => 'Update failed',
     'readmore' => 'Read More',
     'submit' => 'Submit',
     'clear' => 'Clear',
@@ -204,8 +205,6 @@ return [
         'email_help' => 'Email will not be displayed publicly.',
         'new_password' => 'New Password',
         'new_password_confirmation' => 'Re-Enter New Password',
-        'updated' => 'User updated.',
-        'update_failed' => 'User update failed.',
         'verification_info' => 'Verification Information',
 
         'settings_pages' => [

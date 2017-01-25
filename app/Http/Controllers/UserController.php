@@ -36,10 +36,10 @@ class UserController extends Controller
 
     public function editSettingsNotifications(Requests\Edit $request, User $user)
     {
-        // Retrieve all valid user notifications as associative array (event => description)
+        // Retrieve all valid notifications for user
         $validNotifications = array_keys(NotificationPreference::getValidNotificationsForUser($user));
 
-        // Retrieve all notification preferences that are set
+        // Retrieve all notification preferences that are set for user
         $currentNotifications = NotificationPreference
             ::where('user_id', $user->id)
             ->whereIn('event', $validNotifications)
@@ -76,10 +76,10 @@ class UserController extends Controller
         $user->url = $request->input('url') ?: null;
 
         if ($user->save()) {
-            flash(trans('messages.user.updated'));
+            flash(trans('messages.updated'));
             return back();
         } else {
-            flash(trans('messages.user.update_failed'));
+            flash(trans('messages.update_failed'));
             return back()->withInput();
         }
     }
@@ -91,9 +91,9 @@ class UserController extends Controller
         }
 
         if ($user->save()) {
-            flash(trans('messages.user.updated'));
+            flash(trans('messages.updated'));
         } else {
-            flash(trans('messages.user.update_failed'));
+            flash(trans('messages.update_failed'));
         }
 
         return back();
@@ -130,7 +130,7 @@ class UserController extends Controller
             }
         }
 
-        flash(trans('messages.user.updated'));
+        flash(trans('messages.updated'));
         return back();
     }
 }
