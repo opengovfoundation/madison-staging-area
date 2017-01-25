@@ -16,12 +16,14 @@ class Update extends AdminRequest
         return [
             'url' => 'string|required',
             'nav_title' => 'string|required',
-            'page_title' => 'string',
-            'header' => 'string',
             'header_nav_link' => 'boolean|required',
             'footer_nav_link' => 'boolean|required',
             'external' => 'boolean|required',
-            'page_content' => 'string',
+
+            // These not required if the page is external
+            'page_title' => 'string' . $this->input('external') === "1" ? "" : "|required",
+            'header' => 'string' . $this->input('external') === "1" ? "" : "|required",
+            'page_content' => 'string' . $this->input('external') === "1" ? "" : "|required",
         ];
     }
 
