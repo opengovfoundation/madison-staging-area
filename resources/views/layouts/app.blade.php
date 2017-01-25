@@ -45,7 +45,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
                         @foreach ($headerPages as $page)
-                            <li><a href="{{ $page->url }}">{{ $page->nav_title }}</a></li>
+                            <li><a href="{{ $page->getUrl() }}">{{ $page->nav_title }}</a></li>
                         @endforeach
                     </ul>
 
@@ -111,7 +111,7 @@
             <footer class="nav">
                 <ul class="nav navbar-nav navbar-right">
                     @foreach ($footerPages as $page)
-                        <li><a href="{{ $page->url }}">{{ $page->nav_title }}</a></li>
+                        <li><a href="{{ $page->getUrl() }}">{{ $page->nav_title }}</a></li>
                     @endforeach
                 </ul>
             </footer>
