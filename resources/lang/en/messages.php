@@ -207,6 +207,7 @@ return [
         'new_password_confirmation' => 'Re-Enter New Password',
         'updated' => 'User updated.',
         'update_failed' => 'User update failed.',
+        'verification_info' => 'Verification Information',
 
         'settings_pages' => [
             'notifications' => 'Notifications',
