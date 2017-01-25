@@ -208,15 +208,19 @@ return [
         'update_failed' => 'User update failed.',
     ],
 
-    'pages' => [
+    'page' => [
         'manage' => 'Manage Pages',
         'create' => 'Create New Page',
+        'edit' => 'Edit Page',
+        'updated' => 'Page updated',
 
         'title' => 'Title',
         'url' => 'URL',
-        'navigation_title' => 'Navigation Title',
+        'nav_title' => 'Navigation Title',
         'page_title' => 'Page Title',
+        'header' => 'Page Header',
         'show_in_header' => 'Show in Header?',
         'show_in_footer' => 'Show in Footer?',
+        'external' => 'External?',
     ],
 ];

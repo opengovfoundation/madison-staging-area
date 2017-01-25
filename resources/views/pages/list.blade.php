@@ -3,20 +3,20 @@
 @section('content')
 
     <div class="page-header">
-        <h1>{{ trans('messages.pages.manage') }}</h1>
+        <h1>{{ trans('messages.page.manage') }}</h1>
     </div>
 
     @include('components.errors')
 
-    {{ Html::linkRoute('pages.create', trans('messages.pages.create'), [], ['class' => 'btn btn-default'])}}
+    {{ Html::linkRoute('pages.create', trans('messages.page.create'), [], ['class' => 'btn btn-default'])}}
 
     <table class="table">
         <thead>
             <tr>
-                <th>@lang('messages.pages.navigation_title')</th>
-                <th>@lang('messages.pages.url')</th>
-                <th>@lang('messages.pages.show_in_header')</th>
-                <th>@lang('messages.pages.show_in_footer')</th>
+                <th>@lang('messages.page.nav_title')</th>
+                <th>@lang('messages.page.url')</th>
+                <th>@lang('messages.page.show_in_header')</th>
+                <th>@lang('messages.page.show_in_footer')</th>
                 <th>@lang('messages.actions')</th>
             </tr>
         </thead>
@@ -27,7 +27,9 @@
                     <td>{{ $page->url }}</td>
                     <td>{{ $page->header_nav_link ? "X" : "" }}</td>
                     <td>{{ $page->footer_nav_link ? "X" : "" }}</td>
-                    <td></td>
+                    <td>
+                        {{ Html::linkRoute('pages.edit', trans('messages.edit'), [$page], ['class' => 'btn btn-default'])}}
+                    </td>
                 </tr>
             @endforeach
         </tbody>

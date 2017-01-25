@@ -42,9 +42,14 @@ class PageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\Store $request)
     {
-        //
+        $page = Page::create($request->all());
+        $pageContent = PageContent::create([
+            'page_id' => $page->id,
+            'content' => 'New page content'
+        ]);
+        return redirect()->route('pages.edit', ['page' => $page->id]);
     }
 
     /**
@@ -64,9 +69,14 @@ class PageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Requests\Edit $request, Page $page)
     {
-        //
+        $pageContent = $page->content->content;
+
+        return view('pages.edit', compact([
+            'page',
+            'pageContent'
+        ]));
     }
 
     /**
@@ -76,9 +86,16 @@ class PageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Requests\Update $request, Page $page)
     {
-        //
+        $page->update($request->all());
+
+        $page->content()->update([
+            'content' => $request->input('page_content')
+        ]);
+
+        flash(trans('messages.page.updated'));
+        return redirect()->route('pages.edit', $page);
     }
 
     /**

@@ -89,7 +89,7 @@
 
                                     <ul class="dropdown-menu" role="menu">
                                         <li>
-                                            <a href="{{ route('pages.index') }}">@lang('messages.pages.manage')</a>
+                                            <a href="{{ route('pages.index') }}">@lang('messages.page.manage')</a>
                                         </li>
                                     </ul>
                                 </li>
