@@ -21,12 +21,12 @@ class UserController extends Controller
 
     public function editSettings(Requests\Edit $request, User $user)
     {
-        return redirect()->route('users.settings.profile.edit', $user->id);
+        return redirect()->route('users.settings.account.edit', $user->id);
     }
 
-    public function editSettingsProfile(Requests\Edit $request, User $user)
+    public function editSettingsAccount(Requests\Edit $request, User $user)
     {
-        return view('users.settings.profile', compact('user'));
+        return view('users.settings.account', compact('user'));
     }
 
     public function editSettingsPassword(Requests\Edit $request, User $user)
@@ -62,7 +62,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function updateSettingsProfile(Requests\Settings\UpdateProfile $request, User $user)
+    public function updateSettingsAccount(Requests\Settings\UpdateAccount $request, User $user)
     {
         $user->fname = $request->input('fname');
         $user->lname = $request->input('lname');

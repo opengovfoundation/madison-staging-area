@@ -9,7 +9,7 @@
     @include('components.errors')
 
     <div class="col-md-3 list-group">
-        @php ($settingsPages = ['profile', 'password', 'notifications'])
+        @php ($settingsPages = ['account', 'password', 'notifications'])
         @foreach($settingsPages as $setting)
             @php ($settingUrl = route('users.settings.'.$setting.'.edit', $user->id))
             <a href="{{ $settingUrl }}" class="list-group-item {{request()->url() === $settingUrl ? 'active' : ''}}">
