@@ -46,13 +46,13 @@ class ShouldSendNotification
 
         if ($recipient instanceof User) {
             $recipientNotificationPreferenceQuery
-                ::where('user_id', $recipient->id);
+                ->where('user_id', $recipient->id);
         } elseif ($recipient instanceof Sponsor) {
             // TODO: we have some support for Sponsors having notification
             // preferences, which seems like a sane thing to support at some
             // point, but Sponsors are not currently notifiable
             $recipientNotificationPreferenceQuery
-                ::where('sponsor_id', $recipient->id);
+                ->where('sponsor_id', $recipient->id);
         } else {
             throw new \InvalidArgumentException('Notifications only support Users or Sponsors as recipients');
         }
@@ -66,18 +66,18 @@ class ShouldSendNotification
                 }
 
                 $recipientNotificationPreferenceQuery
-                    ::where('type', NotificationPreference::TYPE_EMAIL);
+                    ->where('type', NotificationPreference::TYPE_EMAIL);
                 break;
             case 'database':
                 // unsupported at the moment
                 // $recipientNotificationPreferenceQuery
-                //     ::where('type', NotificationPreference::TYPE_IN_APP);
+                //     ->where('type', NotificationPreference::TYPE_IN_APP);
                 return false;
                 break;
             case 'nexmo':
                 // unsupported at the moment
                 // $recipientNotificationPreferenceQuery
-                //     ::where('type', NotificationPreference::TYPE_TEXT);
+                //     ->where('type', NotificationPreference::TYPE_TEXT);
                 return false;
                 break;
             default:

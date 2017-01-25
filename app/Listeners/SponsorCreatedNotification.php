@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\SponsorCreated;
 use App\Models\Role;
 use App\Models\User;
+use App\Notifications\SponsorNeedsApproval;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Notification;

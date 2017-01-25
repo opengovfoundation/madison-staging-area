@@ -88,9 +88,9 @@ $style = [
                                                 {{ $greeting }}
                                             @else
                                                 @if ($level == 'error')
-                                                    @lang('messages.notifications.greeting.error');
+                                                    @lang('messages.notifications.greeting.error')
                                                 @else
-                                                    @lang('messages.notifications.greeting.normal');
+                                                    @lang('messages.notifications.greeting.normal')
                                                 @endif
                                             @endif
                                         </h1>
