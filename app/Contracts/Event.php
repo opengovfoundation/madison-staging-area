@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace App\Contracts;
 
 // TODO: what to do with this
 interface Event

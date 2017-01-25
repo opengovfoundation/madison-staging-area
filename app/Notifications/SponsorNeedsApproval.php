@@ -18,7 +18,7 @@ class SponsorNeedsApproval extends Notification implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Sponsor $sponosor)
+    public function __construct(Sponsor $sponsor)
     {
         $this->sponsor = $sponsor;
     }
