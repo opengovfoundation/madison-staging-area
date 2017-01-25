@@ -197,7 +197,7 @@ return [
     ],
 
     'user' => [
-        'edit' => 'Edit Profile',
+        'settings' => 'Settings',
         'fname' => 'First Name',
         'lname' => 'Last Name',
         'email' => 'Email Address',
@@ -205,6 +205,12 @@ return [
         'new_password_confirmation' => 'Re-Enter New Password',
         'updated' => 'User updated.',
         'update_failed' => 'User update failed.',
+
+        'settings_pages' => [
+            'notifications' => 'Notifications',
+            'password' => 'Password',
+            'profile' => 'Profile',
+        ],
     ],
 
     'notifications' => [
@@ -220,5 +226,13 @@ return [
         'thank_you' => 'Thank you!',
         'sponsor_needs_approval' => 'A sponsor (:name) needs approval.',
         'review_sponsor' => 'Review sponsor',
+
+        'descriptions' => [
+            'madison' => [
+                'sponsor' => [
+                    'needs_approval' => 'When a sponsor needs approval',
+                ],
+            ],
+        ],
     ],
 ];

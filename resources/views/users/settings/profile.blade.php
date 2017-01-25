@@ -1,13 +1,7 @@
-@extends('layouts.app')
+@extends('users.settings')
 
-@section('content')
-    <div class="page-header">
-        <h1>{{ trans('messages.user.edit') }}: {{ $user->displayName }}</h1>
-    </div>
-
-    @include('components.errors')
-
-    {{ Form::model($user, ['route' => ['users.update', $user->id], 'method' => 'put']) }}
+@section('settings_content')
+    {{ Form::model($user, ['route' => ['users.settings.profile.update', $user->id], 'method' => 'put']) }}
         <div class="row">
             <div class="col-md-3">
                 {{ Form::mInput('text', 'fname', trans('messages.user.fname')) }}
@@ -45,15 +39,6 @@
             <div class="col-md-4">
                 {{ Form::mInput('text', 'phone', trans('messages.info.phone')) }}
                 {{ Form::mInput('text', 'url', trans('messages.info.url')) }}
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-md-6">
-                {{ Form::mInput('password', 'new_password', trans('messages.user.new_password')) }}
-            </div>
-            <div class="col-md-6">
-                {{ Form::mInput('password', 'new_password_confirmation', trans('messages.user.new_password_confirmation')) }}
             </div>
         </div>
         <hr>
