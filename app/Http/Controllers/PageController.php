@@ -104,8 +104,11 @@ class PageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Requests\Destroy $request, Page $page)
     {
-        //
+        $page->delete();
+
+        flash(trans('messages.page.deleted'));
+        return redirect()->route('pages.index');
     }
 }

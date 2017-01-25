@@ -29,6 +29,11 @@
                     <td>{{ $page->footer_nav_link ? "X" : "" }}</td>
                     <td>
                         {{ Html::linkRoute('pages.edit', trans('messages.edit'), [$page], ['class' => 'btn btn-default'])}}
+                        <div class="btn-group" role="group">
+                            {{ Form::open(['route' => ['pages.destroy', $page], 'method' => 'delete']) }}
+                                <button type="submit" class="btn btn-default">{{ trans('messages.delete') }}</button>
+                            {{ Form::close() }}
+                        </div>
                     </td>
                 </tr>
             @endforeach

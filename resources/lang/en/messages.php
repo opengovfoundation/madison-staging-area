@@ -213,6 +213,7 @@ return [
         'create' => 'Create New Page',
         'edit' => 'Edit Page',
         'updated' => 'Page updated',
+        'deleted' => 'Page deleted',
 
         'title' => 'Title',
         'url' => 'URL',

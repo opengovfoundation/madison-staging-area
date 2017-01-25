@@ -22,4 +22,30 @@
         {{ Form::mSubmit() }}
     {{ Form::close() }}
 
+    @push('scripts')
+        <script>
+            // if external is checked, hide page title, page_header, and content
+            let $external = $('input[type="checkbox"][name="external"]');
+
+            let $pageTitle = $('input[name="page_title"]').parent();
+            let $header = $('input[name="header"]').parent();
+            let $content = $('textarea[name="page_content"]').parent();
+
+            hideOrShowInternalFields();
+            $external.change(hideOrShowInternalFields);
+
+            function hideOrShowInternalFields() {
+                if ($external.prop('checked')) {
+                    $pageTitle.hide();
+                    $header.hide();
+                    $content.hide();
+                } else {
+                    $pageTitle.show();
+                    $header.show();
+                    $content.show();
+                }
+            }
+        </script>
+    @endpush
+
 @endsection
