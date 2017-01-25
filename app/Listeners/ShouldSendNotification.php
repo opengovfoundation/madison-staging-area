@@ -84,7 +84,7 @@ class ShouldSendNotification
                 return false;
         }
 
-        if (empty($recipientNotificationPreferenceQuery->get())) {
+        if ($recipientNotificationPreferenceQuery->get()->isEmpty()) {
             // they don't want notifications for this event type
             return false;
         }
