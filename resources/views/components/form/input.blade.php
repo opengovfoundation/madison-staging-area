@@ -3,7 +3,7 @@
 @if ('checkbox' === $type)
     <div class="checkbox">
         <label>
-            {{ Form::checkbox($name, $savedValue, null, $attributes) }}
+            {{ Form::checkbox($name, $savedValue, !empty($savedValue), $attributes) }}
             {{ $displayName }}
         </label>
     </div>
