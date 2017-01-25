@@ -101,7 +101,6 @@ class UserController extends Controller
 
     public function updateSettingsNotifications(Requests\Settings\UpdateNotifications $request, User $user)
     {
-        // TODO
         $validNotifications = array_keys(NotificationPreference::getValidNotificationsForUser($user));
 
         foreach ($validNotifications as $notificationName) {
@@ -131,15 +130,7 @@ class UserController extends Controller
             }
         }
 
-        // // TODO: change this
-        // if ($user->save()) {
-        //     flash(trans('messages.user.updated'));
-        //     return back();
-        // } else {
-        //     flash(trans('messages.user.update_failed'));
-        //     return back()->withInput();
-        // }
-
+        flash(trans('messages.user.updated'));
         return back();
     }
 }

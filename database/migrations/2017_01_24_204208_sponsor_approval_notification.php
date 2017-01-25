@@ -14,8 +14,8 @@ class SponsorApprovalNotification extends Migration
     public function up()
     {
         DB::table('notification_preferences')
-            ->where('type', 'madison.sponsor.created')
-            ->update(['type' => 'madison.sponsor.needs_approval'])
+            ->where('event', 'madison.sponsor.created')
+            ->update(['event' => 'madison.sponsor.needs_approval'])
             ;
     }
 
@@ -27,8 +27,8 @@ class SponsorApprovalNotification extends Migration
     public function down()
     {
         DB::table('notification_preferences')
-            ->where('type', 'madison.sponsor.needs_approval')
-            ->update(['type' => 'madison.sponsor.created'])
+            ->where('event', 'madison.sponsor.needs_approval')
+            ->update(['event' => 'madison.sponsor.created'])
             ;
     }
 }
