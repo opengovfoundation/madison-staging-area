@@ -201,6 +201,7 @@ return [
         'fname' => 'First Name',
         'lname' => 'Last Name',
         'email' => 'Email Address',
+        'email_help' => 'Email will not be displayed publicly.',
         'new_password' => 'New Password',
         'new_password_confirmation' => 'Re-Enter New Password',
         'updated' => 'User updated.',
@@ -209,7 +210,7 @@ return [
         'settings_pages' => [
             'notifications' => 'Notifications',
             'password' => 'Password',
-            'profile' => 'Profile',
+            'account' => 'Account',
         ],
     ],
 

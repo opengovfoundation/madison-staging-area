@@ -1,16 +1,18 @@
 @extends('users.settings')
 
 @section('settings_content')
-    {{ Form::model($user, ['route' => ['users.settings.profile.update', $user->id], 'method' => 'put']) }}
+    {{ Form::model($user, ['route' => ['users.settings.account.update', $user->id], 'method' => 'put']) }}
         <div class="row">
             <div class="col-md-3">
-                {{ Form::mInput('text', 'fname', trans('messages.user.fname')) }}
+                {{ Form::mInput('text', 'fname', trans('messages.user.fname'), null, ['required' => '']) }}
             </div>
             <div class="col-md-3">
-                {{ Form::mInput('text', 'lname', trans('messages.user.lname')) }}
+                {{ Form::mInput('text', 'lname', trans('messages.user.lname'), null, ['required' => '']) }}
             </div>
+        </div>
+        <div class="row">
             <div class="col-md-6">
-                {{ Form::mInput('text', 'email', trans('messages.user.email')) }}
+                {{ Form::mInput('text', 'email', trans('messages.user.email'), null, ['required' => ''], trans('messages.user.email_help')) }}
             </div>
         </div>
         <hr>
@@ -36,6 +38,8 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row">
             <div class="col-md-4">
                 {{ Form::mInput('text', 'phone', trans('messages.info.phone')) }}
                 {{ Form::mInput('text', 'url', trans('messages.info.url')) }}

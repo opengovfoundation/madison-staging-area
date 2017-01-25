@@ -4,7 +4,7 @@ namespace App\Http\Requests\User\Settings;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateProfile extends \App\Http\Requests\User\Edit
+class UpdateAccount extends \App\Http\Requests\User\Edit
 {
     /**
      * Get the validation rules that apply to the request.

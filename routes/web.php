@@ -122,10 +122,10 @@ Route::resource('users', 'UserController', ['only' => [
 Route::get('/users/{user}/settings', 'UserController@editSettings')
     ->name('users.settings.edit');
 
-Route::get('/users/{user}/settings/profile', 'UserController@editSettingsProfile')
-    ->name('users.settings.profile.edit');
-Route::put('/users/{user}/settings/profile', 'UserController@updateSettingsProfile')
-    ->name('users.settings.profile.update');
+Route::get('/users/{user}/settings/account', 'UserController@editSettingsAccount')
+    ->name('users.settings.account.edit');
+Route::put('/users/{user}/settings/account', 'UserController@updateSettingsAccount')
+    ->name('users.settings.account.update');
 
 Route::get('/users/{user}/settings/password', 'UserController@editSettingsPassword')
     ->name('users.settings.password.edit');
