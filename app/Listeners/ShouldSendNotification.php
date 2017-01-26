@@ -41,21 +41,9 @@ class ShouldSendNotification
         }
 
         // determine if the recipient *wants* notifications from this kind of event
-        $recipientNotificationPreferenceQuery = NotificationPreference
-            ::where('event', $notification::getName());
-
-        if ($recipient instanceof User) {
-            $recipientNotificationPreferenceQuery
-                ->where('user_id', $recipient->id);
-        } elseif ($recipient instanceof Sponsor) {
-            // TODO: we have some support for Sponsors having notification
-            // preferences, which seems like a sane thing to support at some
-            // point, but Sponsors are not currently notifiable
-            $recipientNotificationPreferenceQuery
-                ->where('sponsor_id', $recipient->id);
-        } else {
-            throw new \InvalidArgumentException('Notifications only support Users or Sponsors as recipients');
-        }
+        $recipientNotificationPreferenceQuery = $recipient
+            ->notificationPreferences()
+            ->where('event', $notification::getName());
 
         switch ($event->channel) {
             case 'mail':

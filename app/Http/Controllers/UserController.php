@@ -40,8 +40,8 @@ class UserController extends Controller
         $validNotifications = array_keys(NotificationPreference::getValidNotificationsForUser($user));
 
         // Retrieve all notification preferences that are set for user
-        $currentNotifications = NotificationPreference
-            ::where('user_id', $user->id)
+        $currentNotifications = $user
+            ->notificationPreferences()
             ->whereIn('event', $validNotifications)
             ->pluck('event')
             ->flip();
@@ -108,23 +108,21 @@ class UserController extends Controller
             $newValue = !empty($request->input($notificationParamName));
 
             // Grab this notification from the database
-            $model = NotificationPreference
-                ::where('user_id', $user->id)
+            $pref = $user
+                ->notificationPreferences()
                 ->where('event', $notificationName)
                 ->first();
 
             // If we don't want that notification (and it exists), delete it
-            if (!$newValue && !empty($model)) {
-                $model->delete();
+            if (!$newValue && !empty($pref)) {
+                $pref->delete();
             } else {
                 // If the entry doesn't already exist, create it.
-                if (!isset($model)) {
-                    $model = new NotificationPreference();
-                    $model->user_id = $user->id;
-                    $model->event = $notificationName;
-                    $model->type = "email";
-
-                    $model->save();
+                if (!isset($pref)) {
+                    $user->notificationPreferences()->create([
+                        'event' => $notificationName,
+                        'type' => NotificationPreference::TYPE_EMAIL,
+                    ]);
                 }
                 // Otherwise, ignore (there was no change)
             }
