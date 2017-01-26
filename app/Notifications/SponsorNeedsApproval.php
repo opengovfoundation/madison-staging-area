@@ -73,4 +73,9 @@ class SponsorNeedsApproval extends Notification implements ShouldQueue
     {
         return static::TYPE_ADMIN;
     }
+
+    public function getInstigator()
+    {
+        return $this->sponsor->findUsersByRole(Sponsor::ROLE_OWNER)->first();
+    }
 }

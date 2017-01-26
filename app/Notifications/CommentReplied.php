@@ -85,4 +85,9 @@ class CommentReplied extends Notification implements ShouldQueue
     {
         return static::TYPE_USER;
     }
+
+    public function getInstigator()
+    {
+        return $this->comment->user;
+    }
 }
