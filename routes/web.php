@@ -60,7 +60,9 @@ Route::bind('documentTrashed', function ($value) {
 });
 
 Route::bind('page', function ($value) {
-    $page = Page::where('url', '/' . $value)->first();
+    $page = Page::where('url', '/' . $value)
+        ->orWhere('id', $value)
+        ->first();
 
     if ($page) {
         return $page;
@@ -133,5 +135,3 @@ Route::resource('users', 'UserController', ['only' => [
 
 // Pages
 Route::resource('pages', 'PageController');
-
-Route::get('/page/{page}', 'PageController@show');

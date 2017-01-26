@@ -76,7 +76,7 @@ class Page extends Model
      */
     public function getUrl()
     {
-        return $this->external ? $this->url : '/page' . $this->url;
+        return $this->external ? $this->url : '/pages' . $this->url;
     }
 
 }
