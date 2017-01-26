@@ -14,6 +14,7 @@ class NotificationPreference extends Model
     const TYPE_TEXT = "text";
 
     protected $table = 'notification_preferences';
+    protected $fillable = ['event', 'type', 'user_id', 'sponsor_id'];
     public $timestamps = false;
 
     public function sponsor()
