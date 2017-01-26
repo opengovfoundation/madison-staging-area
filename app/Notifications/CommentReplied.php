@@ -50,7 +50,7 @@ class CommentReplied extends Notification implements ShouldQueue
             $parentType = 'comment';
         }
 
-        $url = $this->comment->link;
+        $url = $this->comment->getLink();
 
         return (new MailMessage)
                     ->line(trans('messages.notifications.comment_reply', [
