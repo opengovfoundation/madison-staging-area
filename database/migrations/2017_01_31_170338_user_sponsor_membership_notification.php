@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddedToSponsorNotification extends Migration
+class UserSponsorMembershipNotification extends Migration
 {
     /**
      * Run the migrations.
