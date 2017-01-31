@@ -2,26 +2,27 @@
 
 namespace App\Notifications;
 
-use App\Models\SponsorMember;
+use App\Models\Sponsor;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class AddedToSponsor extends UserMembershipChanged
+class RemovedFromSponsor extends UserMembershipChanged
 {
-    public $sponsorMember;
+    public $sponsor;
+    public $member;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(SponsorMember $sponsorMember, User $instigator)
+    public function __construct(Sponsor $sponsor, User $member, User $instigator)
     {
         parent::__construct($instigator);
-        $this->sponsorMember = $sponsorMember;
-        $this->instigator = $instigator;
+        $this->sponsor = $sponsor;
+        $this->member = $member;
     }
 
     /**
@@ -43,16 +44,12 @@ class AddedToSponsor extends UserMembershipChanged
      */
     public function toMail($notifiable)
     {
-        $url = route('sponsors.index', ['id' => [$this->sponsorMember->sponsor->id]]);
-
         return (new MailMessage)
-                    ->line(trans('messages.notifications.added_to_sponsor', [
+                    ->line(trans('messages.notifications.removed_from_sponsor', [
                         'name' => $this->instigator->getDisplayName(),
-                        'sponsor' => $this->sponsorMember->sponsor->display_name,
-                        'role' => $this->sponsorMember->role,
+                        'sponsor' => $this->sponsor->display_name,
                     ]))
-                    ->action(trans('messages.notifications.see_sponsor'), $url)
-                    ->line(trans('messages.notifications.thank_you'));
+                    ;
     }
 
     /**
@@ -65,7 +62,8 @@ class AddedToSponsor extends UserMembershipChanged
     {
         return [
             'name' => static::getName(),
-            'sponsor_member_id' => $this->sponsorMember->id,
+            'sponsor_id' => $this->sponsor->id,
+            'member_id' => $this->member->id,
             'instigator_id' => $this->instigator->id,
         ];
     }

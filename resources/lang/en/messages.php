@@ -254,6 +254,7 @@ return [
 
         'added_to_sponsor' => ':name has added to :sponsor with a role of :role',
         'see_sponsor' => 'See Sponsor',
+        'removed_from_sponsor' => ':name has removed you from :sponsor',
 
         'descriptions' => [
             'madison' => [
@@ -264,7 +265,7 @@ return [
                     'replied' => 'When someone posts a reply to a comment of yours',
                 ],
                 'user' => [
-                    'added_to_sponsor' => 'When you are added to a sponsor',
+                    'sponsor_membership_changed' => 'When you are added to or removed from a sponsor',
                 ],
             ],
         ],

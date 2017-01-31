@@ -15,7 +15,7 @@ class AddedToSponsorNotification extends Migration
     {
         DB::table('notification_preferences')
             ->where('event', 'madison.sponsor.member-added')
-            ->update(['event' => 'madison.user.added_to_sponsor'])
+            ->update(['event' => 'madison.user.sponsor_membership_changed'])
             ;
     }
 
@@ -27,7 +27,7 @@ class AddedToSponsorNotification extends Migration
     public function down()
     {
         DB::table('notification_preferences')
-            ->where('event', 'madison.user.added_to_sponsor')
+            ->where('event', 'madison.user.sponsor_membership_changed')
             ->update(['event' => 'madison.sponsor.member-added'])
             ;
     }
