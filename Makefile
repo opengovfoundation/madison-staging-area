@@ -3,10 +3,10 @@
 all: deps build
 
 build:
-	./node_modules/.bin/gulp
+	npm run dev
 
 build-prod:
-	./node_modules/.bin/gulp --production
+	npm run production
 
 deps: deps-node deps-php
 
@@ -69,4 +69,4 @@ queue-listen:
 	php artisan queue:listen
 
 watch:
-	./node_modules/.bin/gulp watch
+	npm run watch
