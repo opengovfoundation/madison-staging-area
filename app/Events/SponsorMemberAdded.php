@@ -4,6 +4,7 @@ namespace App\Events;
 
 use App\Events\Event;
 use App\Models\SponsorMember;
+use App\Models\User;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
@@ -12,15 +13,17 @@ class SponsorMemberAdded extends Event
     use SerializesModels;
 
     public $sponsorMember;
+    public $instigator;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(SponsorMember $sponsorMember)
+    public function __construct(SponsorMember $sponsorMember, User $instigator)
     {
         $this->sponsorMember = $sponsorMember;
+        $this->instigator = $instigator;
     }
 
     /**

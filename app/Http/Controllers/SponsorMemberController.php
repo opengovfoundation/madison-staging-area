@@ -78,7 +78,7 @@ class SponsorMemberController extends Controller
         }
 
         $newMember = $sponsor->addMember($user->id, $request->input('role', null));
-        Event::fire(new SponsorMemberAdded($newMember));
+        Event::fire(new SponsorMemberAdded($newMember, $request->user()));
 
         flash(trans('messages.sponsor_member.created'));
         return redirect()->route('sponsors.members.index', $sponsor->id);
