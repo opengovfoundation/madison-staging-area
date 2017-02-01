@@ -12,7 +12,7 @@
 
     <!-- Styles -->
     <link href="{{ elixir('css/app.css') }}" rel="stylesheet">
-    <link href="{{ elixir('css/annotator.min.css') }}" rel="stylesheet">
+    @stack('styles')
 
     <!-- Scripts -->
     <script>
