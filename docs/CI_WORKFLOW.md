@@ -5,16 +5,20 @@ deployment, automated builds, and production monitoring on Madison.
 
 ## Pipeline
 
-1. Code is pushed up for review as a "diff" in Phabricator
-2. CircleCI automatically runs the build process, reporting back any failure
+1. Code is pushed up for review as a "diff" in Phabricator.
+2. CircleCI automatically runs the build process, reporting back any failure.
 3. If build succeeds and changes are accepted, the author then "lands" the
-   code onto the target branch (typically `dev`)
+   code onto the `master` branch.
+  1. Builds that are unsuccessful create an obstruction towards landing that
+     particular diff, ensuring we always have passing builds.
 4. Envoyer will detect new commits on the target branch and trigger a new
-   release to be deployed to all instances tracking that branch
-  1. Our staging site will be configured to track `dev`, and production
-     instances will be set up to track `master`
-5. If deploy process completes successfully, we are notified via Slack
-6. Any errors that happen in production will be reported via Rollbar
+   release to be deployed to all instances tracking that branch.
+  1. Our staging site will be configured to track `master`, and production
+     instances will be set up to track a `production` branch.
+  2. At a regular interval (typically at the end of a sprint) we will merge
+     `master` to `production` which will trigger production deploys.
+5. If deploy process completes successfully, we are notified via Slack.
+6. Any errors that happen in production will be reported via Rollbar.
 
 ## Tools
 
