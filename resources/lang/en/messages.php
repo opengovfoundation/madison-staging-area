@@ -256,6 +256,8 @@ return [
         'see_sponsor' => 'See Sponsor',
         'removed_from_sponsor' => ':name has removed you from :sponsor',
 
+        'sponsor_role_changed' => ':name changed your role for :sponsor from :old_role to :new_role',
+
         'descriptions' => [
             'madison' => [
                 'sponsor' => [
@@ -266,6 +268,7 @@ return [
                 ],
                 'user' => [
                     'sponsor_membership_changed' => 'When you are added to or removed from a sponsor',
+                    'sponsor_role_changed' => 'When your role in a sponsor is changed',
                 ],
             ],
         ],
