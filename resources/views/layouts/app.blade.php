@@ -11,8 +11,8 @@
     <title>{{ config('app.name', 'Madison') }}</title>
 
     <!-- Styles -->
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
-    @stack('styles')
+    <link href="{{ elixir('css/app.css') }}" rel="stylesheet">
+    <link href="{{ elixir('css/annotator.min.css') }}" rel="stylesheet">
 
     <!-- Scripts -->
     <script>
@@ -120,7 +120,8 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ mix('js/app.js') }}"></script>
+    <script src="{{ elixir('js/vendor.js') }}"></script>
+    <script src="{{ elixir('js/app.js') }}"></script>
     @stack('scripts')
 </body>
 </html>

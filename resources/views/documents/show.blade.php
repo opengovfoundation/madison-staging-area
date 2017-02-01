@@ -1,9 +1,5 @@
 @extends('layouts.app')
 
-@push('styles')
-    <link href="{{ mix('css/annotator.min.css') }}" rel="stylesheet">
-@endpush
-
 @section('content')
     <div class="page-header">
         <h1>{{ $document->title }}</h1>
@@ -123,9 +119,8 @@
     {{ $documentPages->appends(request()->query())->fragment('page_content')->links() }}
 
     @push('scripts')
-        <script src="{{ mix('js/annotator-full.min.js') }}"></script>
-        <script src="{{ mix('js/annotator-madison.js') }}"></script>
-        <script src="{{ mix('js/document.js') }}"></script>
+        <script src="{{ elixir('js/annotator-madison.js') }}"></script>
+        <script src="{{ elixir('js/document.js') }}"></script>
         <script>
             loadTranslations([
                 'messages.close',
