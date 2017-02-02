@@ -549,9 +549,17 @@ class Doc extends Model
                 // This means our attempt to re-order the object will fail.
                 // The line below will restore the order. Ugh.
                 ksort($tempDocs);
-                $docs = $tempDocs;
+                return $tempDocs;
             }
         }
+
+        return null;
+    }
+
+
+    public static function getFeaturedOrRecent()
+    {
+        $docs = static::getFeatured();
 
         // If we don't have a document, just find anything recent.
         if (empty($docs)) {
