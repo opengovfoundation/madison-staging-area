@@ -54,6 +54,16 @@ new folder and timestamped. This allows for a symlinked folder called `current`
 to always point to the latest release. It also allows for easy rollback of a
 release by simply changing the symlink.
 
+The Envoyer deploy process is as follows (steps added by us denoted):
+
+1. Clone down the new release into a timestamped release folder.
+2. Install composer dependencies.
+3. [CUSTOM] Install npm dependencies and run `npm run prod` to build assets.
+4. Activate the new release by switching the symlink to point at it.
+5. [CUSTOM] Clear our Laravel cache, including the view cache.
+6. Purge older releases, based on # we specify to keep around.
+7. Perform a health check on the new release.
+
 Envoyer goes a few steps further by enabling this all through a web interface,
 and including other features such as auto-deploying from specific branches in
 your GitHub repo. When new commits are pushed to the specified branch, Envoyer
