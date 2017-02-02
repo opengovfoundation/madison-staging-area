@@ -3,6 +3,9 @@
 The following outlines the tools and processes we use for development,
 deployment, automated builds, and production monitoring on Madison.
 
+For information on deploying an instance of Madison yourself, using Forge and
+Envoyer, check [our deployment documentation](docs/deploy.md).
+
 ## Pipeline
 
 1. Code is pushed up for review as a "diff" in Phabricator.
@@ -40,7 +43,7 @@ Forge is a service that connects to Linode for server provisioning and
 management. It can create a new Linode VPS for you and configure it to run
 Laravel (and other PHP) applications. It also allows for easy management of
 multiple sites on the same server, including SSL certificates through
-LetsEncrypt and environment file settings.
+LetsEncrypt, databases, and environment file settings.
 
 Once Forge has been used to set up a server and configure a site, it shouldn't
 need to be messed with again, except perhaps to change environment settings for
