@@ -7,7 +7,6 @@ use App\Http\Requests\Document\View as DocumentViewRequest;
 use App\Models\Annotation;
 use App\Models\Doc as Document;
 use App\Services;
-use Event;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Response;
@@ -209,7 +208,7 @@ class CommentController extends Controller
     {
         $newComment = $this->commentService->createFromAnnotatorArray($target, $user, $data);
 
-        Event::fire(new CommentCreated($newComment, $target));
+        event(new CommentCreated($newComment, $target));
 
         return $newComment;
     }

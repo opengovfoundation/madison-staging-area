@@ -9,7 +9,6 @@ use App\Models\User;
 use App\Http\Requests\SponsorMember as Requests;
 use App\Events\SponsorMemberAdded;
 use App\Events\SponsorMemberRemoved;
-use Event;
 
 class SponsorMemberController extends Controller
 {
@@ -79,7 +78,7 @@ class SponsorMemberController extends Controller
         }
 
         $newMember = $sponsor->addMember($user->id, $request->input('role', null));
-        Event::fire(new SponsorMemberAdded($newMember, $request->user()));
+        event(new SponsorMemberAdded($newMember, $request->user()));
 
         flash(trans('messages.sponsor_member.created'));
         return redirect()->route('sponsors.members.index', $sponsor->id);
@@ -159,7 +158,7 @@ class SponsorMemberController extends Controller
         } else {
             $user = $member->user;
             $member->delete();
-            Event::fire(new SponsorMemberRemoved($sponsor, $user, $request->user()));
+            event(new SponsorMemberRemoved($sponsor, $user, $request->user()));
             flash(trans('messages.sponsor_member.removed'));
         }
 
