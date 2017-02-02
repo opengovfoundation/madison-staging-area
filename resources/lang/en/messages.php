@@ -252,7 +252,9 @@ return [
         'comment_type_comment' => 'comment',
         'see_comment' => 'See Comment',
 
-        'added_to_sponsor' => ':name has added to :sponsor with a role of :role',
+        'comment_created_on_sponsored' => ':name has created a :comment_type on :document',
+
+        'added_to_sponsor' => ':name has added you to :sponsor with a role of :role',
         'see_sponsor' => 'See Sponsor',
         'removed_from_sponsor' => ':name has removed you from :sponsor',
 
@@ -263,6 +265,7 @@ return [
                 ],
                 'comment' => [
                     'replied' => 'When someone posts a reply to a comment of yours',
+                    'created_on_sponsored' => 'When someone makes a comment on a document you sponsored',
                 ],
                 'user' => [
                     'sponsor_membership_changed' => 'When you are added to or removed from a sponsor',
