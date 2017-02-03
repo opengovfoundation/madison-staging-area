@@ -132,16 +132,6 @@
                                                 )
                                         }}
                                     </div>
-                                @elseif ($cap === 'open')
-                                    <div class="btn-group" role="group">
-                                        {{ Html::linkRoute(
-                                                'sponsors.show',
-                                                trans('messages.open'),
-                                                ['sponsor' => $sponsor->id],
-                                                ['class' => 'btn btn-default']
-                                                )
-                                        }}
-                                    </div>
                                 @elseif ($cap === 'edit')
                                     <div class="btn-group" role="group">
                                         {{ Html::linkRoute(
