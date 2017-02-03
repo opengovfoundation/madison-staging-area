@@ -43,7 +43,8 @@ it's installed, click "Activate" to enable it and set up auto-renew.
 
 Once Forge has been used to set up a server and configure a site, it shouldn't
 need to be messed with again, except perhaps to change environment settings for
-a site, or to renew SSL certificates.
+a site, or to renew SSL certificates if you don't set up auto-renew (which is
+enabled by default if you use LetsEncrypt).
 
 ## Deploy & Release Management: Envoyer
 
@@ -56,12 +57,14 @@ release by simply changing the symlink.
 The Envoyer deploy process is as follows (steps added by us denoted):
 
 1. Clone down the new release into a timestamped release folder.
-2. Install composer dependencies.
-3. [CUSTOM] Install npm dependencies and run `npm run prod` to build assets.
-4. Activate the new release by switching the symlink to point at it.
-5. [CUSTOM] Clear our Laravel cache, including the view cache.
-6. Purge older releases, based on # we specify to keep around.
-7. Perform a health check on the new release.
+1. Install composer dependencies.
+1. [CUSTOM] Clean the cache, install npm dependencies, and build assets.
+  * `make envoyer-post-composer`
+1. Activate the new release by switching the symlink to point at it.
+1. [CUSTOM] Run database migrations.
+  * `make envoyer-post-activate`
+1. Purge older releases, based on # we specify to keep around.
+1. Perform a health check on the new release.
 
 Envoyer goes a few steps further by enabling this all through a web interface,
 and including other features such as auto-deploying from specific branches in
