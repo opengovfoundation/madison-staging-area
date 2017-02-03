@@ -523,13 +523,13 @@ class DocumentController extends Controller
         $existingDocumentMeta = $this->getUserSupportMeta($request->user(), $document);
 
         if ($existingDocumentMeta) {
-
             // are we removing support/opposition?
             if ((bool) $existingDocumentMeta->meta_value === $support) {
                 $existingDocumentMeta->forceDelete();
             } else {
                 $existingDocumentMeta->meta_value = $support;
                 $existingDocumentMeta->save();
+                // TODO: emit event
             }
         } else {
             // create new one!
@@ -539,6 +539,7 @@ class DocumentController extends Controller
             $documentMeta->meta_key = 'support';
             $documentMeta->meta_value = $support;
             $documentMeta->save();
+            // TODO: emit event
         }
 
         flash(trans('messages.document.update_support'));
