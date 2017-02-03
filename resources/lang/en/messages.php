@@ -262,6 +262,13 @@ return [
 
         'sponsor_role_changed' => ':name changed your role for :sponsor from :old_role to :new_role',
 
+        'see_document' => 'See Document',
+
+        'vote_support' => 'A user voted in support of :document.',
+        'vote_oppose' => 'A user voted in opposition of :document.',
+        'vote_support_from_oppose' => 'A user changed their vote to support :document.',
+        'vote_oppose_from_support' => 'A user changed their vote to oppose :document.',
+
         'descriptions' => [
             'madison' => [
                 'sponsor' => [
@@ -271,6 +278,9 @@ return [
                     'replied' => 'When someone posts a reply to a comment of yours',
                     'liked' => 'When someone likes a comment of yours',
                     'created_on_sponsored' => 'When someone makes a comment on a document you sponsored',
+                ],
+                'document' => [
+                    'support_vote_changed' => 'When someone votes on a document you sponsored',
                 ],
                 'user' => [
                     'sponsor_membership_changed' => 'When you are added to or removed from a sponsor',
