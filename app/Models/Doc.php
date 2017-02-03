@@ -517,7 +517,7 @@ class Doc extends Model
         });
     }
 
-    public static function getFeatured()
+    public static function getFeatured($onlyPublished = true)
     {
         $featuredSetting = Setting::where('meta_key', '=', 'featured-doc')->first();
 
@@ -529,8 +529,11 @@ class Doc extends Model
                 ->with('statuses')
                 ->with('dates')
                 ->whereIn('id', $featuredIds)
-                ->where('is_template', '!=', '1')
-                ->where('publish_state', '=', static::PUBLISH_STATE_PUBLISHED);
+                ->where('is_template', '!=', '1');
+
+            if ($onlyPublished) {
+                $docQuery->where('publish_state', '=', static::PUBLISH_STATE_PUBLISHED);
+            }
 
             $docs = $docQuery->get();
 

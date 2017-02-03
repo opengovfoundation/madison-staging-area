@@ -25,11 +25,9 @@
                     <td>{{ $document->title }}</td>
                     <td>{{ $document->created_at->toDateTimeString() }}</td>
                     <td>
-                        @if ($document->sponsors->count() > 0)
-                            {{ $document->sponsors->shift()->display_name }}
-                            @if ($document->sponsors->count() > 1)
-                                @lang('messages.document.sponsor_others')
-                            @endif
+                        {{ $document->sponsors->shift()->display_name }}
+                        @if ($document->sponsors->count() > 1)
+                            @lang('messages.document.sponsor_others')
                         @endif
                     </td>
                     <td>{{ trans('messages.document.publish_states.'.$document->publish_state) }}</td>
@@ -38,7 +36,7 @@
                             <div class="btn-group" role="group">
                                 {{ Form::open(['route' => ['settings.featured-documents.update', $document->id], 'method' => 'put']) }}
                                     <input type="hidden" name="action" value="up">
-                                    @if ($document !== $documents[0])
+                                    @if (!$loop->first)
                                         <button type="submit" class="btn btn-default">
                                             <i class="fa fa-arrow-up"></i>
                                         </button>
@@ -53,7 +51,7 @@
                             <div class="btn-group" role="group">
                                 {{ Form::open(['route' => ['settings.featured-documents.update', $document->id], 'method' => 'put']) }}
                                     <input type="hidden" name="action" value="down">
-                                    @if ($document !== $documents[count($documents) - 1])
+                                    @if (!$loop->last)
                                         <button type="submit" class="btn btn-default">
                                             <i class="fa fa-arrow-down"></i>
                                         </button>

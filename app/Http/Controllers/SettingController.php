@@ -16,7 +16,7 @@ class SettingController extends Controller
      */
     public function indexFeaturedDocuments(Requests\FeaturedDocuments\Index $request)
     {
-        $documents = Document::getFeatured();
+        $documents = Document::getFeatured(false);
         return view('settings.featured-documents', compact([
             'documents'
         ]));
