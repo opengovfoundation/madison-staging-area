@@ -4,7 +4,7 @@ namespace App\Listeners;
 
 use App\Events\CommentCreated;
 use App\Models\Annotation;
-use App\Notifications\CommentCreatedOnSponsored;
+use App\Notifications\CommentCreatedOnSponsoredDocument;
 use App\Notifications\CommentReplied;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -27,7 +27,7 @@ class CommentCreatedNotification implements ShouldQueue
                 return $sponsor->members->pluck('user');
             })
             ->unique('id');
-        Notification::send($members, new CommentCreatedOnSponsored($event->comment));
+        Notification::send($members, new CommentCreatedOnSponsoredDocument($event->comment));
 
         // if the comment is in reply to something, signal a notification to
         // the parent user

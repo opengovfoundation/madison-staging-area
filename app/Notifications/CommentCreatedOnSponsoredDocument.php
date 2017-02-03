@@ -7,7 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class CommentCreatedOnSponsored extends Notification implements ShouldQueue
+class CommentCreatedOnSponsoredDocument extends Notification implements ShouldQueue
 {
     use Queueable;
 
