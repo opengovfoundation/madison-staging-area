@@ -70,3 +70,7 @@ queue-listen:
 
 watch:
 	./node_modules/.bin/gulp watch
+
+envoyer-post-composer: clean deps-node build-prod
+
+envoyer-post-activate: db-force-migrate
