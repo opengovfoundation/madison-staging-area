@@ -416,19 +416,6 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
         sideBubbles += '</span>';
         sideBubbles += '</span>';
 
-        sideBubbles += '<div class="annotation-group-statistics">';
-
-        sideBubbles += '<span class="annotation-collaborator-count">';
-        sideBubbles += window.trans['messages.document.collaborators_count']
-          .replace(':count', annotationGroup.users.length);
-        sideBubbles += '</span>';
-
-        sideBubbles += '<span class="annotation-comment-count">';
-        sideBubbles += window.trans['messages.document.replies_count']
-          .replace(':count', annotationGroup.commentCount);
-        sideBubbles += '</span>';
-
-        sideBubbles += '</div>'; // annotation-group-statistics
         sideBubbles += '</div>'; // annotation-group
       }
     }

@@ -110,7 +110,9 @@ Route::put('/documents/{document}/support', 'DocumentController@updateSupport')
 
 
 // Sponsors
-Route::resource('sponsors', 'SponsorController');
+Route::resource('sponsors', 'SponsorController', [
+    'except' => ['show']
+]);
 
 Route::put('/sponsors/{sponsor}/status', 'SponsorController@updateStatus')
     ->name('sponsors.status.update');
