@@ -78,26 +78,15 @@
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <a href="{{ route('users.settings.edit', Auth::user()->id) }}">@lang('messages.user.settings')</a>
+                                        <a href="{{ route('users.settings.edit', Auth::user()->id) }}">@lang('messages.settings')</a>
                                     </li>
                                     <li>
                                         <a href="{{ route('sponsors.index', ['user_id[]' => Auth::user()->id]) }}">@lang('messages.sponsor.list')</a>
                                     </li>
                                     @if (Auth::user()->isAdmin())
                                         <li role="separator" class="divider"></li>
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                                @lang('messages.admin') <span class="caret"></span>
-                                            </a>
-
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li>
-                                                    <a href="{{ route('pages.index') }}">@lang('messages.page.manage')</a>
-                                                </li>
-                                                <li>
-                                                    <a href="{{ route('settings.featured-documents.list') }}">@lang('messages.settings.featured_documents')</a>
-                                                </li>
-                                            </ul>
+                                        <li>
+                                            <a href="{{ route('settings.site.index') }}">@lang('messages.admin')</a>
                                         </li>
                                     @endif
 
