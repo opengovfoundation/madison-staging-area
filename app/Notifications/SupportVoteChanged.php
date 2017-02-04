@@ -52,25 +52,20 @@ class SupportVoteChanged extends Notification implements ShouldQueue
         $url = $this->document->url;
 
         $subject = '';
-        $msg = '';
 
         if ($this->oldValue === null) {
             // then this is a new vote
             if ($this->newValue === true) {
-                $subject = 'messages.notifications.vote_support';
-                $msg = 'messages.notifications.vote_support';
+                $subject = static::baseMessageLocation().'.vote_support';
             } else {
-                $subject = 'messages.notifications.vote_oppose';
-                $msg = 'messages.notifications.vote_oppose';
+                $subject = static::baseMessageLocation().'.vote_oppose';
             }
         } else {
             // they are changing their vote
             if ($this->oldValue === false && $this->newValue === true) {
-                $subject = 'messages.notifications.vote_support_from_oppose';
-                $msg = 'messages.notifications.vote_support_from_oppose';
+                $subject = static::baseMessageLocation().'.vote_support_from_oppose';
             } else {
-                $subject = 'messages.notifications.vote_oppose_from_support';
-                $msg = 'messages.notifications.vote_oppose_from_support';
+                $subject = static::baseMessageLocation().'.vote_oppose_from_support';
             }
         }
 
@@ -80,9 +75,8 @@ class SupportVoteChanged extends Notification implements ShouldQueue
 
         return (new MailMessage)
                     ->subject(trans($subject, $args))
-                    ->line(trans($msg, $args))
                     ->action(trans('messages.notifications.see_document'), $url)
-                    ->line(trans('messages.notifications.thank_you'));
+                    ;
     }
 
     /**
@@ -95,7 +89,10 @@ class SupportVoteChanged extends Notification implements ShouldQueue
     {
         return [
             'name' => static::getName(),
-            'comment_id' => $this->comment->id,
+            'old_value' => $this->oldValue,
+            'new_value' => $this->newValue,
+            'document_id' => $this->document->id,
+            'user_id' => $this->user->id,
         ];
     }
 

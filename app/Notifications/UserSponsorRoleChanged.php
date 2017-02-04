@@ -52,14 +52,14 @@ class UserSponsorRoleChanged extends Notification implements ShouldQueue
         $url = route('sponsors.members.index', $this->sponsorMember->sponsor);
 
         return (new MailMessage)
-                    ->line(trans('messages.notifications.sponsor_role_changed', [
+                    ->subject(trans(static::baseMessageLocation().'.subject', [
                         'name' => $this->instigator->getDisplayName(),
                         'sponsor' => $this->sponsorMember->sponsor->display_name,
                         'old_role' => trans('messages.sponsor_member.roles.'.$this->oldValue),
                         'new_role' => trans('messages.sponsor_member.roles.'.$this->newValue),
                     ]))
                     ->action(trans('messages.notifications.see_sponsor'), $url)
-                    ->line(trans('messages.notifications.thank_you'));
+                    ;
     }
 
     /**
