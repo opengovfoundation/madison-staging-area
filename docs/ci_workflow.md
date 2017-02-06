@@ -59,12 +59,14 @@ information on Envoyer, including how we have it configured, visit the
 The Envoyer deploy process is as follows (steps added by us denoted):
 
 1. Clone down the new release into a timestamped release folder.
-2. Install composer dependencies.
-3. [CUSTOM] Clear npm deps, Laravel cache, and view cache, then build assets.
-4. Activate the new release by switching the symlink to point at it.
-5. [CUSTOM] Run database mirgations, with `--force` for production.
-6. Purge older releases, based on # we specify to keep around.
-7. Perform a health check on the new release.
+1. Install composer dependencies.
+1. [CUSTOM] Clean the cache, install npm dependencies, and build assets.
+  * `make envoyer-post-composer`
+1. Activate the new release by switching the symlink to point at it.
+1. [CUSTOM] Run database migrations.
+  * `make envoyer-post-activate`
+1. Purge older releases, based on # we specify to keep around.
+1. Perform a health check on the new release.
 
 ### Production Monitoring: Rollbar
 
