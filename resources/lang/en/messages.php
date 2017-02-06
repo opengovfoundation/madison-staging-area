@@ -44,6 +44,7 @@ return [
 
     // Home Page Stuff
     'home' => [
+        'home' => 'Home',
         'welcome' => 'Add your voice...',
         'intro' => 'Find legislation and regulations being developed and get informed. Then get involved and collaboratively craft the documents with the sponsors. To get started, choose from the recent documents below, or search the whole repository.',
     ],

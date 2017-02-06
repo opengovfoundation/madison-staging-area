@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('pageTitle', trans('messages.setting.custom_pages'))
+
 @section('content')
 
     <div class="page-header">
