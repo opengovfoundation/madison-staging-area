@@ -303,7 +303,7 @@ class DocumentController extends Controller
         $document->sponsors()->sync([$request->input('sponsor_id')]);
 
         flash(trans('messages.document.created'));
-        return redirect()->route('documents.edit', ['document' => $document->slug]);
+        return redirect()->route('documents.edit', $document);
     }
 
     /**
@@ -423,7 +423,7 @@ class DocumentController extends Controller
         }
 
         flash(trans('messages.document.updated'));
-        return redirect()->route('documents.edit', ['document' => $document->slug]);
+        return redirect()->route('documents.edit', $document);
     }
 
     /**
@@ -447,7 +447,7 @@ class DocumentController extends Controller
 
         $document->delete();
 
-        $restoreUrl = route('documents.restore', ['document' => $document->slug]);
+        $restoreUrl = route('documents.restore', $document);
         flash(trans('messages.document.deleted', [
             'restoreLinkOpen' => "<a href='$restoreUrl'>",
             'restoreLinkClosed' => '</a>',
@@ -472,7 +472,7 @@ class DocumentController extends Controller
         $document->save();
 
         flash(trans('messages.document.restored'));
-        return redirect()->route('documents.edit', ['document' => $document->slug]);
+        return redirect()->route('documents.edit', $document);
     }
 
     public function storePage(Requests\Edit $request, Document $document)
@@ -486,7 +486,7 @@ class DocumentController extends Controller
         $document->content()->save($documentContent);
 
         flash(trans('messages.document.page_added'));
-        return redirect()->route('documents.edit', ['document' => $document->slug, 'page' => $page]);
+        return redirect()->route('documents.edit', ['document' => $document, 'page' => $page]);
     }
 
     public function showImage(Requests\View $request, Document $document, $image)
@@ -513,7 +513,7 @@ class DocumentController extends Controller
             flash(trans('messages.document.featured_image_removed'));
         }
 
-        return redirect()->route('documents.edit', ['document' => $document->slug]);
+        return redirect()->route('documents.edit', $document);
     }
 
     public function updateSupport(Requests\PutSupport $request, Document $document)
@@ -542,7 +542,7 @@ class DocumentController extends Controller
         }
 
         flash(trans('messages.document.update_support'));
-        return redirect()->route('documents.show', ['document' => $document->slug]);
+        return redirect()->route('documents.show', $document);
     }
 
     public static function validPublishStatesForQuery()
