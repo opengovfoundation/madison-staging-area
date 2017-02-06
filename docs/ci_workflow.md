@@ -37,42 +37,6 @@ example, each time a "diff" is created, it triggers a build process on that new
 code within CircleCI. It also syncs specific branches to GitHub which allows for
 Envoyer to kick off auto-deploys from those branches, if configured.
 
-### Server Management: Forge
-
-Forge is a service that connects to Linode for server provisioning and
-management. It can create a new Linode VPS for you and configure it to run
-Laravel (and other PHP) applications. It also allows for easy management of
-multiple sites on the same server, including SSL certificates through
-LetsEncrypt, databases, and environment file settings.
-
-Once Forge has been used to set up a server and configure a site, it shouldn't
-need to be messed with again, except perhaps to change environment settings for
-a site, or to renew SSL certificates.
-
-### Deploy & Release Management: Envoyer
-
-Envoyer is a service for handling release-based deployments of Laravel
-applications. Release-based means that each new deploy is built into it's own
-new folder and timestamped. This allows for a symlinked folder called `current`
-to always point to the latest release. It also allows for easy rollback of a
-release by simply changing the symlink.
-
-The Envoyer deploy process is as follows (steps added by us denoted):
-
-1. Clone down the new release into a timestamped release folder.
-2. Install composer dependencies.
-3. [CUSTOM] Install npm dependencies and run `npm run prod` to build assets.
-4. Activate the new release by switching the symlink to point at it.
-5. [CUSTOM] Clear our Laravel cache, including the view cache.
-6. Purge older releases, based on # we specify to keep around.
-7. Perform a health check on the new release.
-
-Envoyer goes a few steps further by enabling this all through a web interface,
-and including other features such as auto-deploying from specific branches in
-your GitHub repo. When new commits are pushed to the specified branch, Envoyer
-will trigger a new deployment. Furthermore, if there are any issues during the
-deployment process, the new release will not be used.
-
 ### Build and Test Runner: CircleCI
 
 CircleCI is a service for running our application's build process, which
@@ -80,6 +44,27 @@ includes running our test suite. Phabricator depends on this service to
 determine if a particular diff under review should be allowed to merge or not.
 If the build does not pass, Phabricator will restrict (or at least warn you)
 from landing the diff into the target branch.
+
+### Server Management: Forge
+
+Though we do use Forge, it's not part of our CI/CD pipeline. For more
+information, check out [our deployment documentation](docs/deploy.md).
+
+### Deploy & Release Management: Envoyer
+
+Envoyer is a tool for doing automated release-based deployments. For more
+information on Envoyer, including how we have it configured, visit the
+[deployment documentation](docs/deploy.md).
+
+The Envoyer deploy process is as follows (steps added by us denoted):
+
+1. Clone down the new release into a timestamped release folder.
+2. Install composer dependencies.
+3. [CUSTOM] Clear npm deps, Laravel cache, and view cache, then build assets.
+4. Activate the new release by switching the symlink to point at it.
+5. [CUSTOM] Run database mirgations, with `--force` for production.
+6. Purge older releases, based on # we specify to keep around.
+7. Perform a health check on the new release.
 
 ### Production Monitoring: Rollbar
 

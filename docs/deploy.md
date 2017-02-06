@@ -91,22 +91,20 @@ and compiled views.
 
 The first one, compiling assets, should happen "after" the "Install Composer
 Dependencies" action. Click the cog icon for that action, then click "Add Hook"
-in the "After This Action" section. Give it the name "Compile Assets", run as
+in the "After This Action" section. Give it the name "Post Composer", run as
 "forge", and insert the following code:
 
 ```
-cd ~/dev.mymadison.io/releases
-cd $(ls -1 | tail -n 1)
-npm i && npm run prod
+cd {{release}}
+make envoyer-post-composer
 ```
 
-For the next one, it will go "after" the "Activate New Release" action. The
-contents are as follows:
+For the next one, it will go "after" the "Activate New Release" action. Give it
+the name "Post Activate". The contents are as follows:
 
 ```
-cd ~/dev.mymadison.io/current
-php artisan cache:clear
-php artisan view:clear
+cd {{release}}
+make envoyer-post-activate
 ```
 
 As long as you have configured the Envoyer project to deploy from a valid
