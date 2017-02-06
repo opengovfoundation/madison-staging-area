@@ -19,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if ($this->app->environment('production') || $this->app->environment('staging')) {
+        if ($this->app->environment('production', 'staging')) {
             $this->app->register(\Jenssegers\Rollbar\RollbarServiceProvider::class);
         }
 
