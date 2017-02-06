@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Madison') }}</title>
+    <title>@yield('pageTitle') | {{ config('app.name', 'Madison') }}</title>
 
     <!-- Icons -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">

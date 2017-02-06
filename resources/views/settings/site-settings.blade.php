@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('pageTitle', trans('messages.setting.site_settings'))
+
 @section('content')
     <div class="page-header">
         <h1>{{ trans('messages.setting.admin_label') }} {{ trans('messages.settings') }}</h1>

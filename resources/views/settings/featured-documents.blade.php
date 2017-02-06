@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('pageTitle', trans('messages.setting.featured_documents'))
+
 @section('content')
 
     <div class="page-header">
