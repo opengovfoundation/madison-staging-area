@@ -177,6 +177,7 @@ return [
         App\Providers\CommentsServiceProvider::class,
         App\Providers\AnnotationsServiceProvider::class,
         App\Providers\DocumentsServiceProvider::class,
+        App\Config\SiteConfigServiceProvider::class,
 
         /**
          * Vendor Providers...
@@ -245,6 +246,7 @@ return [
         'CategoryHelpers' => App\Helpers\CategoryHelpers::class,
         'Form'      => Collective\Html\FormFacade::class,
         'Html'      => Collective\Html\HtmlFacade::class,
+        'SiteConfigSaver' => App\Config\Facades\SiteConfigSaver::class,
 
     ],
 
