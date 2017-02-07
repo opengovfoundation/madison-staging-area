@@ -96,9 +96,6 @@ class ConfigSaverRepository
      */
     public function set($key, $value, $environment = null)
     {
-        // Bootstrap the ConfigLoaderRepository class
-        $siteConfigRepository = new ConfigLoaderRepository();
-
         // Parse the key here into group.key.part components.
         //
         // Any time a . is present in the key we are going to assume the first section
@@ -124,6 +121,14 @@ class ConfigSaverRepository
 
         // Now we have the group / item as separate values, we can store these
         ConfigModel::set($item, $value, $group, $environment, $type);
+
+        $this->refresh();
+    }
+
+    public function refresh()
+    {
+        // Bootstrap the ConfigLoaderRepository class
+        $siteConfigRepository = new ConfigLoaderRepository();
 
         // Flush the cache
         $siteConfigRepository->forgetConfig();

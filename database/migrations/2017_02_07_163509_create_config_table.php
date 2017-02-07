@@ -13,7 +13,7 @@ class CreateConfigTable extends Migration
      */
     public function up()
     {
-        Schema::create('config', function (Blueprint $table) {
+        Schema::create('configs', function (Blueprint $table) {
             $table->increments('id');
             $table->string('environment')->nullable();
             $table->string('group')->default('config')->index();

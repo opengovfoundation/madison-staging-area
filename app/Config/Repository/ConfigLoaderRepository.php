@@ -157,7 +157,9 @@ class ConfigLoaderRepository
     {
         // Load the configuration into the current running config.
         foreach ($this->loadConfiguration() as $group => $groupConfig) {
-            $config->set($group, $groupConfig);
+            foreach ($groupConfig as $key => $value) {
+                $config->set($group.'.'.$key, $value);
+            }
         }
     }
 }

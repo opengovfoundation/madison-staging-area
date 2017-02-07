@@ -13,7 +13,23 @@
         @include('settings.partials.admin-sidebar')
 
         <div class="col-md-9">
-            <!-- TODO -->
+            {{ Form::model($currentSettings, ['route' => ['settings.site.update'], 'method' => 'put']) }}
+                {{ Form::mSelect(
+                        'date_format',
+                        trans('messages.setting.date_format'),
+                        $dateFormats
+                        )
+                }}
+
+                {{ Form::mSelect(
+                        'time_format',
+                        trans('messages.setting.time_format'),
+                        $timeFormats
+                        )
+                }}
+
+                {{ Form::mSubmit() }}
+            {{ Form::close() }}
         </div>
     </div>
 @endsection
