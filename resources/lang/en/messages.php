@@ -315,7 +315,7 @@ return [
     ],
 
     'setting' => [
-        'admin_label' => 'Site Administration:',
+        'admin_label' => 'Site Administration: :page',
         'featured_documents' => 'Featured Documents',
         'updated_featured_documents' => 'Feature documents updated',
         'site_settings' => 'Site Settings',

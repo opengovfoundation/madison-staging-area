@@ -5,7 +5,7 @@
 @section('content')
 
     <div class="page-header">
-        <h1>{{ trans('messages.setting.admin_label') }} {{ trans('messages.setting.custom_pages') }}</h1>
+        <h1>{{ trans('messages.setting.admin_label', ['page' => trans('messages.setting.custom_pages')]) }}</h1>
     </div>
 
     @include('components.errors')

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('pageTitle', 'Reset Password')
+@section('pageTitle', trans('messages.reset_password'))
 
 @section('content')
 <div class="container">
