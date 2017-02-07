@@ -256,6 +256,11 @@ return [
                     'subject' => ':name replied to your :comment_type on :document',
                 ],
 
+                'flagged' => [
+                    'preference_description' => 'When someone flags a comment on your sponsored documents',
+                    'subject' => 'Someone flagged a :comment_type on :document.',
+                ],
+
                 'liked' => [
                     'preference_description' => 'When someone likes a comment of yours',
                     'subject' => 'Someone liked your :comment_type on :document.',
