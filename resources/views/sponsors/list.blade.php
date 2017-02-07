@@ -1,10 +1,22 @@
 @extends('layouts.app')
 
-@section('pageTitle', trans('messages.sponsor.list'))
+@if ($onlyUserSponsors)
+    @section('pageTitle', trans('messages.sponsor.my_sponsors'))
+@else
+    @section('pageTitle', trans('messages.sponsor.list'))
+@endif
 
 @section('content')
     <div class="page-header">
-        <h1>{{ trans('messages.sponsor.list') }}</h1>
+        @if ($onlyUserSponsors)
+            @if (request()->user()->isAdmin())
+                {{ Html::linkRoute('sponsors.index', trans('messages.sponsor.all_sponsors'), ['all' => 'true'], ['class' => 'btn btn-default pull-right'])}}
+            @endif
+            <h1>{{ trans('messages.sponsor.my_sponsors') }}</h1>
+        @else
+            {{ Html::linkRoute('sponsors.index', trans('messages.sponsor.my_sponsors'), [], ['class' => 'btn btn-default pull-right'])}}
+            <h1>{{ trans('messages.sponsor.list') }}</h1>
+        @endif
     </div>
 
     @include('components.errors')

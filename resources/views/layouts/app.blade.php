@@ -81,7 +81,7 @@
                                         <a href="{{ route('users.settings.edit', Auth::user()->id) }}">@lang('messages.settings')</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('sponsors.index', ['user_id[]' => Auth::user()->id]) }}">@lang('messages.sponsor.list')</a>
+                                        <a href="{{ route('sponsors.index') }}">@lang('messages.sponsor.list')</a>
                                     </li>
                                     @if (Auth::user()->isAdmin())
                                         <li role="separator" class="divider"></li>

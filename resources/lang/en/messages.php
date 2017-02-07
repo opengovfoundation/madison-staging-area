@@ -142,6 +142,7 @@ return [
         'list' => 'Sponsors',
         'create' => 'Create Sponsor',
         'my_sponsors' => 'My Sponsors',
+        'all_sponsors' => 'All Sponsors',
         'edit' => 'Edit Sponsor',
         'view_docs' => 'Documents',
 
