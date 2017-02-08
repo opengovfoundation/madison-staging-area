@@ -108,6 +108,9 @@ Route::get('/documents/{documentTrashed}/restore', 'DocumentController@restore')
 Route::put('/documents/{document}/support', 'DocumentController@updateSupport')
     ->name('documents.support');
 
+Route::get('/documents/{document}/moderate', 'DocumentController@moderate')
+    ->name('documents.moderate');
+
 
 // Sponsors
 Route::resource('sponsors', 'SponsorController', [

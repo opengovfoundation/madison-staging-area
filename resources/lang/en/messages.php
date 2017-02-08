@@ -34,6 +34,8 @@ return [
     'email_verified' => 'Email Verified',
     'misc' => 'Misc.',
     'settings' => 'Settings',
+    'type' => 'Type',
+    'view' => 'View',
 
     // Authentication Stuff
     'password' => 'Password',
@@ -84,10 +86,10 @@ return [
         'categories' => 'Categories: ',
         'sponsor' => 'Sponsor',
         'sponsor_others' => 'and others',
-        'content' => 'Content',
 
         'activity' => 'Activity',
         'participants' => 'Participants',
+        'comment' => 'Comment',
         'comments' => 'Comments',
         'add_comment' => 'Add comment',
         'login_to_comment' => 'Login to comment',
@@ -112,6 +114,7 @@ return [
         'opposed' => 'Opposed',
         'flag' => 'Flag',
         'like' => 'Like',
+        'moderate' => 'Moderate: :document',
 
         'created' => 'Document created.',
         'deleted' => 'Document deleted. :restoreLinkOpen Undo :restoreLinkClosed',
@@ -216,6 +219,7 @@ return [
     ],
 
     'user' => [
+        'user' => 'User',
         'fname' => 'First Name',
         'lname' => 'Last Name',
         'email' => 'Email Address',
