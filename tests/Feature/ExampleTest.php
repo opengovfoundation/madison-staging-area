@@ -32,6 +32,7 @@ class ExampleTest extends TestCase
         ]);
 
         $response = $this->get('/');
+        dd($response);
         $response->assertStatus(200);
     }
 
