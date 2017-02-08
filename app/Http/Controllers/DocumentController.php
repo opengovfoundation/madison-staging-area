@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Document as Requests;
 use App\Events\DocumentPublished;
 use App\Events\SupportVoteChanged;
+use App\Models\Annotation;
 use App\Models\Category;
 use App\Models\User;
 use App\Models\Doc as Document;
@@ -560,6 +561,20 @@ class DocumentController extends Controller
 
         flash(trans('messages.document.update_support'));
         return redirect()->route('documents.show', $document);
+    }
+
+    public function moderate(Requests\Moderate $request, Document $document)
+    {
+        $flaggedComments = Annotation::where('annotation_type_type', 'comment')
+            ->where('root_annotatable_id', $document->id)
+            ->get()->filter(function($a) {
+                  return $a->flags()->count() > 0;
+            });
+
+        return view('documents.moderate', compact([
+            'document',
+            'flaggedComments',
+        ]));
     }
 
     public static function validPublishStatesForQuery()
