@@ -25,8 +25,19 @@ class SettingController extends Controller
             $currentSettings->{$k} = $dbSettings->get($key, 'default');
         }
 
-        $dateFormats = static::addDefaultOption(static::validDateFormats());
-        $timeFormats = static::addDefaultOption(static::validTimeFormats());
+        // reset config() to just the configuration file contents so we can
+        // show correct default values
+        (new \Illuminate\Foundation\Bootstrap\LoadConfiguration())
+            ->bootstrap(app());
+
+        $dateFormats = static::addDefaultOption(
+            static::validDateFormats(),
+            config('madison.date_format')
+        );
+        $timeFormats = static::addDefaultOption(
+            static::validTimeFormats(),
+            config('madison.time_format')
+        );
 
         return view('settings.site-settings', compact([
             'currentSettings',
@@ -113,9 +124,15 @@ class SettingController extends Controller
         return redirect()->route('setings.featured-documents.index');
     }
 
-    public static function addDefaultOption($choices)
+    public static function addDefaultOption($choices, $current)
     {
-        return ['default' => 'Default']+$choices;
+        $value = '';
+        if (!isset($choices[$current])) {
+            $value = 'Unknown';
+        } else {
+            $value = 'Default ('.$choices[$current].')';
+        }
+        return ['default' => $value]+$choices;
     }
 
     public static function validDateFormats()
