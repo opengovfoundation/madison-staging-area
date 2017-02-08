@@ -10,7 +10,6 @@ use SiteConfigSaver;
 
 class SettingController extends Controller
 {
-
     /**
      * Admin page for configuring site settings.
      *
@@ -18,21 +17,16 @@ class SettingController extends Controller
      */
     public function siteSettingsIndex(Requests\SiteSettings\Index $request)
     {
-        $dbSettings = SiteConfigSaver::get();
+        $dbSettings = collect(SiteConfigSaver::get());
 
         $currentSettings = new \stdClass();
-        $currentSettings->date_format = isset($dbSettings['madison.date_format']) ? $dbSettings['madison.date_format'] : 'default';
-        $currentSettings->time_format = isset($dbSettings['madison.time_format']) ? $dbSettings['madison.time_format'] : 'default';
+        foreach (static::getSiteSettingKeys() as $key) {
+            $k = str_replace('.', '_', $key);
+            $currentSettings->{$k} = $dbSettings->get($key, 'default');
+        }
 
-        $dateFormats = static::addDefaultOption(
-            static::validDateFormats(),
-            config('madison.date_format')
-        );
-        $timeFormats = static::addDefaultOption(
-            static::validTimeFormats(),
-            config('madison.time_format')
-        );
-
+        $dateFormats = static::addDefaultOption(static::validDateFormats());
+        $timeFormats = static::addDefaultOption(static::validTimeFormats());
 
         return view('settings.site-settings', compact([
             'currentSettings',
@@ -43,57 +37,24 @@ class SettingController extends Controller
 
     public function siteSettingsUpdate(Requests\SiteSettings\Update $request)
     {
-        $settingsToCheck = [
-            'date_format',
-            'time_format',
-        ];
+        foreach (static::getSiteSettingKeys() as $key) {
+            $input = $request->input(str_replace('.', '_', $key));
 
-        $group = 'madison';
-
-        foreach ($settingsToCheck as $key) {
-            $input = $request->input($key);
+            list($group, $item) = ConfigModel::explodeGroupAndKey($key);
             $existingModel = ConfigModel
                 ::where('group', $group)
-                ->where('key', $key);
+                ->where('key', $item);
 
             if ((!$input || $input === 'default') && $existingModel) {
                 $existingModel->delete();
                 SiteConfigSaver::refresh();
             } else {
-                SiteConfigSaver::set($group.'.'.$key, $input);
+                SiteConfigSaver::set($key, $input);
             }
         }
 
         flash(trans('messages.updated'));
         return redirect()->route('settings.site.index');
-    }
-
-    public static function addDefaultOption($choices, $current)
-    {
-        $value = '';
-        if (!isset($choices[$current])) {
-            $value = 'Unknown';
-        } else {
-            $value = 'Default ('.$choices[$current].')';
-        }
-        return ['default' => $value]+$choices;
-    }
-
-    public static function validDateFormats()
-    {
-        return [
-            'Y-m-d' => 'ISO 8601: 2009-06-27',
-            'n/j/Y' => 'US: 06/27/2009',
-            'd-m-Y' => 'Europe: 27-06-2009',
-        ];
-    }
-
-    public static function validTimeFormats()
-    {
-        return [
-            'g:i A' => '12 Hour, 1:15 PM',
-            'H:i' => '24 Hour, 13:15',
-        ];
     }
 
     /**
@@ -152,4 +113,33 @@ class SettingController extends Controller
         return redirect()->route('setings.featured-documents.index');
     }
 
+    public static function addDefaultOption($choices)
+    {
+        return ['default' => 'Default']+$choices;
+    }
+
+    public static function validDateFormats()
+    {
+        return [
+            'Y-m-d' => 'ISO 8601: 2009-06-27',
+            'n/j/Y' => 'US: 06/27/2009',
+            'd-m-Y' => 'Europe: 27-06-2009',
+        ];
+    }
+
+    public static function validTimeFormats()
+    {
+        return [
+            'g:i A' => '12 Hour, 1:15 PM',
+            'H:i' => '24 Hour, 13:15',
+        ];
+    }
+
+    public static function getSiteSettingKeys()
+    {
+        return [
+            'madison.date_format',
+            'madison.time_format',
+        ];
+    }
 }

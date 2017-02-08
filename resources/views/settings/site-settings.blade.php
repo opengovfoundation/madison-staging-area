@@ -15,14 +15,14 @@
         <div class="col-md-9">
             {{ Form::model($currentSettings, ['route' => ['settings.site.update'], 'method' => 'put']) }}
                 {{ Form::mSelect(
-                        'date_format',
+                        'madison.date_format',
                         trans('messages.setting.date_format'),
                         $dateFormats
                         )
                 }}
 
                 {{ Form::mSelect(
-                        'time_format',
+                        'madison.time_format',
                         trans('messages.setting.time_format'),
                         $timeFormats
                         )

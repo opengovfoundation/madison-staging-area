@@ -270,4 +270,23 @@ class Config extends Model
             $array[$key] = $value;
         }
     }
+
+    public static function explodeGroupAndKey($key)
+    {
+        // Parse the key here into group.key.part components.
+        //
+        // Any time a . is present in the key we are going to assume the first
+        // section is the group. If there is no group present then we assume
+        // that the group is "config".
+        $explodedOnGroup = explode('.', $key);
+        if (count($explodedOnGroup) > 1) {
+            $group = array_shift($explodedOnGroup);
+            $item  = implode('.', $explodedOnGroup);
+        } else {
+            $group = 'config';
+            $item  = $key;
+        }
+
+        return [$group, $item];
+    }
 }
