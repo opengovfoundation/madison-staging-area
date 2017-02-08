@@ -10,7 +10,7 @@ machine:
     TESTING: true
 
   node:
-    version: 4.1
+    version: 6.1.0
 
   php:
     version: 5.6.22
