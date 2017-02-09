@@ -58,7 +58,7 @@ class CommentReplied extends Notification implements ShouldQueue
                         'comment_type' => $parentType,
                         'document' => $this->comment->rootAnnotatable->title,
                     ]))
-                    ->action(trans('messages.notifications.see_comment'), $url)
+                    ->action(trans('messages.notifications.see_comment', ['comment_type' => $parentType]), $url)
                     ;
     }
 

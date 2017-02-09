@@ -55,7 +55,7 @@ class CommentFlagged extends Notification implements ShouldQueue
                         'comment_type' => $parentType,
                         'document' => $this->flag->rootAnnotatable->title,
                     ]))
-                    ->action(trans('messages.notifications.see_comment'), $url)
+                    ->action(trans('messages.notifications.see_comment', ['comment_type' => $parentType]), $url)
                     ;
     }
 

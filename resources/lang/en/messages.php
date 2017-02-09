@@ -313,7 +313,7 @@ return [
         // helpers
         'comment_type_note' => 'note',
         'comment_type_comment' => 'comment',
-        'see_comment' => 'See Comment',
+        'see_comment' => 'See :Comment_type',
         'see_sponsor' => 'See Sponsor',
         'see_document' => 'See Document',
         'review_sponsor' => 'Review Sponsor',
