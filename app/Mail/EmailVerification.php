@@ -32,7 +32,7 @@ class EmailVerification extends Mailable
     public function build()
     {
         return $this
-            ->subject(trans('messages.email_verification_ask'))
+            ->subject(trans('messages.email_verification.ask'))
             ->markdown('emails.verify_email');
     }
 }

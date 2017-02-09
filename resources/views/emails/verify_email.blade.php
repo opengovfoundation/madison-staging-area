@@ -3,7 +3,7 @@
 
 @lang('messages.email_verification.reason')
 
-@component('mail::button', ['url' => route('users.verify_email', [$this->user, $this->user->token])])
+@component('mail::button', ['url' => route('users.verify_email', [$user, $user->token])])
 @lang('messages.email_verification.action')
 @endcomponent
 
