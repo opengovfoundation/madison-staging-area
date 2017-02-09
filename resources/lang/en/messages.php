@@ -105,6 +105,11 @@ return [
         'flag' => 'Flag',
         'like' => 'Like',
         'moderate' => 'Moderate: :document',
+        'hide_comment' => 'Hide',
+        'resolve_comment' => 'Resolve',
+        'comment_hide_success' => 'Comment hidden',
+        'comment_resolve_success' => 'Comment marked as resolved',
+        'comment_action_removed' => 'Comment action removed',
 
         'created' => 'Document created.',
         'deleted' => 'Document deleted. :restoreLinkOpen Undo :restoreLinkClosed',

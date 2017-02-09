@@ -6,6 +6,7 @@ use App\Events\CommentCreated;
 use App\Events\CommentFlagged;
 use App\Events\CommentLiked;
 use App\Http\Requests\Document\View as DocumentViewRequest;
+use App\Http\Requests\Comment as Requests;
 use App\Models\Annotation;
 use App\Models\Doc as Document;
 use App\Services;
@@ -73,6 +74,11 @@ class CommentController extends Controller
         }
 
         $comments = $commentsQuery->get();
+
+        // Filter out "hidden" comments
+        $comments = $comments->filter(function($comment) {
+            return !isset($comment->data['action']) || $comment->data['action'] !== Annotation::COMMENT_ACTION_HIDE;
+        });
 
         // a little silly, we should probably support a more general
         // download=true param and a content type headers, but for now we'll
@@ -154,6 +160,21 @@ class CommentController extends Controller
         event(new CommentFlagged($flag));
 
         return Response::json($this->commentService->toAnnotatorArray($comment));
+    }
+
+    public function storeAction(Requests\StoreAction $request, Document $document, Annotation $comment)
+    {
+        $action = $request->input('action', null);
+
+        if ($request->input('action', null)) {
+            $this->commentService->addActionToComment($comment, $request->input('action'));
+            flash(trans('messages.document.comment_' . $action . '_success'));
+        } else {
+            $this->commentService->removeActionFromComment($comment);
+            flash(trans('messages.document.comment_action_removed'));
+        }
+
+        return redirect()->route('documents.moderate', $document);
     }
 
     /**

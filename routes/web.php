@@ -88,6 +88,8 @@ Route::post('documents/{document}/comments/{comment}/likes', 'CommentController@
     ->name('documents.comments.storeLikes');
 Route::post('documents/{document}/comments/{comment}/flags', 'CommentController@storeFlags')
     ->name('documents.comments.storeFlags');
+Route::post('documents/{document}/comments/{comment}/action', 'CommentController@storeAction')
+    ->name('documents.comments.storeAction');
 
 
 // Documents
