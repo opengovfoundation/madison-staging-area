@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User as Requests;
+use App\Mail\EmailVerification;
 use App\Models\NotificationPreference;
 use App\Models\User;
-use App\Http\Requests\User as Requests;
 use Illuminate\Http\Request;
+use Mail;
 
 class UserController extends Controller
 {
@@ -129,6 +131,43 @@ class UserController extends Controller
         }
 
         flash(trans('messages.updated'));
+        return back();
+    }
+
+    public function verifyEmail(Requests\Edit $request, User $user, $token)
+    {
+        if (empty($user->token)) {
+            flash(trans('messages.email_verification.already_verified'));
+            // TODO: where to send them
+            return back();
+        }
+
+        if ($user->token === $token) {
+            $user->token = '';
+            $user->save();
+
+            flash(trans('messages.email_verification.verified'));
+            // TODO: where to send them
+            return back();
+        }
+
+        // TODO: where to send them
+    }
+
+    public function resendEmailVerification(Requests\Edit $request, User $user)
+    {
+        if (empty($user->token)) {
+            flash(trans('messages.email_verification.already_verified'));
+            // TODO: where to send them
+            return back();
+        }
+
+        Mail
+            ::to($user)
+            ->send(new EmailVerification($user));
+
+        flash(trans('messages.email_verification.sent'));
+        // TODO: where to send them
         return back();
     }
 }

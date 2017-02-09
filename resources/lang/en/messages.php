@@ -42,7 +42,19 @@ return [
     'reset_password' => 'Reset Password',
     'reset_password_send' => 'Send Password Reset Link',
 
-    'verification_banner' => 'Uh oh, we noticed you haven\'t verified your email address yet. We need you to verify it before we can send messages to it. Please check your inbox or resend the verification email.',
+    'email_verification' => [
+        'banner' => 'You haven\'t verified your email address yet. We need you to verify it before we can send messages to it. Please check your inbox or :resendLinkOpen resend the verification email :resendLinkClose.',
+        'ask' => 'Please verify this address',
+        'reason' => 'Before we can send you notifications and otherwise interact over email, we need you to verify you email. Just click the button below.',
+        'action' => 'Verify email',
+        'verified' => 'Your email has been verified',
+        'already_verified' => 'Your email has already been verified',
+        'sent' => 'Email verification sent',
+    ],
+
+    'welcome_email' => [
+        'subject' => 'Welcome to the Madison Community',
+    ]
 
     // Home Page Stuff
     'home' => [

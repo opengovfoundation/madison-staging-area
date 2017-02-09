@@ -114,7 +114,10 @@
         <div class="container">
             @if (Auth::check() && Auth::user()->token)
                 <div class="alert alert-info alert-important" role="alert">
-                    @lang('messages.verification_banner')
+                    @lang('messages.email_verification.banner', [
+                      'resendLinkOpen' => '<a href="'.route('users.resend_email_verification', Auth::user()).'">',
+                      'resendLinkClose' => '</a>',
+                    ])
                 </div>
             @endif
 
