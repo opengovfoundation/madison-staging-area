@@ -3,7 +3,6 @@
 namespace App\Listeners;
 
 use App\Mail\EmailVerification;
-use App\Mail\Welcome;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -29,11 +28,6 @@ class RegisteredUser
      */
     public function handle(Registered $event)
     {
-        // send welcome email
-        Mail
-            ::to($event->user)
-            ->send(new Welcome($event->user));
-
         // send email to user for email verification
         Mail
             ::to($event->user)

@@ -52,10 +52,6 @@ return [
         'sent' => 'Email verification sent',
     ],
 
-    'welcome_email' => [
-        'subject' => 'Welcome to the Madison Community',
-    ]
-
     // Home Page Stuff
     'home' => [
         'home' => 'Home',
