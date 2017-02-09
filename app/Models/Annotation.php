@@ -28,12 +28,23 @@ class Annotation extends Model implements ActivityInterface
 
     const SUBTYPE_NOTE = 'note';
 
+    const COMMENT_ACTION_HIDE = 'hide';
+    const COMMENT_ACTION_RESOLVE = 'resolve';
+
     protected $table = 'annotations';
     protected $fillable = ['data', 'user_id', 'annotation_subtype', 'str_id'];
     protected $dates = ['deleted_at'];
     protected $casts = [
         'data' => 'array',
     ];
+
+    public static function validCommentActions()
+    {
+        return [
+            static::COMMENT_ACTION_HIDE,
+            static::COMMENT_ACTION_RESOLVE,
+        ];
+    }
 
     public static function boot()
     {
@@ -147,4 +158,5 @@ class Annotation extends Model implements ActivityInterface
 
         return $this->annotation_subtype === static::SUBTYPE_NOTE;
     }
+
 }

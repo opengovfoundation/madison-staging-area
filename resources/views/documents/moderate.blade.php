@@ -38,6 +38,22 @@
                                 {{ trans('messages.view') }}
                             </a>
                         </div>
+                        <div class="btn-group" role="group">
+                            {{ Form::open(['route' => ['documents.comments.storeAction', $document, $comment], 'method' => 'post']) }}
+                                <button type="submit" class="btn btn-default">
+                                    <input type="hidden" name="action" value="hide">
+                                    {{ trans('messages.document.hide_comment') }}
+                                </button>
+                            {{ Form::close() }}
+                        </div>
+                        <div class="btn-group" role="group">
+                            {{ Form::open(['route' => ['documents.comments.storeAction', $document, $comment], 'method' => 'post']) }}
+                                <button type="submit" class="btn btn-default">
+                                    <input type="hidden" name="action" value="resolve">
+                                    {{ trans('messages.document.resolve_comment') }}
+                                </button>
+                            {{ Form::close() }}
+                        </div>
                     </td>
                 </tr>
             @endforeach

@@ -7,6 +7,7 @@ use App\Models\AnnotationPermission;
 use App\Models\Doc as Document;
 use App\Models\User;
 use DB;
+use Exception;
 use League\Csv\Writer;
 
 class Comments
@@ -208,5 +209,25 @@ class Comments
         });
 
         return Annotation::find($id);
+    }
+
+    public function addActionToComment(Annotation $comment, $action)
+    {
+        if (!in_array($action, Annotation::validCommentActions())) {
+            throw new Exception('Invalid comment action provided');
+        }
+
+        $comment->data = array_merge($comment->data, [ 'action' => $action ]);
+        $comment->save();
+
+        return $comment;
+    }
+
+    public function removeActionFromComment(Annotation $comment)
+    {
+        $comment->data = array_merge($comment->data, [ 'action' => null ]);
+        $comment->save();
+
+        return $comment;
     }
 }
