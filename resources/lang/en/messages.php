@@ -42,6 +42,8 @@ return [
     'reset_password' => 'Reset Password',
     'reset_password_send' => 'Send Password Reset Link',
 
+    'verification_banner' => 'Uh oh, we noticed you haven\'t verified your email address yet. We need you to verify it before we can send messages to it. Please check your inbox or resend the verification email.',
+
     // Home Page Stuff
     'home' => [
         'home' => 'Home',

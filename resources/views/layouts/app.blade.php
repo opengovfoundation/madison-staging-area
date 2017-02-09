@@ -112,6 +112,12 @@
         </nav>
 
         <div class="container">
+            @if (Auth::check() && Auth::user()->token)
+                <div class="alert alert-info alert-important" role="alert">
+                    @lang('messages.verification_banner')
+                </div>
+            @endif
+
             @include('flash::message')
             @yield('content')
 
