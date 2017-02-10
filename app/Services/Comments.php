@@ -223,6 +223,7 @@ class Comments
         return $comment;
     }
 
+    // TODO: Not used right now, is this something we should allow?
     public function removeActionFromComment(Annotation $comment)
     {
         $comment->data = array_merge($comment->data, [ 'action' => null ]);
