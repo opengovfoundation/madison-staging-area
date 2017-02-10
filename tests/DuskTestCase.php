@@ -32,4 +32,17 @@ abstract class DuskTestCase extends BaseTestCase
             'http://localhost:9515', DesiredCapabilities::chrome()
         );
     }
+
+    /**
+     * Get the Chromedriver environment variables.
+     *
+     * @return array
+     */
+    protected static function chromeEnvironment()
+    {
+        if (PHP_OS === 'Darwin' || PHP_OS === 'WINNT') {
+            return [];
+        }
+        return ['DISPLAY' => ':99'];
+    }
 }
