@@ -30,7 +30,7 @@ return [
     'none' => 'None',
     'close' => 'Close',
     'permalink' => 'Permalink',
-    'admin' => 'Admin',
+    'administrator' => 'Admin',
     'misc' => 'Misc.',
     'settings' => 'Settings',
     'type' => 'Type',
@@ -334,7 +334,7 @@ return [
         'review_sponsor' => 'Review Sponsor',
     ],
 
-    'setting' => [
+    'admin' => [
         'admin_label' => 'Site Administration: :page',
         'featured_documents' => 'Featured Documents',
         'updated_featured_documents' => 'Feature documents updated',

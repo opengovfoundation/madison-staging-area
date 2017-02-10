@@ -8,7 +8,7 @@ use App\Models\Setting;
 use App\Http\Requests\Setting as Requests;
 use SiteConfigSaver;
 
-class SettingController extends Controller
+class AdminController extends Controller
 {
     /**
      * Admin page for configuring site settings.
@@ -39,7 +39,7 @@ class SettingController extends Controller
             config('madison.time_format')
         );
 
-        return view('settings.site-settings', compact([
+        return view('admin.site-settings', compact([
             'currentSettings',
             'dateFormats',
             'timeFormats',
@@ -65,7 +65,7 @@ class SettingController extends Controller
         }
 
         flash(trans('messages.updated'));
-        return redirect()->route('settings.site.index');
+        return redirect()->route('admin.site.index');
     }
 
     /**
@@ -76,7 +76,7 @@ class SettingController extends Controller
     public function indexFeaturedDocuments(Requests\FeaturedDocuments\Index $request)
     {
         $documents = Document::getFeatured(false);
-        return view('settings.featured-documents', compact([
+        return view('admin.featured-documents', compact([
             'documents'
         ]));
     }
@@ -120,8 +120,8 @@ class SettingController extends Controller
         $featuredSetting->meta_value = join(',', $featuredIds);
         $featuredSetting->save();
 
-        flash(trans('messages.setting.updated_featured_documents'));
-        return redirect()->route('setings.featured-documents.index');
+        flash(trans('messages.admin.updated_featured_documents'));
+        return redirect()->route('settings.featured-documents.index');
     }
 
     public static function addDefaultOption($choices, $current)
