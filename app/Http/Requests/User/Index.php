@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Setting\SiteSettings;
+namespace App\Http\Requests\User;
 
 use App\Http\Requests\AdminRequest;
 
@@ -17,4 +17,5 @@ class Index extends AdminRequest
             //
         ];
     }
+
 }

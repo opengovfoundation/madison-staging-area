@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Config\Models\Config as ConfigModel;
 use App\Models\Doc as Document;
 use App\Models\Setting;
-use App\Http\Requests\Setting as Requests;
+use App\Http\Requests\Admin as Requests;
 use SiteConfigSaver;
 
-class SettingController extends Controller
+class AdminController extends Controller
 {
     /**
      * Admin page for configuring site settings.
@@ -65,7 +65,7 @@ class SettingController extends Controller
         (new \App\Config\Bootstrap\LoadConfiguration())
             ->bootstrap(app());
 
-        return view('settings.site-settings', compact([
+        return view('admin.site-settings', compact([
             'allSettingsDesc',
             'currentSettings',
             'options',
@@ -91,7 +91,7 @@ class SettingController extends Controller
         }
 
         flash(trans('messages.updated'));
-        return redirect()->route('settings.site.index');
+        return redirect()->route('admin.site.index');
     }
 
     /**
@@ -102,7 +102,7 @@ class SettingController extends Controller
     public function indexFeaturedDocuments(Requests\FeaturedDocuments\Index $request)
     {
         $documents = Document::getFeatured(false);
-        return view('settings.featured-documents', compact([
+        return view('admin.featured-documents', compact([
             'documents'
         ]));
     }
@@ -147,7 +147,7 @@ class SettingController extends Controller
         $featuredSetting->save();
 
         flash(trans('messages.setting.updated_featured_documents'));
-        return redirect()->route('setings.featured-documents.index');
+        return redirect()->route('settings.featured-documents.index');
     }
 
     public static function addDefaultOption($choices, $current)
