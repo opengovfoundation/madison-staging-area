@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="page-header">
-        <h1>@lang('messages.document.moderate', ['document' => $document->title])</h1>
+        <h1>@lang('messages.document.moderate_document', ['document' => $document->title])</h1>
     </div>
 
     @include('components.errors')
