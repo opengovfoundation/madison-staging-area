@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Setting\FeaturedDocuments;
+namespace App\Http\Requests\Admin\SiteSettings;
 
 use App\Http\Requests\AdminRequest;
 
-class Update extends AdminRequest
+class Index extends AdminRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,7 +14,7 @@ class Update extends AdminRequest
     public function rules()
     {
         return [
-            'action' => 'required|in:up,down,remove',
+            //
         ];
     }
 }
