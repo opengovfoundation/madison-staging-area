@@ -43,6 +43,7 @@ abstract class DuskTestCase extends BaseTestCase
         if (PHP_OS === 'Darwin' || PHP_OS === 'WINNT') {
             return [];
         }
-        return ['DISPLAY' => ':99'];
+
+        return ['DISPLAY' => env('DISPLAY', ':0')];
     }
 }
