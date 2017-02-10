@@ -26,6 +26,9 @@ test: test-php
 test-php: db-test-setup
 	./vendor/bin/phpunit
 
+test-browser: db-test-setup
+	./artisan dusk
+
 clean:
 	rm -rf public/build public/css public/js
 	@-php artisan cache:clear
