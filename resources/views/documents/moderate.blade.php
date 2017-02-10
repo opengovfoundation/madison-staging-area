@@ -9,54 +9,9 @@
 
     @include('components.errors')
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>@lang('messages.user.user')</th>
-                <th>@lang('messages.type')</th>
-                <th>@lang('messages.document.comment')</th>
-                <th>@lang('messages.document.like')</th>
-                <th>@lang('messages.document.flag')</th>
-                <th>@lang('messages.document.replies')</th>
-                <th>@lang('messages.created')</th>
-                <th>@lang('messages.actions')</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($flaggedComments as $comment)
-                <tr>
-                    <td>{{ $comment->user->display_name }}</td>
-                    <td>{{ $comment->annotation_type_type === "range" ? trans('messages.document.note') : trans('messages.document.comment') }}</td>
-                    <td>{{ str_limit($comment->annotationType->content, 100, ' ...') }}</td>
-                    <td>{{ $comment->likes_count }}</td>
-                    <td>{{ $comment->flags_count }}</td>
-                    <td>{{ $comment->comments_count }}</td>
-                    <td>{{ $comment->created_at->diffForHumans() }}</td>
-                    <td>
-                        <div class="btn-group" role="group">
-                            <a href="{{ $comment->getLink() }}" class="btn btn-default">
-                                {{ trans('messages.view') }}
-                            </a>
-                        </div>
-                        <div class="btn-group" role="group">
-                            {{ Form::open(['route' => ['documents.comments.storeAction', $document, $comment], 'method' => 'post']) }}
-                                <button type="submit" class="btn btn-default">
-                                    <input type="hidden" name="action" value="hide">
-                                    {{ trans('messages.document.hide_comment') }}
-                                </button>
-                            {{ Form::close() }}
-                        </div>
-                        <div class="btn-group" role="group">
-                            {{ Form::open(['route' => ['documents.comments.storeAction', $document, $comment], 'method' => 'post']) }}
-                                <button type="submit" class="btn btn-default">
-                                    <input type="hidden" name="action" value="resolve">
-                                    {{ trans('messages.document.resolve_comment') }}
-                                </button>
-                            {{ Form::close() }}
-                        </div>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+    <h3>@lang('messages.document.comments_unhandled')</h3>
+    @include('documents.partials.comment_table', ['comments' => $unhandledComments, 'document' => $document])
+
+    <h3>@lang('messages.document.comments_handled')</h3>
+    @include('documents.partials.comment_table', ['comments' => $handledComments, 'document' => $document])
 @endsection

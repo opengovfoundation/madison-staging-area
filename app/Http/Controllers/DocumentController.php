@@ -17,6 +17,7 @@ use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Storage;
 
 class DocumentController extends Controller
@@ -565,15 +566,27 @@ class DocumentController extends Controller
 
     public function moderate(Requests\Moderate $request, Document $document)
     {
-        $flaggedComments = Annotation::where('annotation_type_type', 'comment')
+        $allFlaggedComments = Annotation::where('annotation_type_type', 'comment')
             ->where('root_annotatable_id', $document->id)
             ->get()->filter(function($a) {
                   return $a->flags()->count() > 0;
             });
 
+        $unhandledComments = new Collection();
+        $handledComments = new Collection();
+
+        $allFlaggedComments->filter(function($c) use ($unhandledComments, $handledComments) {
+            if (!isset($c->data['action']) || $c->data['action'] === null) {
+                $unhandledComments->push($c);
+            } else {
+                $handledComments->push($c);
+            }
+        });
+
         return view('documents.moderate', compact([
             'document',
-            'flaggedComments',
+            'unhandledComments',
+            'handledComments',
         ]));
     }
 
