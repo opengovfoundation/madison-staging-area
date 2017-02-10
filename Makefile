@@ -21,7 +21,7 @@ deps-php:
 set-key:
 	php artisan key:generate
 
-test: test-php
+test: test-php test-browser
 
 test-php: db-test-setup
 	./vendor/bin/phpunit
