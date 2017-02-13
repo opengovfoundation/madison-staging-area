@@ -2,12 +2,15 @@ machine:
   environment:
     APP_URL: http://0.0.0.0:8888
     APP_ENV: testing
-    DB_HOST: 127.0.0.1
-    DB_CONNECTION: mysql_testing
-    DB_DATABASE: circle_test
-    DB_USERNAME: ubuntu
     APP_DEBUG: true
     TESTING: true
+    DB_HOST: 127.0.0.1
+    DB_DATABASE: circle_test
+    DB_USERNAME: ubuntu
+    BROADCAST_DRIVER: log
+    CACHE_DRIVER: array
+    SESSION_DRIVER: array
+    QUEUE_DRIVER: sync
 
   node:
     version: 6.1.0
