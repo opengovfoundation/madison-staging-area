@@ -5,6 +5,7 @@ namespace Tests;
 use Laravel\Dusk\TestCase as BaseTestCase;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
+use DatabaseSeeder;
 
 abstract class DuskTestCase extends BaseTestCase
 {
@@ -19,6 +20,13 @@ abstract class DuskTestCase extends BaseTestCase
     public static function prepare()
     {
         static::startChromeDriver();
+    }
+
+    public function setUp()
+    {
+        parent::setUp();
+        // Seeder truncates each time
+        $this->seed(DatabaseSeeder::class);
     }
 
     /**
