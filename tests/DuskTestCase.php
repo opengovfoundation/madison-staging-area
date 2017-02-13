@@ -5,7 +5,8 @@ namespace Tests;
 use Laravel\Dusk\TestCase as BaseTestCase;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
-use DatabaseSeeder;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 abstract class DuskTestCase extends BaseTestCase
 {
@@ -25,8 +26,19 @@ abstract class DuskTestCase extends BaseTestCase
     public function setUp()
     {
         parent::setUp();
-        // Seeder truncates each time
-        $this->seed(DatabaseSeeder::class);
+
+        // Truncate all tables between each test
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
+        $tables = Schema::getConnection()->getDoctrineSchemaManager()->listTableNames();
+        foreach ($tables as $table) {
+            if ($table === 'migrations') {
+                continue;
+            }
+            DB::table($table)->truncate();
+        }
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
     }
 
     /**
