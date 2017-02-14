@@ -76,9 +76,7 @@ class CommentController extends Controller
         $comments = $commentsQuery->get();
 
         // Filter out "hidden" comments
-        $comments = $comments->filter(function($comment) {
-            return !isset($comment->data['action']) || $comment->data['action'] !== Annotation::COMMENT_ACTION_HIDE;
-        });
+        $comments = $comments->filter(function($comment) { return !$comment->isHidden(); });
 
         // a little silly, we should probably support a more general
         // download=true param and a content type headers, but for now we'll

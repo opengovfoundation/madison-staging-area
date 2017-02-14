@@ -566,20 +566,18 @@ class DocumentController extends Controller
 
     public function moderate(Requests\Moderate $request, Document $document)
     {
-        $allFlaggedComments = Annotation::where('annotation_type_type', 'comment')
-            ->where('root_annotatable_id', $document->id)
-            ->get()->filter(function($a) {
-                  return $a->flags()->count() > 0;
-            });
+        $allFlaggedComments = $document->allComments->filter(function ($comment) {
+            return $comment->flags_count;
+        });
 
         $unhandledComments = new Collection();
         $handledComments = new Collection();
 
         $allFlaggedComments->filter(function($c) use ($unhandledComments, $handledComments) {
-            if (!isset($c->data['action']) || $c->data['action'] === null) {
-                $unhandledComments->push($c);
-            } else {
+            if ($c->isResolved() || $c->isHidden()) {
                 $handledComments->push($c);
+            } else {
+                $unhandledComments->push($c);
             }
         });
 
