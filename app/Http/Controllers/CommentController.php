@@ -6,6 +6,7 @@ use App\Events\CommentCreated;
 use App\Events\CommentFlagged;
 use App\Events\CommentLiked;
 use App\Http\Requests\Document\View as DocumentViewRequest;
+use App\Http\Requests\Document\Edit as DocumentEditRequest;
 use App\Http\Requests\Comment as Requests;
 use App\Models\Annotation;
 use App\Models\Doc as Document;
@@ -160,18 +161,17 @@ class CommentController extends Controller
         return Response::json($this->commentService->toAnnotatorArray($comment));
     }
 
-    public function storeAction(Requests\StoreAction $request, Document $document, Annotation $comment)
+    public function storeHidden(DocumentEditRequest $request, Document $document, Annotation $comment)
     {
-        $action = $request->input('action', null);
+        $this->commentService->hideComment($comment, $request->user());
+        flash(trans('messages.document.comment_hide_success'));
+        return redirect()->route('documents.moderate', $document);
+    }
 
-        if ($request->input('action', null)) {
-            $this->commentService->addActionToComment($comment, $request->input('action'));
-            flash(trans('messages.document.comment_' . $action . '_success'));
-        } else {
-            $this->commentService->removeActionFromComment($comment);
-            flash(trans('messages.document.comment_action_removed'));
-        }
-
+    public function storeResolve(DocumentEditRequest $request, Document $document, Annotation $comment)
+    {
+        $this->commentService->resolveComment($comment, $request->user());
+        flash(trans('messages.document.comment_resolve_success'));
         return redirect()->route('documents.moderate', $document);
     }
 

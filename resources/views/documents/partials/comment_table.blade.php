@@ -28,8 +28,7 @@
                         </a>
                     </div>
                     <div class="btn-group" role="group">
-                        {{ Form::open(['route' => ['documents.comments.storeAction', $document, $comment], 'method' => 'post']) }}
-                            <input type="hidden" name="action" value="hide">
+                        {{ Form::open(['route' => ['documents.comments.storeHidden', $document, $comment], 'method' => 'post']) }}
                             @if ($comment->isHidden())
                                 <button type="submit" class="btn btn-default" disabled="true">
                                     {{ trans('messages.document.hidden_comment') }}
@@ -42,8 +41,7 @@
                         {{ Form::close() }}
                     </div>
                     <div class="btn-group" role="group">
-                        {{ Form::open(['route' => ['documents.comments.storeAction', $document, $comment], 'method' => 'post']) }}
-                            <input type="hidden" name="action" value="resolve">
+                        {{ Form::open(['route' => ['documents.comments.storeResolve', $document, $comment], 'method' => 'post']) }}
                             @if ($comment->isResolved())
                                 <button type="submit" class="btn btn-default" disabled="true">
                                     {{ trans('messages.document.resolved_comment') }}

@@ -25,11 +25,10 @@ class Annotation extends Model implements ActivityInterface
     const TYPE_RANGE = 'range';
     const TYPE_SEEN = 'seen';
     const TYPE_TAG = 'tag';
+    const TYPE_HIDDEN = 'hidden';
+    const TYPE_RESOLVED = 'resolved';
 
     const SUBTYPE_NOTE = 'note';
-
-    const COMMENT_ACTION_HIDE = 'hide';
-    const COMMENT_ACTION_RESOLVE = 'resolve';
 
     protected $table = 'annotations';
     protected $fillable = ['data', 'user_id', 'annotation_subtype', 'str_id'];
@@ -157,16 +156,6 @@ class Annotation extends Model implements ActivityInterface
         }
 
         return $this->annotation_subtype === static::SUBTYPE_NOTE;
-    }
-
-    public function isHidden()
-    {
-        return isset($this->data['action']) && $this->data['action'] === static::COMMENT_ACTION_HIDE;
-    }
-
-    public function isResolved()
-    {
-        return isset($this->data['action']) && $this->data['action'] === static::COMMENT_ACTION_RESOLVE;
     }
 
 }
