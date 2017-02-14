@@ -159,4 +159,14 @@ class Annotation extends Model implements ActivityInterface
         return $this->annotation_subtype === static::SUBTYPE_NOTE;
     }
 
+    public function isHidden()
+    {
+        return isset($this->data['action']) && $this->data['action'] === static::COMMENT_ACTION_HIDE;
+    }
+
+    public function isResolved()
+    {
+        return isset($this->data['action']) && $this->data['action'] === static::COMMENT_ACTION_RESOLVE;
+    }
+
 }
