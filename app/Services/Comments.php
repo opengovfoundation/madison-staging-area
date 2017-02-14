@@ -211,24 +211,26 @@ class Comments
         return Annotation::find($id);
     }
 
-    public function addActionToComment(Annotation $comment, $action)
+
+    public function hideComment(Annotation $comment, User $user)
     {
-        if (!in_array($action, Annotation::validCommentActions())) {
-            throw new Exception('Invalid comment action provided');
-        }
+        // Do nothing if comment is already hidden
+        if ($comment->isHidden()) { return; }
 
-        $comment->data = array_merge($comment->data, [ 'action' => $action ]);
-        $comment->save();
+        // Can't be hidden and resolved at the same time.
+        if ($comment->isResolved()) { $comment->resolves()->delete(); }
 
-        return $comment;
+        $this->annotationService->createAnnotationHidden($comment, $user, []);
     }
 
-    // TODO: Not used right now, is this something we should allow?
-    public function removeActionFromComment(Annotation $comment)
+    public function resolveComment(Annotation $comment, User $user)
     {
-        $comment->data = array_merge($comment->data, [ 'action' => null ]);
-        $comment->save();
+        // Do nothing if comment is already resolved
+        if ($comment->isResolved()) { return; }
 
-        return $comment;
+        // Can't be hidden and resolved at the same time.
+        if ($comment->isHidden()) { $comment->hiddens()->delete(); }
+
+        $this->annotationService->createAnnotationResolved($comment, $user, []);
     }
 }

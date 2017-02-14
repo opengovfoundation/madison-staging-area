@@ -90,6 +90,31 @@ trait AnnotatableHelpers
         return $this->seens()->count();
     }
 
+    public function hiddens()
+    {
+        return $this
+            ->annotationTypeBaseQuery(Annotation::TYPE_HIDDEN)
+            ;
+    }
+
+    public function isHidden()
+    {
+        \Log::info('isHidden: ' . $this->hiddens()->count());
+        return $this->hiddens()->count() > 0;
+    }
+
+    public function resolves()
+    {
+        return $this
+            ->annotationTypeBaseQuery(Annotation::TYPE_RESOLVED)
+            ;
+    }
+
+    public function isResolved()
+    {
+        return $this->resolves()->count() > 0;
+    }
+
     public function ranges()
     {
         return $this
