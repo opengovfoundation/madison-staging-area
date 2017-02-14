@@ -55,8 +55,6 @@ dependencies:
     # Create blank log file and let Apache write to it
     - touch ./storage/logs/laravel.log
     - sudo chgrp -R www-data ./storage
-    # Remove the .env.testing file so it doesn't overwrite anything
-    - rm .env.testing
 
   cache_directories:
     - "vendor"
