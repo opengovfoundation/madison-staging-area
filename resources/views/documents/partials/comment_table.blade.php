@@ -15,7 +15,7 @@
         @foreach ($comments as $comment)
             <tr>
                 <td>{{ $comment->user->display_name }}</td>
-                <td>{{ $comment->annotation_type_type === "range" ? trans('messages.document.note') : trans('messages.document.comment') }}</td>
+                <td>{{ $comment->annotation_subtype === "note" ? trans('messages.document.note') : trans('messages.document.comment') }}</td>
                 <td>{{ str_limit($comment->annotationType->content, 100, ' ...') }}</td>
                 <td>{{ $comment->likes_count }}</td>
                 <td>{{ $comment->flags_count }}</td>
