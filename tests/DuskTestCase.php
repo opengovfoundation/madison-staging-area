@@ -39,6 +39,9 @@ abstract class DuskTestCase extends BaseTestCase
         }
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
+
+        // Flush sessions
+        session()->flush();
     }
 
     /**
