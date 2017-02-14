@@ -7,7 +7,6 @@ machine:
     DB_HOST: 127.0.0.1
     DB_DATABASE: circle_test
     DB_USERNAME: ubuntu
-    DB_PASSWORD: null
     BROADCAST_DRIVER: log
     CACHE_DRIVER: array
     SESSION_DRIVER: array
@@ -56,6 +55,8 @@ dependencies:
     # Create blank log file and let Apache write to it
     - touch ./storage/logs/laravel.log
     - sudo chgrp -R www-data ./storage
+    # Remove the .env.testing file so it doesn't overwrite anything
+    - rm .env.testing
 
   cache_directories:
     - "vendor"
