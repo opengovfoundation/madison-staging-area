@@ -184,4 +184,47 @@ trait AnnotatableHelpers
     {
         $query->whereRaw('COALESCE(annotation_subtype <> ?, TRUE)', [Annotation::SUBTYPE_NOTE]);
     }
+
+    public function scopeVisible($query)
+    {
+        $query->notHidden()->notRepliesToHidden();
+    }
+
+    public function scopeNotHidden($query)
+    {
+        $query->whereNotIn('id', function ($query) {
+            $query
+                ->select('annotatable_id')
+                ->from('annotations')
+                ->where('annotation_type_type', '=', Annotation::TYPE_HIDDEN)
+                ->whereNull('deleted_at')
+                ;
+        });
+    }
+
+    public function scopeNotRepliesToHidden($query)
+    {
+        $query->whereNotIn('id', function ($query) {
+            $query
+                ->select('id')
+                ->from('annotations')
+                ->where('annotatable_type', '=', Annotation::ANNOTATABLE_TYPE)
+                ->whereIn('annotatable_id', function ($query) {
+                    $query
+                        ->select('id')
+                        ->from('annotations')
+                        ->whereIn('id', function ($query) {
+                            $query
+                                ->select('annotatable_id')
+                                ->from('annotations')
+                                ->where('annotation_type_type', '=', Annotation::TYPE_HIDDEN)
+                                ->whereNull('deleted_at')
+                                ;
+                        })
+                        ->whereNull('deleted_at')
+                        ;
+                })
+                ;
+        });
+    }
 }

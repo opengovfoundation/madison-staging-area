@@ -31,38 +31,6 @@ trait RootAnnotatableHelpers
             ;
     }
 
-    public function allVisibleComments()
-    {
-        return $this
-            ->rootAnnotationTypeBaseQuery(Annotation::TYPE_COMMENT)
-            // Don't include comments that have a hidden annotation
-            ->whereNotIn('id', function ($query) {
-                $query
-                    ->select('annotatable_id')
-                    ->from('annotations')
-                    ->where('annotation_type_type', '=', Annotation::TYPE_HIDDEN)
-                    ->whereNull('deleted_at')
-                    ;
-            })
-            // Don't include comments that are replies to hidden annotations
-            ->whereNotIn('annotatable_id', function ($query) {
-                $query
-                    ->select('id')
-                    ->from('annotations')
-                    ->whereIn('id', function ($query) {
-                        $query
-                            ->select('annotatable_id')
-                            ->from('annotations')
-                            ->where('annotation_type_type', '=', Annotation::TYPE_HIDDEN)
-                            ->whereNull('deleted_at')
-                            ;
-                    })
-                    ->whereNull('deleted_at')
-                    ;
-            })
-            ;
-    }
-
     public function getAllCommentsAttribute()
     {
         return $this->allComments()->get();
