@@ -15,7 +15,7 @@
         @foreach ($comments as $comment)
             <tr>
                 <td>{{ $comment->user->display_name }}</td>
-                <td>{{ $comment->annotation_subtype === "note" ? trans('messages.document.note') : trans('messages.document.comment') }}</td>
+                <td>{{ $comment->isNote() ? trans('messages.document.note') : trans('messages.document.comment') }}</td>
                 <td>{{ str_limit($comment->annotationType->content, 100, ' ...') }}</td>
                 <td>{{ $comment->likes_count }}</td>
                 <td>{{ $comment->flags_count }}</td>
@@ -30,7 +30,7 @@
                     <div class="btn-group" role="group">
                         {{ Form::open(['route' => ['documents.comments.storeAction', $document, $comment], 'method' => 'post']) }}
                             <input type="hidden" name="action" value="hide">
-                            @if (isset($comment->data['action']) && $comment->data['action'] == "hide")
+                            @if ($comment->isHidden())
                                 <button type="submit" class="btn btn-default" disabled="true">
                                     {{ trans('messages.document.hidden_comment') }}
                                 </button>
@@ -44,7 +44,7 @@
                     <div class="btn-group" role="group">
                         {{ Form::open(['route' => ['documents.comments.storeAction', $document, $comment], 'method' => 'post']) }}
                             <input type="hidden" name="action" value="resolve">
-                            @if (isset($comment->data['action']) && $comment->data['action'] == "resolve")
+                            @if ($comment->isResolved())
                                 <button type="submit" class="btn btn-default" disabled="true">
                                     {{ trans('messages.document.resolved_comment') }}
                                 </button>
