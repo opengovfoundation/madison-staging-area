@@ -177,8 +177,8 @@ Route::get('/admin/featured', 'AdminController@indexFeaturedDocuments')
 Route::put('/admin/featured/{document}', 'AdminController@updateFeaturedDocuments')
     ->name('admin.featured-documents.update');
 
-Route::get('/admin/users', 'UserController@index')
+Route::get('/admin/users', 'AdminController@usersIndex')
     ->name('admin.users.index');
 
-Route::post('/admin/users/{user}/admin', 'UserController@postAdmin')
+Route::post('/admin/users/{user}/admin', 'AdminController@usersPostAdmin')
     ->name('admin.users.postAdmin');

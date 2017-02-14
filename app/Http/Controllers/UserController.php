@@ -22,12 +22,6 @@ class UserController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Requests\Index $request)
-    {
-        $users = User::all();
-        return view('users.list', compact('users'));
-    }
-
     public function editSettings(Requests\Edit $request, User $user)
     {
         return redirect()->route('users.settings.account.edit', $user->id);
@@ -172,20 +166,5 @@ class UserController extends Controller
 
         flash(trans('messages.email_verification.sent'));
         return back();
-    }
-
-    public function postAdmin(Requests\PostAdmin $request, User $user)
-    {
-        $makingAdmin = $request->input('admin', false);
-        $adminRole = Role::where('name', Role::ROLE_ADMIN)->first();
-
-        if ($makingAdmin) {
-            $user->attachRole($adminRole);
-        } else {
-            $user->detachRole($adminRole);
-        }
-
-        flash(trans('messages.updated'));
-        return redirect()->route('admin.users.index');
     }
 }

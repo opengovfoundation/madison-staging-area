@@ -39,8 +39,8 @@
                                     {{ $page->url }}
                                 </a>
                             </td>
-                            <td class="text-center">{!! $page->header_nav_link ? '<i class="fa fa-check-square-o"></i>' : '<i class="fa fa-square-o"></i>' !!}</td>
-                            <td class="text-center">{!! $page->footer_nav_link ? '<i class="fa fa-check-square-o"></i>' : '<i class="fa fa-square-o"></i>' !!}</td>
+                            <td class="text-center">{!! $page->header_nav_link ? '<i class="fa fa-check"></i>' : '<i class="fa fa"></i>' !!}</td>
+                            <td class="text-center">{!! $page->footer_nav_link ? '<i class="fa fa-check"></i>' : '<i class="fa fa"></i>' !!}</td>
                             <td>
                                 <a href="{{ route('pages.edit', $page) }}"
                                     title="@lang('messages.page.edit')"

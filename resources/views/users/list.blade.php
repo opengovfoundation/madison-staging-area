@@ -20,7 +20,7 @@
                         <th>@lang('messages.user.fname')</th>
                         <th>@lang('messages.user.lname')</th>
                         <th>@lang('messages.user.email')</th>
-                        <th>@lang('messages.verified')</th>
+                        <th>@lang('messages.email_verified')</th>
                         <th>@lang('messages.administrator')</th>
                         <th></th>
                     </tr>
@@ -32,12 +32,12 @@
                             <td>{{ $user->lname }}</td>
                             <td>{{ $user->email }}</td>
                             @if (empty($user->token))
-                                <td><i class="fa fa-check-square-o"></i></td>
+                                <td class="text-center"><i class="fa fa-check"></i></td>
                             @else
                                 <td></td>
                             @endif
                             @if ($user->isAdmin())
-                                <td><i class="fa fa-check-square-o"></i></td>
+                                <td class="text-center"><i class="fa fa-check"></i></td>
                             @else
                                 <td></td>
                             @endif

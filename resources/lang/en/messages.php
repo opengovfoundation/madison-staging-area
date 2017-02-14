@@ -31,7 +31,7 @@ return [
     'close' => 'Close',
     'permalink' => 'Permalink',
     'administrator' => 'Admin',
-    'verified' => 'Verified',
+    'email_verified' => 'Email Verified',
     'misc' => 'Misc.',
     'settings' => 'Settings',
 
