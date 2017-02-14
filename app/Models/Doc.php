@@ -252,7 +252,8 @@ class Doc extends Model
     public function getCommentCountAttribute()
     {
         return $this
-            ->allVisibleComments()
+            ->allComments()
+            ->visible()
             ->notNotes()
             ->count()
             ;
@@ -261,7 +262,8 @@ class Doc extends Model
     public function getNoteCountAttribute()
     {
         return $this
-            ->allVisibleComments()
+            ->allComments()
+            ->visible()
             ->onlyNotes()
             ->count()
             ;
@@ -269,7 +271,7 @@ class Doc extends Model
 
     public function getUserCount()
     {
-        return $this->allVisibleComments()->count(DB::raw('DISTINCT user_id'));
+        return $this->allComments()->visible()->count(DB::raw('DISTINCT user_id'));
     }
 
     public function getUserCountAttribute()
