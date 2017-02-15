@@ -9,7 +9,7 @@ use Laravel\Dusk\Browser;
 
 class UserTest extends DuskTestCase
 {
-    public function testAccountSettingsView()
+    public function testAccountSettingsViewOwn()
     {
         $user = factory(User::class)->create();
 
@@ -22,6 +22,23 @@ class UserTest extends DuskTestCase
                 ->assertInputValue('fname', $user->fname)
                 ->assertInputValue('lname', $user->lname)
                 ->assertInputValue('email', $user->email)
+                ;
+        });
+    }
+
+    public function testAccountSettingsNotViewOthers()
+    {
+        $user = factory(User::class)->create();
+        $otherUser = factory(User::class)->create();
+
+        $this->browse(function ($browser) use ($user, $otherUser) {
+            $page = new AccountPage($otherUser);
+
+            $browser
+                ->loginAs($user)
+                ->visit($page)
+                // 403 status
+                ->assertSee('Whoops, looks like something went wrong')
                 ;
         });
     }
