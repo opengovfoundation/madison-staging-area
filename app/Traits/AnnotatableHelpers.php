@@ -99,7 +99,6 @@ trait AnnotatableHelpers
 
     public function isHidden()
     {
-        \Log::info('isHidden: ' . $this->hiddens()->count());
         return $this->hiddens()->count() > 0;
     }
 
