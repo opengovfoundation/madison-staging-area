@@ -63,7 +63,7 @@ class HomeTest extends DuskTestCase
         });
     }
 
-    public function testUnpublishingDocumentRemovesFromFeatured()
+    public function testUnpublishedWontShowInFeatured()
     {
         $this->browse(function ($browser) {
             $this->document1->setAsFeatured();
@@ -82,6 +82,51 @@ class HomeTest extends DuskTestCase
 
             $browser->visit(new HomePage);
             $browser->assertSeeIn('@featured', $this->document1->title);
+        });
+    }
+
+    public function testPrivateWontShowInFeatured()
+    {
+        $this->browse(function ($browser) {
+            $this->document1->setAsFeatured();
+
+            $browser->visit(new HomePage);
+            $browser->assertSeeIn('@featured', $this->document1->title);
+
+            // Test setting to unpublished removes from featured
+            $this->document1->update(['publish_state' => Document::PUBLISH_STATE_PRIVATE]);
+
+            $browser->visit(new HomePage);
+            $browser->assertDontSeeIn('@featured', $this->document1->title);
+
+            // Test it becomes featured again after republishing
+            $this->document1->update(['publish_state' => Document::PUBLISH_STATE_PUBLISHED]);
+
+            $browser->visit(new HomePage);
+            $browser->assertSeeIn('@featured', $this->document1->title);
+        });
+    }
+
+    public function testDeletedRemovesFromFeaturedList()
+    {
+        $this->browse(function ($browser) {
+            $this->document1->setAsFeatured();
+
+            $browser->visit(new HomePage);
+            $browser->assertSeeIn('@featured', $this->document1->title);
+
+            // Delete
+            $this->document1->update(['publish_state' => Document::PUBLISH_STATE_DELETED_USER]);
+            $this->document1->delete();
+
+            $browser->visit(new HomePage);
+            $browser->assertDontSeeIn('@featured', $this->document1->title);
+
+            // Test it isn't featured anymore if restored
+            $this->document1->restore();
+
+            $browser->visit(new HomePage);
+            $browser->assertDontSeeIn('@featured', $this->document1->title);
         });
     }
 }
