@@ -334,7 +334,7 @@ class DocumentController extends Controller
         }
 
         $documentPages = $document->content()->paginate(1);
-        $comments = $document->comments()->visible()->notNotes()->paginate(15, ['*'], 'comment_page');
+        $comments = $document->comments()->notNotes()->paginate(15, ['*'], 'comment_page');
 
         return view('documents.show', compact([
             'document',
@@ -566,7 +566,7 @@ class DocumentController extends Controller
 
     public function moderate(Requests\Moderate $request, Document $document)
     {
-        $allFlaggedComments = $document->allComments->filter(function ($comment) {
+        $allFlaggedComments = $document->allCommentsWithHidden->filter(function ($comment) {
             return $comment->flags_count;
         });
 
