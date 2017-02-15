@@ -10,61 +10,78 @@ use App\Models\Doc as Document;
 class HomeTest extends DuskTestCase
 {
 
-    public function testFeaturedDefaultsToMostRecent()
+    public function setUp()
     {
-        $document = factory(Document::class)->create([
+        parent::setUp();
+
+        $this->document1 = factory(Document::class)->create([
             'publish_state' => Document::PUBLISH_STATE_PUBLISHED,
         ]);
 
-        $this->browse(function ($browser) use ($document) {
+        $this->document2 = factory(Document::class)->create([
+            'publish_state' => Document::PUBLISH_STATE_PUBLISHED,
+        ]);
+    }
+
+    public function testFeaturedDefaultsToMostRecent()
+    {
+        $this->browse(function ($browser) {
             $browser->visit(new HomePage);
-            $browser->with('@mainFeatured', function ($featured) use ($document) {
-                $featured->assertSee($document->title);
+            $browser->with('@mainFeatured', function ($featured) {
+                $featured->assertSee($this->document1->title);
             });
         });
     }
 
     public function testFeaturedDocument()
     {
-        $document = factory(Document::class)->create([
-            'publish_state' => Document::PUBLISH_STATE_PUBLISHED,
-        ]);
-        $document->setAsFeatured();
+        $this->browse(function ($browser) {
+            $this->document1->setAsFeatured();
 
-        $recentDocument = factory(Document::class)->create([
-            'publish_state' => Document::PUBLISH_STATE_PUBLISHED,
-        ]);
-
-        $this->browse(function ($browser) use ($document, $recentDocument) {
             $browser->visit(new HomePage);
 
-            $browser->assertSeeIn('@mainFeatured', $document->title);
-            $browser->assertDontSeeIn('@mainFeatured', $recentDocument->title);
-            $browser->assertDontSeeIn('@featured', $recentDocument->title);
+            $browser->assertSeeIn('@mainFeatured', $this->document1->title);
+            $browser->assertDontSeeIn('@mainFeatured', $this->document2->title);
+            $browser->assertDontSeeIn('@featured', $this->document2->title);
         });
     }
 
     public function testMultipleFeaturedDocuments()
     {
-        $document = factory(Document::class)->create([
-            'publish_state' => Document::PUBLISH_STATE_PUBLISHED,
-        ]);
-        $document->setAsFeatured();
+        $this->browse(function ($browser) {
+            $this->document1->setAsFeatured();
+            $this->document2->setAsFeatured();
 
-        $secondDocument = factory(Document::class)->create([
-            'publish_state' => Document::PUBLISH_STATE_PUBLISHED,
-        ]);
-        $secondDocument->setAsFeatured();
-
-        $this->browse(function ($browser) use ($document, $secondDocument) {
             $browser->visit(new HomePage);
 
-            $browser->assertSeeIn('@featured', $document->title);
-            $browser->assertSeeIn('@featured', $secondDocument->title);
+            $browser->assertSeeIn('@featured', $this->document1->title);
+            $browser->assertSeeIn('@featured', $this->document2->title);
 
             // Most recently "featured" document shows up first
-            $browser->assertSeeIn('@mainFeatured', $secondDocument->title);
-            $browser->assertDontSeeIn('@mainFeatured', $document->title);
+            $browser->assertSeeIn('@mainFeatured', $this->document2->title);
+            $browser->assertDontSeeIn('@mainFeatured', $this->document1->title);
+        });
+    }
+
+    public function testUnpublishingDocumentRemovesFromFeatured()
+    {
+        $this->browse(function ($browser) {
+            $this->document1->setAsFeatured();
+
+            $browser->visit(new HomePage);
+            $browser->assertSeeIn('@featured', $this->document1->title);
+
+            // Test setting to unpublished removes from featured
+            $this->document1->update(['publish_state' => Document::PUBLISH_STATE_UNPUBLISHED]);
+
+            $browser->visit(new HomePage);
+            $browser->assertDontSeeIn('@featured', $this->document1->title);
+
+            // Test it becomes featured again after republishing
+            $this->document1->update(['publish_state' => Document::PUBLISH_STATE_PUBLISHED]);
+
+            $browser->visit(new HomePage);
+            $browser->assertSeeIn('@featured', $this->document1->title);
         });
     }
 }
