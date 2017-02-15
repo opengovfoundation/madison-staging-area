@@ -208,6 +208,7 @@ trait AnnotatableHelpers
                 ->select('id')
                 ->from('annotations')
                 ->where('annotatable_type', '=', Annotation::ANNOTATABLE_TYPE)
+                ->where('annotation_type_type', '=', Annotation::TYPE_COMMENT)
                 ->whereIn('annotatable_id', function ($query) {
                     $query
                         ->select('id')

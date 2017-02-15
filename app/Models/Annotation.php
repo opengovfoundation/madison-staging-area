@@ -7,6 +7,7 @@ use App\Services\UniqId;
 use App\Traits\AnnotatableHelpers;
 use DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use URL;
 
@@ -48,6 +49,10 @@ class Annotation extends Model implements ActivityInterface
     public static function boot()
     {
         parent::boot();
+
+        static::addGlobalScope(function (Builder $builder) {
+            $builder->visible();
+        });
 
         static::creating(function($annotation) {
             if (!isset($annotation->str_id)) {
