@@ -60,7 +60,6 @@ $factory->define(PageContent::class, function (Faker\Generator $faker) {
 
 $factory->define(Doc::class, function (Faker\Generator $faker) {
     return [
-        // 'title' => substr($faker->realText(50, 5), 0, -1),
         'title' => substr($faker->sentence(5), 0, -1),
     ];
 });

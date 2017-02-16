@@ -29,16 +29,19 @@ class RegisterTest extends DuskTestCase
                 ->type('lname', $fakeUser->lname)
                 ->type('email', $fakeUser->email)
                 ->type('password', 'secret')
-                ->type('password-confirm', 'secret')
+                ->type('password_confirmation', 'secret')
                 ->press('Register')
                 ->assertPathIs('/');
 
             Event::assertDispatched('Illuminate\Auth\Events\Registered');
-            Mail::assertSent(EmailVerification::class, function ($mail) use ($fakeUser)) {
+            Mail::assertSent(EmailVerification::class, function ($mail) use ($fakeUser) {
                 return $mail->hasTo($fakeUser->email);
-            };
+            });
 
-            $user = User::orderBy('created_by', 'DESC')->first();
+            $user = User::orderBy('created_at', 'desc')->first();
+            $this->assertEquals($fakeUser->fname, $user->fname);
+            $this->assertEquals($fakeUser->lname, $user->lname);
+            $this->assertEquals($fakeUser->email, $user->email);
         });
     }
 }
