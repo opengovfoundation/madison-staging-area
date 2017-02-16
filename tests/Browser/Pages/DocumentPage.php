@@ -42,6 +42,7 @@ class DocumentPage extends BasePage
     public function elements()
     {
         return [
+            '@sponsorList' => '.page-header .sponsors',
             '@stats' => '.document-stats',
             '@participantCount' => '.participants-count',
             '@commentsCount' => '.comments-count',
@@ -51,6 +52,7 @@ class DocumentPage extends BasePage
             '@contentTab' => '.nav-tabs a[href="#content"]',
             '@commentsTab' => '.nav-tabs a[href="#comments"]',
             '@annotationGroups' => '.annotation-group',
+            '@commentsList' => '#comments.comments',
         ];
     }
 }
