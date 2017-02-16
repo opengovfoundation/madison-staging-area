@@ -7,14 +7,20 @@ use Laravel\Dusk\Page as BasePage;
 
 class DocumentPage extends BasePage
 {
+
+    public function __construct($document)
+    {
+        $this->document = $document;
+    }
+
     /**
      * Get the URL for the page.
      *
      * @return string
      */
-    public function url($slug)
+    public function url()
     {
-        return '/documents/' . $slug;
+        return '/documents/' . $this->document->slug;
     }
 
     /**
@@ -25,6 +31,7 @@ class DocumentPage extends BasePage
     public function assert(Browser $browser)
     {
         $browser->assertPathIs($this->url());
+        $browser->assertTitleContains($this->document->title);
     }
 
     /**
@@ -35,7 +42,15 @@ class DocumentPage extends BasePage
     public function elements()
     {
         return [
-            '@element' => '#selector',
+            '@stats' => '.document-stats',
+            '@participantCount' => '.participants-count',
+            '@commentsCount' => '.comments-count',
+            '@notesCount' => '.notes-count',
+            '@supportBtn' => '.support-btn button',
+            '@opposeBtn' => '.oppose-btn button',
+            '@contentTab' => '.nav-tabs a[href="#content"]',
+            '@commentsTab' => '.nav-tabs a[href="#comments"]',
+            '@annotationGroups' => '.annotation-group',
         ];
     }
 }
