@@ -5,6 +5,7 @@ namespace Tests\Browser;
 use Tests\DuskTestCase;
 use Tests\Browser\Pages\HomePage;
 
+use Carbon\Carbon;
 use App\Models\Doc as Document;
 
 class HomeTest extends DuskTestCase
@@ -20,6 +21,7 @@ class HomeTest extends DuskTestCase
 
         $this->document2 = factory(Document::class)->create([
             'publish_state' => Document::PUBLISH_STATE_PUBLISHED,
+            'created_at' => Carbon::now()->addDay(),
         ]);
     }
 
@@ -28,7 +30,7 @@ class HomeTest extends DuskTestCase
         $this->browse(function ($browser) {
             $browser->visit(new HomePage);
             $browser->with('@mainFeatured', function ($featured) {
-                $featured->assertSee($this->document1->title);
+                $featured->assertSee($this->document2->title);
             });
         });
     }
