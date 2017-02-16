@@ -40,6 +40,13 @@ class UserTest extends DuskTestCase
                 // 403 status
                 ->assertSee('Whoops, looks like something went wrong')
                 ;
+
+            // anonymous user
+            $browser
+                ->visit($page)
+                // 403 status
+                ->assertSee('Whoops, looks like something went wrong')
+                ;
         });
     }
 
@@ -59,11 +66,19 @@ class UserTest extends DuskTestCase
                 ->type('email', $fakeUser->email)
                 ->press('Submit')
                 ->assertPathIs($page->url())
+                // some success
                 ->assertVisible('.alert.alert-info')
+                // inputs have correct input
                 ->assertInputValue('fname', $fakeUser->fname)
                 ->assertInputValue('lname', $fakeUser->lname)
                 ->assertInputValue('email', $fakeUser->email)
                 ;
+
+            // ensure changes actually happened in db
+            $user = $user->fresh();
+            $this->assertEquals($fakeUser->fname, $user->fname);
+            $this->assertEquals($fakeUser->lname, $user->lname);
+            $this->assertEquals($fakeUser->email, $user->email);
         });
     }
 
@@ -74,6 +89,7 @@ class UserTest extends DuskTestCase
 
         $this->browse(function ($browser) use ($user, $otherUser) {
             $page = new AccountPage($user);
+            $originalEmail = $user->email;
 
             $browser
                 ->loginAs($user)
@@ -81,9 +97,15 @@ class UserTest extends DuskTestCase
                 ->type('email', $otherUser->email)
                 ->press('Submit')
                 ->assertPathIs($page->url())
+                // some error
                 ->assertVisible('.alert.alert-danger')
+                // input still has their invalid input
                 ->assertInputValue('email', $otherUser->email)
                 ;
+
+            // ensure changes did not reach db
+            $user = $user->fresh();
+            $this->assertEquals($originalEmail, $user->email);
         });
     }
 }
