@@ -11,7 +11,7 @@
 */
 
 use App\Models\Category;
-use App\Models\Doc;
+use App\Models\Doc as Document;
 use App\Models\Sponsor;
 use App\Models\Page;
 use App\Models\PageContent;
@@ -28,10 +28,6 @@ $factory->define(User::class, function (Faker\Generator $faker) {
         'password' => $password ?: $password = 'secret',
         'remember_token' => str_random(10),
     ];
-});
-
-$factory->defineAs(Role::class, 'admin_role', function (Faker\Generator $faker) {
-    return ['name' => Role::ROLE_ADMIN];
 });
 
 $factory->define(Sponsor::class, function (Faker\Generator $faker) {
@@ -56,7 +52,7 @@ $factory->define(PageContent::class, function (Faker\Generator $faker) {
     return [ 'content' => join(' ', $faker->sentences) ];
 });
 
-$factory->define(Doc::class, function (Faker\Generator $faker) {
+$factory->define(Document::class, function (Faker\Generator $faker) {
     return [ 'title' => $faker->words(5, true) ];
 });
 
