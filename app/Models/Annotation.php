@@ -38,19 +38,11 @@ class Annotation extends Model implements ActivityInterface
         'data' => 'array',
     ];
 
-    public static function validCommentActions()
-    {
-        return [
-            static::COMMENT_ACTION_HIDE,
-            static::COMMENT_ACTION_RESOLVE,
-        ];
-    }
-
     public static function boot()
     {
         parent::boot();
 
-        static::addGlobalScope(function (Builder $builder) {
+        static::addGlobalScope('visible', function (Builder $builder) {
             $builder->visible();
         });
 

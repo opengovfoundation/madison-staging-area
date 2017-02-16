@@ -31,6 +31,20 @@ Route::bind('comment', function ($value) {
     throw new NotFoundHttpException;
 });
 
+Route::bind('commentHidden', function ($value) {
+    $comment = Annotation::withoutGlobalScope('visible')->find($value);
+    if ($comment) {
+        return $comment;
+    }
+
+    $comment = Annotation::withoutGlobalScope('visible')->where('str_id', $value)->first();
+    if ($comment) {
+        return $comment;
+    }
+
+    throw new NotFoundHttpException;
+});
+
 Route::bind('document', function ($value) {
     $doc = Document::find($value);
     if ($doc) {
@@ -90,7 +104,7 @@ Route::post('documents/{document}/comments/{comment}/flags', 'CommentController@
     ->name('documents.comments.storeFlags');
 Route::post('documents/{document}/comments/{comment}/hide', 'CommentController@storeHidden')
     ->name('documents.comments.storeHidden');
-Route::post('documents/{document}/comments/{comment}/resolve', 'CommentController@storeResolve')
+Route::post('documents/{document}/comments/{commentHidden}/resolve', 'CommentController@storeResolve')
     ->name('documents.comments.storeResolve');
 
 

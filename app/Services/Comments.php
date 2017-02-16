@@ -7,7 +7,6 @@ use App\Models\AnnotationPermission;
 use App\Models\Doc as Document;
 use App\Models\User;
 use DB;
-use Exception;
 use League\Csv\Writer;
 
 class Comments
@@ -218,7 +217,7 @@ class Comments
         if ($comment->isHidden()) { return; }
 
         // Can't be hidden and resolved at the same time.
-        if ($comment->isResolved()) { $comment->resolves()->delete(); }
+        if ($comment->isResolved()) { $comment->resolves()->withoutGlobalScope('visible')->delete(); }
 
         $this->annotationService->createAnnotationHidden($comment, $user, []);
     }
@@ -229,7 +228,7 @@ class Comments
         if ($comment->isResolved()) { return; }
 
         // Can't be hidden and resolved at the same time.
-        if ($comment->isHidden()) { $comment->hiddens()->delete(); }
+        if ($comment->isHidden()) { $comment->hiddens()->withoutGlobalScope('visible')->delete(); }
 
         $this->annotationService->createAnnotationResolved($comment, $user, []);
     }

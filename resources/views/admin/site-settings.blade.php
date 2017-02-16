@@ -14,19 +14,37 @@
 
         <div class="col-md-9">
             {{ Form::model($currentSettings, ['route' => ['admin.site.update'], 'method' => 'put']) }}
-                {{ Form::mSelect(
-                        'madison.date_format',
-                        trans('messages.admin.date_format'),
-                        $dateFormats
-                        )
-                }}
-
-                {{ Form::mSelect(
-                        'madison.time_format',
-                        trans('messages.admin.time_format'),
-                        $timeFormats
-                        )
-                }}
+                @foreach ($allSettingsDesc as $key => $desc)
+                    @if ($desc['type'] === 'select')
+                        {{ Form::mSelect(
+                                $key,
+                                trans('messages.admin.'.$key),
+                                $options[$key]['choices'],
+                                null,
+                                [],
+                                trans('messages.admin.'.$key.'_help') !== 'messages.admin.'.$key.'_help'
+                                       ? trans('messages.admin.'.$key.'_help')
+                                       : null
+                                )
+                        }}
+                    @elseif ($desc['type'] === 'text')
+                        {{ Form::mInput(
+                                'text',
+                                $key,
+                                trans('messages.admin.'.$key),
+                                null,
+                                [ 'placeholder' =>
+                                    !empty($options[$key]['placeholder'])
+                                        ? $options[$key]['placeholder']
+                                        : ''
+                                ],
+                                trans('messages.admin.'.$key.'_help') !== 'messages.admin.'.$key.'_help'
+                                       ? trans('messages.admin.'.$key.'_help')
+                                       : null
+                                )
+                        }}
+                    @endif
+                @endforeach
 
                 {{ Form::mSubmit() }}
             {{ Form::close() }}

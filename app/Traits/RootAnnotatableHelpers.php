@@ -8,20 +8,18 @@ trait RootAnnotatableHelpers
 {
     use AnnotatableHelpers;
 
-    public function rootAnnotatableBaseQuery($onlyVisible = true)
+    public function rootAnnotatableBaseQuery()
     {
-        $baseQuery = $onlyVisible ? Annotation::query() : Annotation::withoutGlobalScopes();
-
-        return $baseQuery
-            ->where('root_annotatable_type', static::ANNOTATABLE_TYPE)
+        return Annotation
+            ::where('root_annotatable_type', static::ANNOTATABLE_TYPE)
             ->where('root_annotatable_id', $this->id)
             ;
     }
 
-    public function rootAnnotationTypeBaseQuery($class, $onlyVisible = true)
+    public function rootAnnotationTypeBaseQuery($class)
     {
         return $this
-            ->rootAnnotatableBaseQuery($onlyVisible)
+            ->rootAnnotatableBaseQuery()
             ->where('annotation_type_type', $class)
             ;
     }
@@ -45,9 +43,7 @@ trait RootAnnotatableHelpers
 
     public function allCommentsWithHidden()
     {
-        return $this
-            ->rootAnnotationTypeBaseQuery(Annotation::TYPE_COMMENT, false)
-            ;
+        return $this->allComments()->withoutGlobalScope('visible');
     }
 
     public function getAllCommentsWithHiddenAttribute()
