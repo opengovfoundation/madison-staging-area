@@ -31,7 +31,9 @@ class RegisterTest extends DuskTestCase
                 ->type('password', 'secret')
                 ->type('password_confirmation', 'secret')
                 ->press('Register')
-                ->assertPathIs('/');
+                ->assertPathIs('/')
+                ->assertSee('You haven\'t verified your email')
+                ;
 
             Event::assertDispatched('Illuminate\Auth\Events\Registered');
             Mail::assertSent(EmailVerification::class, function ($mail) use ($fakeUser) {
