@@ -29,7 +29,7 @@
                         </span>
                     </div>
 
-                    <div class="btn-group" role="group">
+                    <div class="btn-group support-btn" role="group">
                             {{ Form::open(['route' => ['documents.support', $document], 'method' => 'put']) }}
                                 <input type="hidden" name="support" value="1">
 
@@ -44,7 +44,7 @@
                                 @endif
                             {{ Form::close() }}
                     </div>
-                    <div class="btn-group" role="group">
+                    <div class="btn-group oppose-btn" role="group">
                             {{ Form::open(['route' => ['documents.support', $document], 'method' => 'put']) }}
                                 <input type="hidden" name="support" value="0">
                                 @if ($userSupport === false)
