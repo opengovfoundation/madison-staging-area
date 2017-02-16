@@ -55,14 +55,10 @@ class Doc extends Model
             if (empty($doc->slug)) $doc->slug = static::makeSlug($doc->title);
         });
 
-        static::created(function ($document) {
-            $starter = new DocumentContent();
-            $starter->doc_id = $document->id;
-            $starter->content = "New Document Content";
-            $starter->save();
-
-            $document->init_section = $starter->id;
-            $document->save();
+        static::updating(function ($document) {
+            if (empty($document->init_section) && $document->content()->count()) {
+                $document->init_section = $document->content()->first()->id;
+            }
         });
 
         static::deleted(function ($document) {

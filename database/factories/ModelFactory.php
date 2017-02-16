@@ -12,6 +12,7 @@
 
 use App\Models\Category;
 use App\Models\Doc;
+use App\Models\DocContent;
 use App\Models\Sponsor;
 use App\Models\Page;
 use App\Models\PageContent;
@@ -26,6 +27,7 @@ $factory->define(User::class, function (Faker\Generator $faker) {
         'lname' => $faker->lastName,
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = 'secret',
+        'token' => str_random(10),
         'remember_token' => str_random(10),
     ];
 });
@@ -57,7 +59,16 @@ $factory->define(PageContent::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(Doc::class, function (Faker\Generator $faker) {
-    return [ 'title' => $faker->words(5, true) ];
+    return [
+        // 'title' => substr($faker->realText(50, 5), 0, -1),
+        'title' => substr($faker->sentence(5), 0, -1),
+    ];
+});
+
+$factory->define(DocContent::class, function (Faker\Generator $faker) {
+    return [
+        'content' => $faker->paragraphs(5, true),
+    ];
 });
 
 $factory->define(Category::class, function (Faker\Generator $faker) {
