@@ -30,8 +30,11 @@ class DocumentPageTest extends DuskTestCase
 
         $this->document->sponsors()->save($this->sponsor);
 
-        $note1 = FactoryHelpers::addNoteToDocument($this->user, $this->document);
-        $note2 = FactoryHelpers::addNoteToDocument($this->user, $this->document, "New");
+        $this->note1 = FactoryHelpers::addNoteToDocument($this->user, $this->document);
+        $this->note2 = FactoryHelpers::addNoteToDocument($this->user, $this->document, "New");
+
+        $this->comment1 = FactoryHelpers::addCommentToDocument($this->user, $this->document);
+        $this->comment2 = FactoryHelpers::addCommentToDocument($this->user, $this->document);
     }
 
     public function testCanSeeDocumentContent()
@@ -40,6 +43,7 @@ class DocumentPageTest extends DuskTestCase
             $browser->visit(new DocumentPage($this->document))
                 ->assertSee($this->document->title)
                 ->assertSee($this->document->content()->first()->content)
+                ->assertSeeIn('@sponsorList', $this->document->sponsors()->first()->display_name);
                 ;
         });
     }
@@ -50,7 +54,7 @@ class DocumentPageTest extends DuskTestCase
             $browser->visit(new DocumentPage($this->document))
                 ->assertSeeIn('@participantCount', '1')
                 ->assertSeeIn('@notesCount', '2')
-                ->assertSeeIn('@commentsCount', '0')
+                ->assertSeeIn('@commentsCount', '2')
                 ->assertSeeIn('@supportBtn', '0')
                 ->assertSeeIn('@opposeBtn', '0')
                 ;
@@ -76,5 +80,20 @@ class DocumentPageTest extends DuskTestCase
     }
 
     // TODO: test can view document comments, plus action counts, replies show by default
+    public function testsViewDocumentComments()
+    {
+        // browse to the doc page
+        $this->browse(function ($browser) {
+            $browser->visit(new DocumentPage($this->document))
+                ->click('@commentsTab')
+                ->assertVisible('@commentsList')
+                // expect to see comment1 and comment2
+                // -- author, like/flag counts, permalink??, content, datetime
+                ->assertSeeIn('@commentsList', $this->comment1->annotationType->content)
+                ->assertSeeIn('@commentsList', $this->comment2->annotationType->content)
+                ;
+        });
+    }
+
     // TODO: test can see notes bubbles, and click to see notes pane, plus note details
 }

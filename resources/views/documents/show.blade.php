@@ -9,6 +9,12 @@
 @section('content')
     <div class="page-header">
         <h1>{{ $document->title }}</h1>
+        <h3 class="sponsors">
+            <small>
+            Sponsored by:
+            {{ join(",", $document->sponsors()->get()->map(function ($s) { return $s->display_name; })->toArray()) }}
+            </small>
+        </h3>
     </div>
 
     @include('components.errors')

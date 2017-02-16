@@ -52,6 +52,14 @@ class FactoryHelpers
         return $commentService->createFromAnnotatorArray($document, $user, $note);
     }
 
+    public static function addCommentToDocument(User $user, Document $document)
+    {
+        $faker = Faker\Factory::create();
+        $commentService = App::make('App\Services\Comments');
+
+        return $commentService->createFromAnnotatorArray($document, $user, ['text' => $faker->text]);
+    }
+
     /**
      * For now, this assumes all content lines are individual paragraphs,
      * no support for any further complex HTML.
