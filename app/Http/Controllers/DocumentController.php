@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Document as Requests;
 use App\Events\DocumentPublished;
 use App\Events\SupportVoteChanged;
-use App\Models\Annotation;
 use App\Models\Category;
 use App\Models\User;
 use App\Models\Doc as Document;

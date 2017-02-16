@@ -7,7 +7,6 @@ use App\Events\CommentFlagged;
 use App\Events\CommentLiked;
 use App\Http\Requests\Document\View as DocumentViewRequest;
 use App\Http\Requests\Document\Edit as DocumentEditRequest;
-use App\Http\Requests\Comment as Requests;
 use App\Models\Annotation;
 use App\Models\Doc as Document;
 use App\Services;
@@ -75,9 +74,6 @@ class CommentController extends Controller
         }
 
         $comments = $commentsQuery->get();
-
-        // Call `values()` so the array is rekeyed, preventing it from showing up as an object in JSON
-        $comments = $comments->filter(function($comment) { return !$comment->isHidden(); })->values();
 
         // a little silly, we should probably support a more general
         // download=true param and a content type headers, but for now we'll
