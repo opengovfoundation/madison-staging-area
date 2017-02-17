@@ -34,7 +34,7 @@ class DocContent extends Model
 
                 // if this is the only content on the document, set it as the
                 // first page of content
-                if (empty($document->init_section) && $document->content()->count() === 0) {
+                if (empty($document->init_section) && $document->content()->count() === 1) {
                     $document->init_section = $content->id;
                     $document->save();
                 }

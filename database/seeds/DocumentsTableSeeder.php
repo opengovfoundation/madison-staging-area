@@ -13,7 +13,7 @@ class DocumentsTableSeeder extends Seeder
     {
         $sponsor = Sponsor::where('id', '=', 1)->first();
 
-        $documents = factory(Document::class, 2)->create([
+        $documents = factory(Document::class, 5)->create([
             'publish_state' => Document::PUBLISH_STATE_PUBLISHED,
         ])->each(function ($document) use ($sponsor) {
             $document->sponsors()->attach($sponsor);

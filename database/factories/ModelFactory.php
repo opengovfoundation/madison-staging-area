@@ -66,7 +66,7 @@ $factory->define(Doc::class, function (Faker\Generator $faker) {
 
 $factory->define(DocContent::class, function (Faker\Generator $faker) {
     return [
-        'content' => $faker->paragraphs(5, true),
+        'content' => $faker->paragraphs(100, true),
     ];
 });
 
