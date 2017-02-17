@@ -52,7 +52,7 @@ class DocumentPage extends BasePage
             '@contentTab' => '.nav-tabs a[href="#content"]',
             '@commentsTab' => '.nav-tabs a[href="#comments"]',
             '@noteBubble' => '.annotation-group',
-            '@notesPane' => '.annotation-pane',
+            '@notesPane' => '.annotation-list',
             '@commentsList' => '#comments.comments',
             '@likeCount' => '.activity-actions a[data-action-type="likes"] .action-count',
             '@flagCount' => '.activity-actions a[data-action-type="flags"] .action-count',
