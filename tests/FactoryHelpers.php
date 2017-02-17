@@ -57,7 +57,7 @@ class FactoryHelpers
         $faker = Faker\Factory::create();
         $commentService = App::make('App\Services\Comments');
 
-        return $commentService->createFromAnnotatorArray($target, $user, ['text' => $faker->text]);
+        return $commentService->createFromAnnotatorArray($target, $user, ['text' => $faker->words(5, true)]);
     }
 
     /**

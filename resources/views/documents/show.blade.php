@@ -103,7 +103,7 @@
                 <section class="col-md-8">
                     @if ($document->discussion_state === \App\Models\Doc::DISCUSSION_STATE_OPEN)
                         @if (Auth::user())
-                            {{ Form::open(['route' => ['documents.comments.store', $document]]) }}
+                            {{ Form::open(['route' => ['documents.comments.store', $document], 'class' => 'comment-form']) }}
                                 {{ Form::mInput(
                                     'textarea',
                                     'text',
