@@ -10,13 +10,15 @@
 |
 */
 
+use App\Models\Annotation;
+use App\Models\AnnotationTypes;
 use App\Models\Category;
 use App\Models\Doc;
 use App\Models\DocContent;
-use App\Models\Sponsor;
 use App\Models\Page;
 use App\Models\PageContent;
 use App\Models\Role;
+use App\Models\Sponsor;
 use App\Models\User;
 
 $factory->define(User::class, function (Faker\Generator $faker) {
@@ -72,4 +74,24 @@ $factory->define(DocContent::class, function (Faker\Generator $faker) {
 
 $factory->define(Category::class, function (Faker\Generator $faker) {
     return [ 'name' => $faker->words(2, true) ];
+});
+
+$factory->define(Annotation::class, function (Faker\Generator $faker) {
+    return [
+    ];
+});
+
+$factory->define(AnnotationTypes\Comment::class, function (Faker\Generator $faker) {
+    return [
+        'content' => $faker->paragraphs($faker->numberBetween(1, 3), true),
+    ];
+});
+
+$factory->define(AnnotationTypes\Range::class, function (Faker\Generator $faker) {
+    return [
+        'start' => '/p[1]',
+        'end' => '/p[1]',
+        'start_offset' => $faker->numberBetween(1, 20),
+        'end_offset' => $faker->numberBetween(1, 20),
+    ];
 });

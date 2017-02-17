@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Annotation;
+use App\Models\AnnotationTypes;
 use App\Models\Doc;
 use App\Models\User;
 
@@ -10,65 +11,68 @@ class AnnotationsTableSeeder extends Seeder
 {
     public function run()
     {
-        $user = User::find(1);
-        $admin = User::find(2);
-        $doc = Doc::find(1);
-        $commentService = App::make('App\Services\Comments');
+        $regularUser = User::find(1);
+        $adminUser = User::find(2);
+        $users = collect([$regularUser, $adminUser]);
+        $docs = Doc::all();
 
-        $note1 = [
-            'quote' => 'Document',
-            'text' => 'Note!',
-            'uri' => '/documents/example-document',
-            'tags' => [],
-            'comments' => [],
-            'ranges' => [
-                [
-                    'start' => '/p[1]',
-                    'end' => '/p[1]',
-                    'startOffset' => 4,
-                    'endOffset' => 12
-                ]
-            ]
-        ];
+        foreach ($docs as $doc) {
+            // All the comments
+            $comments = factory(Annotation::class, rand(1, 50))->create([
+                'user_id' => $users->random()->id,
+            ])->each(function ($ann) use ($doc, $users) {
+                $doc->annotations()->save($ann);
+                $doc->allAnnotations()->save($ann);
+                $comment = factory(AnnotationTypes\Comment::class)->create();
+                $comment->annotation()->save($ann);
+                $ann->user()->associate($users->random());
+            });
 
-        $commentService->createFromAnnotatorArray($doc, $user, $note1);
+            // Make some of them notes
+            $notes = $comments->random(round($comments->count() / 3))->each(function ($comment) use ($doc) {
+                $content = $doc->content()->first()->content;
+                $contentLines = preg_split('/\\n\\n/', $content);
+                $paragraphNumber = rand(1, count($contentLines));
+                $endParagraphOffset = strlen($contentLines[$paragraphNumber - 1]);
+                $startOffset = rand(1, $endParagraphOffset);
+                $endOffset = rand($startOffset, $endParagraphOffset);
 
-        $note2 = [
-            'quote' => 'Content',
-            'text' => 'Another Note!',
-            'uri' => '/documents/example-document',
-            'tags' => [],
-            'comments' => [],
-            'ranges' => [
-                [
-                    'start' => '/p[1]',
-                    'end' => '/p[1]',
-                    'startOffset' => 13,
-                    'endOffset' => 20
-                ]
-            ]
-        ];
+                // create range annotation
+                $annotation = factory(Annotation::class)->create([
+                    'user_id' => $comment->user->id,
+                ]);
+                $range = factory(AnnotationTypes\Range::class)->create([
+                    'start' => '/p['.$paragraphNumber.']',
+                    'end' => '/p['.$paragraphNumber.']',
+                    'start_offset' => $startOffset,
+                    'end_offset' => $endOffset,
+                ]);
+                $range->annotation()->save($annotation);
 
-        $commentService->createFromAnnotatorArray($doc, $user, $note2);
+                // mark comment with range
+                $comment->annotations()->save($annotation);
+                $doc->allAnnotations()->save($annotation);
+                $comment->annotation_subtype = 'note';
+                $comment->save();
+            });
 
-        $comment1 = [
-            'text' => 'This is a comment'
-        ];
+            // Reply to some of them
+            $replies = $comments->random(round($comments->count() / 5))->each(function ($comment) use ($doc, $users) {
+                // create comment annotation
+                $annotation = factory(Annotation::class)->create([
+                    'user_id' => $users->random()->id,
+                ]);
+                $reply = factory(AnnotationTypes\Comment::class)->create();
+                $reply->annotation()->save($annotation);
 
-        $comment1Result = $commentService
-            ->createFromAnnotatorArray($doc, $admin, $comment1);
-
-        $comment1Reply = [
-            'text' => 'Comment reply',
-        ];
-
-        $commentTarget = Annotation::find($comment1Result['id']);
-        $commentService->createFromAnnotatorArray($commentTarget, $user, $comment1Reply);
-
-        $comment2 = [
-            'text' => 'Yet another comment'
-        ];
-
-        $commentService->createFromAnnotatorArray($doc, $admin, $comment2);
+                // mark comment with reply
+                $comment->annotations()->save($annotation);
+                $doc->allAnnotations()->save($annotation);
+                if ($comment->isNote()) {
+                    $comment->annotation_subtype = 'note';
+                }
+                $comment->save();
+            });
+        }
     }
 }
