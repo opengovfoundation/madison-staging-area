@@ -26,7 +26,7 @@ class FactoryHelpers
             $result = static::getPositionFromContent($docContent, $quote);
             $paragraph = $result['paragraph'];
             $startOffset = $result['start'];
-            $endOffset = $startOffset + strlen($quote) - 1;
+            $endOffset = $startOffset + strlen($quote);
         } else {
             $firstParagraph = explode("\r\n", $docContent)[0];
             $startOffset = rand(0, strlen($firstParagraph) - 1);
@@ -41,8 +41,8 @@ class FactoryHelpers
             'comments' => [],
             'ranges' => [
                 [
-                    'start' => '/p[' . (string) $paragraph . ']',
-                    'end' => '/p[' . (string) $paragraph . ']',
+                    'start' => '/p[' . (string) ($paragraph+1) . ']',
+                    'end' => '/p[' . (string) ($paragraph+1) . ']',
                     'startOffset' => $startOffset,
                     'endOffset' => $endOffset
                 ]
