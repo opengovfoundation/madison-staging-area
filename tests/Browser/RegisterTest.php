@@ -20,8 +20,8 @@ class RegisterTest extends DuskTestCase
     {
         $fakeUser = factory(User::class)->make();
 
-        Event::fake();
-        // Mail::fake();
+        // TODO: currently doesn't work with Dusk
+        // Event::fake();
 
         $this->browse(function ($browser) use ($fakeUser) {
             $browser->visit('/register')
@@ -35,10 +35,8 @@ class RegisterTest extends DuskTestCase
                 ->assertSee('You haven\'t verified your email')
                 ;
 
-            Event::assertDispatched('Illuminate\Auth\Events\Registered');
-            // Mail::assertSent(EmailVerification::class, function ($mail) use ($fakeUser) {
-            //     return $mail->hasTo($fakeUser->email);
-            // });
+            // TODO: currently doesn't work with Dusk
+            // Event::assertDispatched('Illuminate\Auth\Events\Registered');
 
             $user = User::first();
             $this->assertEquals($fakeUser->fname, $user->fname);
