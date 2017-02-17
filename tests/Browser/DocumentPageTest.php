@@ -88,31 +88,10 @@ class DocumentPageTest extends DuskTestCase
          */
         $this->browse(function ($browser) {
             $browser->visit(new DocumentPage($this->document))
-                ->click('@commentsTab')
-                ->assertVisible('@commentsList')
-                ->with('.comment#' . $this->comment1->str_id, function ($commentDiv) {
-                    $commentDiv->assertSee($this->comment1->annotationType->content)
-                        ->assertSee($this->comment1->user->name)
-                        ->assertSeeIn('@likeCount', (string) $this->comment1->likes_count)
-                        ->assertSeeIn('@flagCount', (string) $this->comment1->flags_count)
-                        ;
-
-                    // Check for the comment reply
-                    $commentDiv->with('.comment#' . $this->commentReply->str_id, function ($replyDiv) {
-                        $replyDiv->assertSee($this->commentReply->annotationType->content)
-                            ->assertSee($this->commentReply->user->name)
-                            ->assertSeeIn('@likeCount', (string) $this->commentReply->likes_count)
-                            ->assertSeeIn('@flagCount', (string) $this->commentReply->flags_count)
-                            ;
-                    });
-                })
-                ->with('.comment#' . $this->comment2->str_id, function ($commentDiv) {
-                    $commentDiv->assertSee($this->comment2->annotationType->content)
-                        ->assertSee($this->comment2->user->name)
-                        ->assertSeeIn('@likeCount', (string) $this->comment2->likes_count)
-                        ->assertSeeIn('@flagCount', (string) $this->comment2->flags_count)
-                        ;
-                })
+                ->openCommentsTab()
+                ->assertSeeComment($this->comment1)
+                ->assertSeeComment($this->comment2)
+                ->assertSeeReplyToComment($this->comment1, $this->commentReply)
                 ;
         });
     }
@@ -124,27 +103,9 @@ class DocumentPageTest extends DuskTestCase
          */
         $this->browse(function ($browser) {
             $browser->visit(new DocumentPage($this->document))
-                ->waitFor('@noteBubble', 3)
-                ->click('@noteBubble')
-                ->pause(1000) // Ensure enough time for notes pane to expand
-                ->assertVisible('@notesPane')
-                ->with('@notesPane', function ($notesPane) {
-                    $notesPane->with('.annotation#' . $this->note1->str_id, function ($note) {
-                        $note->assertSee($this->note1->annotationType->content)
-                            ->assertSee($this->note1->user->name)
-                            ->assertSeeIn('@likeCount', (string) $this->note1->likes_count)
-                            ->assertSeeIn('@flagCount', (string) $this->note1->flags_count)
-                            ;
-                    });
-
-                    $notesPane->with('.annotation#' . $this->note2->str_id, function ($note) {
-                        $note->assertSee($this->note2->annotationType->content)
-                            ->assertSee($this->note2->user->name)
-                            ->assertSeeIn('@likeCount', (string) $this->note2->likes_count)
-                            ->assertSeeIn('@flagCount', (string) $this->note2->flags_count)
-                            ;
-                    });
-                })
+                ->openNotesPane()
+                ->assertSeeNote($this->note1)
+                ->assertSeeNote($this->note2)
                 ;
         });
     }
@@ -157,8 +118,96 @@ class DocumentPageTest extends DuskTestCase
 
         $this->browse(function ($browser) {
             $browser->visit(new DocumentPage($this->document))
-                // 403 status
                 ->assertSee('This action is unauthorized')
+                ;
+        });
+    }
+
+    public function testLoginRedirectIfSupportWhenNotLoggedIn()
+    {
+        $this->browse(function ($browser) {
+            $browser->visit(new DocumentPage($this->document))
+                ->click('@supportBtn')
+                ->assertPathIs('/login')
+                ;
+        });
+    }
+
+    public function testLoginRedirectIfOpposeWhenNotLoggedIn()
+    {
+        $this->browse(function ($browser) {
+            $browser->visit(new DocumentPage($this->document))
+                ->click('@opposeBtn')
+                ->assertPathIs('/login')
+                ;
+        });
+    }
+
+    public function testLoginRedirectIfLikeCommentWhenNotLoggedIn()
+    {
+        $this->browse(function ($browser) {
+            $browser->visit(new DocumentPage($this->document))
+                ->addActionToComment('like', $this->comment1)
+                ->assertPathIs('/login')
+                ;
+        });
+    }
+
+    public function testLoginRedirectIfFlagCommentWhenNotLoggedIn()
+    {
+        $this->browse(function ($browser) {
+            $browser->visit(new DocumentPage($this->document))
+                ->addActionToComment('flag', $this->comment1)
+                ->assertPathIs('/login')
+                ;
+        });
+    }
+
+    public function testLoginRedirectIfLikeNoteWhenNotLoggedIn()
+    {
+        $this->browse(function ($browser) {
+            $browser->visit(new DocumentPage($this->document))
+                ->addActionToNote('like', $this->note1)
+                ->assertPathIs('/login')
+                ;
+        });
+    }
+
+    public function testLoginRedirectIfFlagNoteWhenNotLoggedIn()
+    {
+        $this->browse(function ($browser) {
+            $browser->visit(new DocumentPage($this->document))
+                ->addActionToNote('flag', $this->note1)
+                ->assertPathIs('/login')
+                ;
+        });
+    }
+
+    public function testCommentFormsHiddenIfNotLoggedIn()
+    {
+        $this->browse(function ($browser) {
+            $browser->visit(new DocumentPage($this->document))
+                ->openCommentsTab()
+                ->assertDontSee('@commentForm')
+                ->with(DocumentPage::commentSelector($this->comment1), function($commentDiv) {
+                    $commentDiv->assertDontSee('@commentForm');
+                })
+                ;
+        });
+    }
+
+    public function testNoteReplyHiddenIfNotLoggedIn()
+    {
+        $this->browse(function ($browser) {
+            $browser->visit(new DocumentPage($this->document))
+                ->openNotesPane()
+                ->with(DocumentPage::noteSelector($this->note1), function($commentDiv) {
+                    $commentDiv
+                        ->assertDontSee('@noteReplyForm')
+                        ->clickLink('Add your reply')
+                        ->assertPathIs('/login')
+                        ;
+                })
                 ;
         });
     }
