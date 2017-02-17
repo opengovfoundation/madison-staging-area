@@ -23,7 +23,6 @@ class DocumentPageTest extends DuskTestCase
         ]);
 
         $this->user = factory(User::class)->create();
-        $this->user->attachRole(Role::adminRole());
 
         $this->sponsor = factory(Sponsor::class)->create();
         $this->sponsor->addMember($this->user->id, Sponsor::ROLE_OWNER);
@@ -33,8 +32,10 @@ class DocumentPageTest extends DuskTestCase
         $this->note1 = FactoryHelpers::addNoteToDocument($this->user, $this->document);
         $this->note2 = FactoryHelpers::addNoteToDocument($this->user, $this->document, "New");
 
-        $this->comment1 = FactoryHelpers::addCommentToDocument($this->user, $this->document);
-        $this->comment2 = FactoryHelpers::addCommentToDocument($this->user, $this->document);
+        $this->comment1 = FactoryHelpers::createComment($this->user, $this->document);
+        $this->comment2 = FactoryHelpers::createComment($this->user, $this->document);
+
+        $this->commentReply = FactoryHelpers::createComment($this->user, $this->comment1);
     }
 
     public function testCanSeeDocumentContent()
@@ -54,7 +55,7 @@ class DocumentPageTest extends DuskTestCase
             $browser->visit(new DocumentPage($this->document))
                 ->assertSeeIn('@participantCount', '1')
                 ->assertSeeIn('@notesCount', '2')
-                ->assertSeeIn('@commentsCount', '2')
+                ->assertSeeIn('@commentsCount', '3')
                 ->assertSeeIn('@supportBtn', '0')
                 ->assertSeeIn('@opposeBtn', '0')
                 ;
@@ -79,21 +80,52 @@ class DocumentPageTest extends DuskTestCase
         });
     }
 
-    // TODO: test can view document comments, plus action counts, replies show by default
-    public function testsViewDocumentComments()
+    public function testViewDocumentComments()
     {
-        // browse to the doc page
         $this->browse(function ($browser) {
             $browser->visit(new DocumentPage($this->document))
                 ->click('@commentsTab')
                 ->assertVisible('@commentsList')
-                // expect to see comment1 and comment2
-                // -- author, like/flag counts, permalink??, content, datetime
-                ->assertSeeIn('@commentsList', $this->comment1->annotationType->content)
-                ->assertSeeIn('@commentsList', $this->comment2->annotationType->content)
+                ->with('.comment#' . $this->comment1->str_id, function ($commentDiv) {
+                    $commentDiv->assertSee($this->comment1->annotationType->content)
+                        ->assertSee($this->comment1->user->name)
+                        ->assertSee($this->comment1->created_at->diffForHumans())
+                        ->assertSeeIn('@likeCount', (string) $this->comment1->likes_count)
+                        ->assertSeeIn('@flagCount', (string) $this->comment1->flags_count)
+                        ;
+
+                    // Check for the comment reply
+                    $commentDiv->with('.comment#' . $this->commentReply->str_id, function ($replyDiv) {
+                        $replyDiv->assertSee($this->commentReply->annotationType->content)
+                            ->assertSee($this->commentReply->user->name)
+                            ->assertSee($this->commentReply->created_at->diffForHumans())
+                            ->assertSeeIn('@likeCount', (string) $this->commentReply->likes_count)
+                            ->assertSeeIn('@flagCount', (string) $this->commentReply->flags_count)
+                            ;
+                    });
+                })
+                ->with('.comment#' . $this->comment2->str_id, function ($commentDiv) {
+                    $commentDiv->assertSee($this->comment2->annotationType->content)
+                        ->assertSee($this->comment2->user->name)
+                        ->assertSee($this->comment2->created_at->diffForHumans())
+                        ->assertSeeIn('@likeCount', (string) $this->comment2->likes_count)
+                        ->assertSeeIn('@flagCount', (string) $this->comment2->flags_count)
+                        ;
+                })
                 ;
         });
     }
 
     // TODO: test can see notes bubbles, and click to see notes pane, plus note details
+    //public function testViewDocumentNotes()
+    //{
+    //    $this->browse(function ($browser) {
+    //        $browser->visit(new DocumentPage($this->document))
+    //            ->waitFor('@noteBubble', 5)
+    //            ->click('@noteBubble')
+    //            ->waitFor('@notesPane', 1)
+    //            ->assertVisible('@notesPane')
+    //            ;
+    //    });
+    //}
 }
