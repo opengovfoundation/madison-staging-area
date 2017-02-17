@@ -31,7 +31,6 @@ class DocumentPage extends BasePage
     public function assert(Browser $browser)
     {
         $browser->assertPathIs($this->url());
-        $browser->assertTitleContains($this->document->title);
     }
 
     /**
