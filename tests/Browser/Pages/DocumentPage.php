@@ -51,8 +51,11 @@ class DocumentPage extends BasePage
             '@opposeBtn' => '.oppose-btn button',
             '@contentTab' => '.nav-tabs a[href="#content"]',
             '@commentsTab' => '.nav-tabs a[href="#comments"]',
-            '@annotationGroups' => '.annotation-group',
+            '@noteBubble' => '.annotation-group',
+            '@notesPane' => '.annotation-pane',
             '@commentsList' => '#comments.comments',
+            '@likeCount' => '.activity-actions a[data-action-type="likes"] .action-count',
+            '@flagCount' => '.activity-actions a[data-action-type="flags"] .action-count',
         ];
     }
 }

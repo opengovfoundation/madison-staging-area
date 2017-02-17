@@ -52,12 +52,12 @@ class FactoryHelpers
         return $commentService->createFromAnnotatorArray($document, $user, $note);
     }
 
-    public static function addCommentToDocument(User $user, Document $document)
+    public static function createComment(User $user, $target)
     {
         $faker = Faker\Factory::create();
         $commentService = App::make('App\Services\Comments');
 
-        return $commentService->createFromAnnotatorArray($document, $user, ['text' => $faker->text]);
+        return $commentService->createFromAnnotatorArray($target, $user, ['text' => $faker->text]);
     }
 
     /**
