@@ -116,16 +116,35 @@ class DocumentPageTest extends DuskTestCase
         });
     }
 
-    // TODO: test can see notes bubbles, and click to see notes pane, plus note details
-    //public function testViewDocumentNotes()
-    //{
-    //    $this->browse(function ($browser) {
-    //        $browser->visit(new DocumentPage($this->document))
-    //            ->waitFor('@noteBubble', 5)
-    //            ->click('@noteBubble')
-    //            ->waitFor('@notesPane', 1)
-    //            ->assertVisible('@notesPane')
-    //            ;
-    //    });
-    //}
+    public function testViewDocumentNotes()
+    {
+        $this->browse(function ($browser) {
+            $browser->visit(new DocumentPage($this->document))
+                ->waitFor('@noteBubble', 3)
+                ->click('@noteBubble')
+                ->pause(1000) // Ensure enough time for notes pane to expand
+                ->assertVisible('@notesPane')
+                ->with('@notesPane', function ($notesPane) {
+                    /**
+                     * Not testing for timestamps here because they end up off by a second or so
+                     */
+                    $notesPane->with('.annotation#' . $this->note1->str_id, function ($note) {
+                        $note->assertSee($this->note1->annotationType->content)
+                            ->assertSee($this->note1->user->name)
+                            ->assertSeeIn('@likeCount', (string) $this->note1->likes_count)
+                            ->assertSeeIn('@flagCount', (string) $this->note1->flags_count)
+                            ;
+                    });
+
+                    $notesPane->with('.annotation#' . $this->note2->str_id, function ($note) {
+                        $note->assertSee($this->note2->annotationType->content)
+                            ->assertSee($this->note2->user->name)
+                            ->assertSeeIn('@likeCount', (string) $this->note2->likes_count)
+                            ->assertSeeIn('@flagCount', (string) $this->note2->flags_count)
+                            ;
+                    });
+                })
+                ;
+        });
+    }
 }
