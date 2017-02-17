@@ -42,6 +42,7 @@ class DocumentPageTest extends DuskTestCase
     {
         $this->browse(function ($browser) {
             $browser->visit(new DocumentPage($this->document))
+                ->assertTitleContains($this->document->title)
                 ->assertSee($this->document->title)
                 ->assertSee($this->document->content()->first()->content)
                 ->assertSeeIn('@sponsorList', $this->document->sponsors()->first()->display_name);
@@ -82,6 +83,9 @@ class DocumentPageTest extends DuskTestCase
 
     public function testViewDocumentComments()
     {
+        /**
+         * Not testing for timestamps here because they end up off by a second or so
+         */
         $this->browse(function ($browser) {
             $browser->visit(new DocumentPage($this->document))
                 ->click('@commentsTab')
@@ -89,7 +93,6 @@ class DocumentPageTest extends DuskTestCase
                 ->with('.comment#' . $this->comment1->str_id, function ($commentDiv) {
                     $commentDiv->assertSee($this->comment1->annotationType->content)
                         ->assertSee($this->comment1->user->name)
-                        ->assertSee($this->comment1->created_at->diffForHumans())
                         ->assertSeeIn('@likeCount', (string) $this->comment1->likes_count)
                         ->assertSeeIn('@flagCount', (string) $this->comment1->flags_count)
                         ;
@@ -98,7 +101,6 @@ class DocumentPageTest extends DuskTestCase
                     $commentDiv->with('.comment#' . $this->commentReply->str_id, function ($replyDiv) {
                         $replyDiv->assertSee($this->commentReply->annotationType->content)
                             ->assertSee($this->commentReply->user->name)
-                            ->assertSee($this->commentReply->created_at->diffForHumans())
                             ->assertSeeIn('@likeCount', (string) $this->commentReply->likes_count)
                             ->assertSeeIn('@flagCount', (string) $this->commentReply->flags_count)
                             ;
@@ -107,7 +109,6 @@ class DocumentPageTest extends DuskTestCase
                 ->with('.comment#' . $this->comment2->str_id, function ($commentDiv) {
                     $commentDiv->assertSee($this->comment2->annotationType->content)
                         ->assertSee($this->comment2->user->name)
-                        ->assertSee($this->comment2->created_at->diffForHumans())
                         ->assertSeeIn('@likeCount', (string) $this->comment2->likes_count)
                         ->assertSeeIn('@flagCount', (string) $this->comment2->flags_count)
                         ;
@@ -118,6 +119,9 @@ class DocumentPageTest extends DuskTestCase
 
     public function testViewDocumentNotes()
     {
+        /**
+         * Not testing for timestamps here because they end up off by a second or so
+         */
         $this->browse(function ($browser) {
             $browser->visit(new DocumentPage($this->document))
                 ->waitFor('@noteBubble', 3)
@@ -125,9 +129,6 @@ class DocumentPageTest extends DuskTestCase
                 ->pause(1000) // Ensure enough time for notes pane to expand
                 ->assertVisible('@notesPane')
                 ->with('@notesPane', function ($notesPane) {
-                    /**
-                     * Not testing for timestamps here because they end up off by a second or so
-                     */
                     $notesPane->with('.annotation#' . $this->note1->str_id, function ($note) {
                         $note->assertSee($this->note1->annotationType->content)
                             ->assertSee($this->note1->user->name)
@@ -144,6 +145,20 @@ class DocumentPageTest extends DuskTestCase
                             ;
                     });
                 })
+                ;
+        });
+    }
+
+    public function testCantViewUnpublishedDocument()
+    {
+        $this->document->update([
+            'publish_state' => Document::PUBLISH_STATE_UNPUBLISHED,
+        ]);
+
+        $this->browse(function ($browser) {
+            $browser->visit(new DocumentPage($this->document))
+                // 403 status
+                ->assertSee('This action is unauthorized')
                 ;
         });
     }
