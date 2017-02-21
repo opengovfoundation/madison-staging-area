@@ -13,7 +13,7 @@
 use App\Models\Annotation;
 use App\Models\AnnotationTypes;
 use App\Models\Category;
-use App\Models\Doc;
+use App\Models\Doc as Document;
 use App\Models\DocContent;
 use App\Models\Page;
 use App\Models\PageContent;
@@ -60,7 +60,7 @@ $factory->define(PageContent::class, function (Faker\Generator $faker) {
     return [ 'content' => join(' ', $faker->sentences) ];
 });
 
-$factory->define(Doc::class, function (Faker\Generator $faker) {
+$factory->define(Document::class, function (Faker\Generator $faker) {
     return [
         'title' => substr($faker->sentence(5), 0, -1),
     ];

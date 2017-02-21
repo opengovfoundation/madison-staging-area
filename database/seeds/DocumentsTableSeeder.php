@@ -11,9 +11,9 @@ class DocumentsTableSeeder extends Seeder
 {
     public function run()
     {
-        $sponsor = Sponsor::where('id', '=', 1)->first();
+        $sponsor = Sponsor::find(1);
 
-        $documents = factory(Document::class, 5)->create([
+        $documents = factory(Document::class, (int)config('madison.seeder.num_docs'))->create([
             'publish_state' => Document::PUBLISH_STATE_PUBLISHED,
         ])->each(function ($document) use ($sponsor) {
             $document->sponsors()->attach($sponsor);
