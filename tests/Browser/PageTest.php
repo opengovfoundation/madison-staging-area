@@ -6,7 +6,6 @@ use Tests\DuskTestCase;
 use Tests\Browser\Pages\HomePage;
 use Laravel\Dusk\Browser;
 
-use App\Models\Doc as Document;
 use App\Models\Page;
 use App\Models\PageContent;
 
@@ -15,11 +14,6 @@ class PageTest extends DuskTestCase
     public function setUp()
     {
         parent::setUp();
-
-        // TODO: This should go away after D114 land.
-        factory(Document::class)->create([
-            'publish_state' => Document::PUBLISH_STATE_PUBLISHED,
-        ]);
 
         $this->page = factory(Page::class)->create();
         $this->page->content()->save(factory(PageContent::class)->make());
