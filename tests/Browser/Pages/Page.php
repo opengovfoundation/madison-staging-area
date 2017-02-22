@@ -7,6 +7,11 @@ use Laravel\Dusk\Page as BasePage;
 
 abstract class Page extends BasePage
 {
+    /**
+     * Assert that the browser is on the page.
+     *
+     * @return void
+     */
     public function assert(Browser $browser)
     {
         $browser->assertPathIs($this->url());
