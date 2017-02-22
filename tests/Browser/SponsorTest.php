@@ -4,17 +4,21 @@ namespace Tests\Browser;
 
 use App\Models\User;
 use App\Models\Sponsor;
-use Illuminate\Support\Facades\Event;
-use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\Sponsor as SponsorPages;
 use Tests\DuskTestCase;
+use Illuminate\Support\Facades\Event;
+use Laravel\Dusk\Browser;
 
 class SponsorTest extends DuskTestCase
 {
-    public function setUp()
+
+    public function testMustBeLoggedInToCreateSponsor()
     {
-        parent::setUp();
-        $this->user = factory(User::class)->create();
+        $this->browse(function ($browser) {
+            $browser
+                ->visit(route('sponsors.create'))
+                ->assertSee('unauthorized');
+        });
     }
 
     public function testUserCanCreateSponsor()
@@ -23,9 +27,10 @@ class SponsorTest extends DuskTestCase
         //Event::fake();
 
         $attrs = factory(Sponsor::class)->make()->toArray();
+        $user = factory(User::class)->create();
 
-        $this->browse(function ($browser) use ($attrs) {
-            $browser->loginAs($this->user)
+        $this->browse(function ($browser) use ($attrs, $user) {
+            $browser->loginAs($user)
                 ->visit(new SponsorPages\CreatePage())
                 ->fillNewSponsorForm($attrs)
                 ->click('@submitBtn')
