@@ -19,14 +19,16 @@
                 <td>{{ str_limit($comment->annotationType->content, 100, ' ...') }}</td>
                 <td>{{ $comment->likes_count }}</td>
                 <td>{{ $comment->flags_count }}</td>
-                <td>{{ $comment->comments_count }}</td>
+                <td>{{ $comment->comments()->withoutGlobalScope('visible')->notHidden()->count() }}</td>
                 <td>{{ $comment->created_at->diffForHumans() }}</td>
                 <td>
-                    <div class="btn-group" role="group">
-                        <a href="{{ $comment->getLink() }}" class="btn btn-default">
-                            {{ trans('messages.view') }}
-                        </a>
-                    </div>
+                    @if (!$comment->isHidden())
+                        <div class="btn-group" role="group">
+                            <a href="{{ $comment->getLink() }}" class="btn btn-default">
+                                {{ trans('messages.view') }}
+                            </a>
+                        </div>
+                    @endif
                     <div class="btn-group" role="group">
                         {{ Form::open(['route' => ['documents.comments.storeHidden', $document, $comment], 'method' => 'post']) }}
                             @if ($comment->isHidden())

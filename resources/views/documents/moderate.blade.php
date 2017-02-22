@@ -9,9 +9,13 @@
 
     @include('components.errors')
 
-    <h3>@lang('messages.document.comments_unhandled')</h3>
-    @include('documents.partials.comment_table', ['comments' => $unhandledComments, 'document' => $document])
+    @if ($unhandledComments->count() > 0)
+        <h3>@lang('messages.document.comments_unhandled')</h3>
+        @include('documents.partials.comment_table', ['comments' => $unhandledComments, 'document' => $document])
+    @endif
 
-    <h3>@lang('messages.document.comments_handled')</h3>
-    @include('documents.partials.comment_table', ['comments' => $handledComments, 'document' => $document])
+    @if ($handledComments->count() > 0)
+        <h3>@lang('messages.document.comments_handled')</h3>
+        @include('documents.partials.comment_table', ['comments' => $handledComments, 'document' => $document])
+    @endif
 @endsection
