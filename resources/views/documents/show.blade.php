@@ -12,7 +12,7 @@
         <h3 class="sponsors">
             <small>
             Sponsored by:
-            {{ join(",", $document->sponsors()->get()->map(function ($s) { return $s->display_name; })->toArray()) }}
+            {{ $document->sponsors->implode('display_name', ', ') }}
             </small>
         </h3>
     </div>

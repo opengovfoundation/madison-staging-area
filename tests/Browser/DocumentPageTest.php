@@ -7,9 +7,8 @@ use Tests\Browser\Pages\DocumentPage;
 use Tests\FactoryHelpers;
 
 use App\Models\Doc as Document;
+use App\Models\DocContent;
 use App\Models\User;
-use App\Models\Role;
-use App\Models\Sponsor;
 
 class DocumentPageTest extends DuskTestCase
 {
@@ -18,19 +17,22 @@ class DocumentPageTest extends DuskTestCase
     {
         parent::setUp();
 
+        $this->user = factory(User::class)->create();
+        $this->sponsor = FactoryHelpers::createActiveSponsorWithUser($this->user);
+
         $this->document = factory(Document::class)->create([
             'publish_state' => Document::PUBLISH_STATE_PUBLISHED,
         ]);
 
-        $this->user = factory(User::class)->create();
-
-        $this->sponsor = factory(Sponsor::class)->create();
-        $this->sponsor->addMember($this->user->id, Sponsor::ROLE_OWNER);
+        $this->document->content()->save(factory(DocContent::class)->make());
 
         $this->document->sponsors()->save($this->sponsor);
 
-        $this->note1 = FactoryHelpers::addNoteToDocument($this->user, $this->document);
-        $this->note2 = FactoryHelpers::addNoteToDocument($this->user, $this->document, "New");
+        $firstWord = explode(' ', $this->document->content()->first()->content)[0];
+        $secondWord = explode(' ', $this->document->content()->first()->content)[1];
+
+        $this->note1 = FactoryHelpers::addNoteToDocument($this->user, $this->document, $firstWord);
+        $this->note2 = FactoryHelpers::addNoteToDocument($this->user, $this->document, $secondWord);
 
         $this->comment1 = FactoryHelpers::createComment($this->user, $this->document);
         $this->comment2 = FactoryHelpers::createComment($this->user, $this->document);
@@ -44,9 +46,12 @@ class DocumentPageTest extends DuskTestCase
             $browser->visit(new DocumentPage($this->document))
                 ->assertTitleContains($this->document->title)
                 ->assertSee($this->document->title)
-                ->assertSee($this->document->content()->first()->content)
-                ->assertSeeIn('@sponsorList', $this->document->sponsors()->first()->display_name);
+                ->assertSeeIn('@sponsorList', $this->document->sponsors()->first()->display_name)
                 ;
+
+            foreach (explode("\n\n", $this->document->content()->first()->content) as $p) {
+                $browser->assertSee($p);
+            }
         });
     }
 

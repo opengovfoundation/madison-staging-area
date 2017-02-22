@@ -8,6 +8,8 @@ use Exception;
 
 use App\Models\Doc as Document;
 use App\Models\User;
+use App\Models\Sponsor;
+use App\Models\AnnotationTypes;
 
 class FactoryHelpers
 {
@@ -28,14 +30,14 @@ class FactoryHelpers
             $startOffset = $result['start'];
             $endOffset = $startOffset + strlen($quote);
         } else {
-            $firstParagraph = explode("\r\n", $docContent)[0];
+            $firstParagraph = explode("\n\n", $docContent)[0];
             $startOffset = rand(0, strlen($firstParagraph) - 1);
             $endOffset = $startOffset + 1;
         }
 
         $note = [
             'quote' => 'Document',
-            'text' => $faker->text,
+            'text' => factory(AnnotationTypes\Comment::class)->make()->content,
             'uri' => '/documents/' . $document->slug,
             'tags' => [],
             'comments' => [],
@@ -57,7 +59,20 @@ class FactoryHelpers
         $faker = Faker\Factory::create();
         $commentService = App::make('App\Services\Comments');
 
-        return $commentService->createFromAnnotatorArray($target, $user, ['text' => $faker->words(5, true)]);
+        return $commentService->createFromAnnotatorArray($target, $user, [
+            'text' => factory(AnnotationTypes\Comment::class)->make()->content
+        ]);
+    }
+
+    public static function createActiveSponsorWithUser(User $user)
+    {
+        $sponsor = factory(Sponsor::class)->create([
+            'status' => Sponsor::STATUS_ACTIVE,
+        ]);
+
+        $sponsor->addMember($user->id, Sponsor::ROLE_OWNER);
+
+        return $sponsor;
     }
 
     /**
@@ -69,7 +84,7 @@ class FactoryHelpers
      */
     private static function getPositionFromContent($content, $quote)
     {
-        $paragraphs = explode("\r\n", $content);
+        $paragraphs = explode("\n\n", $content);
 
         $pIndex = null;
         $startIndex = null;

@@ -22,7 +22,7 @@ class DocumentPage extends BasePage
      */
     public function url()
     {
-        return '/documents/' . $this->document->slug;
+        return route('documents.show', $this->document, false);;
     }
 
     /**
@@ -83,34 +83,37 @@ class DocumentPage extends BasePage
 
     public function assertSeeNote(Browser $browser, Annotation $note)
     {
-        /**
-         * Timestamps end up being off by a second sometimes, so leaving them out.
-         */
+        // Timestamps end up being off by a second sometimes, so leaving them out.
         $noteSelector = static::noteSelector($note);
         $browser->with('@notesPane', function ($notesPane) use ($note, $noteSelector) {
             $notesPane->with($noteSelector, function ($noteElement) use ($note) {
                 $noteElement
-                    ->assertSee($note->annotationType->content)
                     ->assertSee($note->user->name)
                     ->assertSeeIn('@likeCount', (string) $note->likes_count)
                     ->assertSeeIn('@flagCount', (string) $note->flags_count)
                     ;
+
+                foreach (explode("\n\n", $note->annotationType->content) as $p) {
+                    $noteElement->assertSee($p);
+                }
             });
         });
     }
 
     public function assertSeeComment(Browser $browser, Annotation $comment)
     {
-        /**
-         * Timestamps end up being off by a second sometimes, so leaving them out.
-         */
+        // Timestamps end up being off by a second sometimes, so leaving them out.
         $commentSelector = static::commentSelector($comment);
         $browser->with($commentSelector, function ($commentDiv) use ($comment) {
-            $commentDiv->assertSee($comment->annotationType->content)
+            $commentDiv
                 ->assertSee($comment->user->name)
                 ->assertSeeIn('@likeCount', (string) $comment->likes_count)
                 ->assertSeeIn('@flagCount', (string) $comment->flags_count)
                 ;
+
+            foreach (explode("\n\n", $comment->annotationType->content) as $p) {
+                $commentDiv->assertSee($p);
+            }
         })
         ;
     }
@@ -125,11 +128,15 @@ class DocumentPage extends BasePage
 
         $browser->with($commentSelector, function ($commentDiv) use ($reply, $replySelector) {
             $commentDiv->with($replySelector, function ($replyDiv) use ($reply) {
-                $replyDiv->assertSee($reply->annotationType->content)
+                $replyDiv
                     ->assertSee($reply->user->name)
                     ->assertSeeIn('@likeCount', (string) $reply->likes_count)
                     ->assertSeeIn('@flagCount', (string) $reply->flags_count)
                     ;
+
+                foreach (explode("\n\n", $reply->annotationType->content) as $p) {
+                    $replyDiv->assertSee($p);
+                }
             });
         })
         ;
