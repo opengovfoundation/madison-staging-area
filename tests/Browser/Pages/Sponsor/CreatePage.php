@@ -15,7 +15,7 @@ class CreatePage extends Page
      */
     public function url()
     {
-        return route('sponsors.create');
+        return route('sponsors.create', [], false);
     }
 
     /**
@@ -25,7 +25,7 @@ class CreatePage extends Page
      */
     public function assert(Browser $browser)
     {
-        $browser->assertTitleContains('New Sponsor');
+        $browser->assertPathIs($this->url());
     }
 
     /**

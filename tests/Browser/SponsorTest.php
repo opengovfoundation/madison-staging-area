@@ -16,7 +16,7 @@ class SponsorTest extends DuskTestCase
     {
         $this->browse(function ($browser) {
             $browser
-                ->visit(route('sponsors.create'))
+                ->visitRoute('sponsors.create')
                 ->assertSee('unauthorized');
         });
     }
@@ -31,7 +31,7 @@ class SponsorTest extends DuskTestCase
 
         $this->browse(function ($browser) use ($attrs, $user) {
             $browser->loginAs($user)
-                ->visit(new SponsorPages\CreatePage())
+                ->visit(new SponsorPages\CreatePage)
                 ->fillNewSponsorForm($attrs)
                 ->click('@submitBtn')
                 ;
