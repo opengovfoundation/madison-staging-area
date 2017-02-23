@@ -35,7 +35,7 @@ dependencies:
     # Make proper link
     - sudo ln -s $PHPENV_ROOT/versions/$(phpenv global)/usr/lib/apache2/modules/libphp5.so /usr/lib/apache2/modules/libphp5.so
     # Setup environment for Apache
-    - env | xargs -I {} echo "export {}" | sudo tee --append /etc/apache2/envvars > /dev/null
+    - env | grep -vE "^_" | xargs -I {} echo "export {}" | sudo tee --append /etc/apache2/envvars > /dev/null
     # Install our config and make it active
     - sudo cp -f circleci/apache.conf /etc/apache2/sites-available/madison.conf
     - sudo a2enmod rewrite actions alias headers negotiation dir vhost_alias deflate
