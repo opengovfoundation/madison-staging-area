@@ -157,6 +157,18 @@ class UserTest extends DuskTestCase
     public function testNotificationsSettingsViewOwn()
     {
         $user = factory(User::class)->create();
+        $this->notificationsSettingsViewOwnCommon($user);
+    }
+
+    public function testNotificationsSettingsViewOwnAdmin()
+    {
+        $user = factory(User::class)->create();
+        $user->makeAdmin();
+        $this->notificationsSettingsViewOwnCommon($user);
+    }
+
+    protected function notificationsSettingsViewOwnCommon($user)
+    {
         $events = NotificationPreference::getValidNotificationsForUser($user);
 
         foreach ($events as $eventName => $eventClass) {
