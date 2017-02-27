@@ -3,6 +3,7 @@
 namespace Tests\Browser;
 
 use App\Models\User;
+use App\Http\Controllers\AdminController;
 use Tests\DuskTestCase;
 use Tests\Browser\Pages\Admin;
 use Laravel\Dusk\Browser;
@@ -30,6 +31,28 @@ class AdminTest extends DuskTestCase
                 ->loginAs($this->admin)
                 ->visit($page)
                 ;
+
+            $dateFormatKey = array_keys(AdminController::validDateFormats())[0];
+            $browser
+                ->assertSelected('madison.date_format', 'default')
+                ->select('madison.date_format', $dateFormatKey)
+                ->click('@submitBtn')
+                ->assertVisible('.alert.alert-info') // some success
+                ->assertSelected('madison.date_format', $dateFormatKey)
+                ;
+
+            $this->assertEquals($dateFormatKey, config('madison.date_format'));
+
+            $timeFormatKey = array_keys(AdminController::validTimeFormats())[0];
+            $browser
+                ->assertSelected('madison.time_format', 'default')
+                ->select('madison.time_format', $timeFormatKey)
+                ->click('@submitBtn')
+                ->assertVisible('.alert.alert-info') // some success
+                ->assertSelected('madison.time_format', $timeFormatKey)
+                ;
+
+            $this->assertEquals($timeFormatKey, config('madison.time_format'));
 
             // Google Analytics
             $browser
