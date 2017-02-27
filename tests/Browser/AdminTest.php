@@ -4,6 +4,7 @@ namespace Tests\Browser;
 
 use App\Models\User;
 use App\Http\Controllers\AdminController;
+use SiteConfigSaver;
 use Tests\DuskTestCase;
 use Tests\Browser\Pages\Admin;
 use Laravel\Dusk\Browser;
@@ -41,6 +42,7 @@ class AdminTest extends DuskTestCase
                 ->assertSelected('madison.date_format', $dateFormatKey)
                 ;
 
+            SiteConfigSaver::refresh();
             $this->assertEquals($dateFormatKey, config('madison.date_format'));
 
             $timeFormatKey = array_keys(AdminController::validTimeFormats())[0];
@@ -52,6 +54,7 @@ class AdminTest extends DuskTestCase
                 ->assertSelected('madison.time_format', $timeFormatKey)
                 ;
 
+            SiteConfigSaver::refresh();
             $this->assertEquals($timeFormatKey, config('madison.time_format'));
 
             // Google Analytics
