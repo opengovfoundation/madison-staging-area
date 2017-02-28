@@ -6,6 +6,7 @@ use Tests\DuskTestCase;
 use Tests\Browser\Pages\DocumentPage;
 use Tests\FactoryHelpers;
 
+use App\Models\Annotation;
 use App\Models\Doc as Document;
 use App\Models\DocContent;
 use App\Models\User;
@@ -17,7 +18,9 @@ class DocumentPageTest extends DuskTestCase
     {
         parent::setUp();
 
-        $this->user = factory(User::class)->create();
+        // TODO: won't need to explicitly remove tokens after D122 land
+        $this->user = factory(User::class)->create([ 'token' => '' ]);
+        $this->user2 = factory(User::class)->create([ 'token' => '' ]);
         $this->sponsor = FactoryHelpers::createActiveSponsorWithUser($this->user);
 
         $this->document = factory(Document::class)->create([
@@ -152,6 +155,7 @@ class DocumentPageTest extends DuskTestCase
     {
         $this->browse(function ($browser) {
             $browser->visit(new DocumentPage($this->document))
+                ->openCommentsTab()
                 ->addActionToComment('like', $this->comment1)
                 ->assertPathIs('/login')
                 ;
@@ -162,6 +166,7 @@ class DocumentPageTest extends DuskTestCase
     {
         $this->browse(function ($browser) {
             $browser->visit(new DocumentPage($this->document))
+                ->openCommentsTab()
                 ->addActionToComment('flag', $this->comment1)
                 ->assertPathIs('/login')
                 ;
@@ -172,6 +177,7 @@ class DocumentPageTest extends DuskTestCase
     {
         $this->browse(function ($browser) {
             $browser->visit(new DocumentPage($this->document))
+                ->openNotesPane()
                 ->addActionToNote('like', $this->note1)
                 ->assertPathIs('/login')
                 ;
@@ -182,6 +188,7 @@ class DocumentPageTest extends DuskTestCase
     {
         $this->browse(function ($browser) {
             $browser->visit(new DocumentPage($this->document))
+                ->openNotesPane()
                 ->addActionToNote('flag', $this->note1)
                 ->assertPathIs('/login')
                 ;
@@ -213,6 +220,245 @@ class DocumentPageTest extends DuskTestCase
                         ->assertPathIs('/login')
                         ;
                 })
+                ;
+        });
+    }
+
+    public function testAddCommentToDocument()
+    {
+        $this->browse(function ($browser) {
+            $browser
+                ->loginAs($this->user2)
+                ->visit(new DocumentPage($this->document))
+                ->openCommentsTab()
+                ->fillAndSubmitCommentForm()
+                ;
+
+            $newComment = Annotation::where('annotation_type_type', Annotation::TYPE_COMMENT)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            // Should jump to and highlight new comment
+            $browser
+                ->waitFor('.comment#' . $newComment->str_id)
+                ->assertSeeComment($newComment)
+                ;
+        });
+    }
+
+    public function testAddReplyToComment()
+    {
+        $this->browse(function ($browser) {
+            $browser
+                ->loginAs($this->user2)
+                ->visit(new DocumentPage($this->document))
+                ->openCommentsTab()
+                ->fillAndSubmitCommentReplyForm($this->comment1)
+                ;
+
+            $newComment = Annotation::where('annotation_type_type', Annotation::TYPE_COMMENT)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            // Should jump to and highlight new comment
+            $browser
+                ->waitFor('.comment#' . $newComment->str_id)
+                ->assertSeeReplyToComment($this->comment1, $newComment)
+                ;
+        });
+    }
+
+    public function testAddNoteToDocument()
+    {
+        $this->browse(function ($browser) {
+            $browser
+                ->loginAs($this->user2)
+                ->visit(new DocumentPage($this->document))
+                ->addNoteToContent()
+                ;
+
+            $newNote = Annotation::where('annotation_type_type', Annotation::TYPE_COMMENT)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            $browser
+                ->refresh()
+                ->openNotesPane()
+                ->assertSeeNote($newNote)
+                ;
+        });
+    }
+
+    public function testAddReplyToNote()
+    {
+        $this->browse(function ($browser) {
+            $browser
+                ->loginAs($this->user2)
+                ->visit(new DocumentPage($this->document))
+                ->openNotesPane()
+                ->addReplyToNote($this->note1)
+                ;
+
+            $newNote = Annotation::where('annotation_type_type', Annotation::TYPE_COMMENT)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            $browser
+                ->refresh()
+                ->openNotesPane()
+                ->assertSeeReplyToNote($this->note1, $newNote)
+                ;
+        });
+    }
+
+    public function testLikeCommentOnDocument()
+    {
+        $commentLikes = $this->comment1->likes_count;
+
+        $this->browse(function ($browser) use ($commentLikes) {
+            $browser
+                ->loginAs($this->user2)
+                ->visit(new DocumentPage($this->document))
+                ->openCommentsTab()
+                ->addActionToComment('like', $this->comment1)
+                ->assertCommentHasActionCount('like', $this->comment1, $commentLikes + 1)
+                ;
+        });
+    }
+
+    public function testFlagCommentOnDocument()
+    {
+        $commentFlags = $this->comment1->flags_count;
+
+        $this->browse(function ($browser) use ($commentFlags) {
+            $browser
+                ->loginAs($this->user2)
+                ->visit(new DocumentPage($this->document))
+                ->openCommentsTab()
+                ->addActionToComment('flag', $this->comment1)
+                ->assertCommentHasActionCount('flag', $this->comment1, $commentFlags + 1)
+                ;
+        });
+    }
+
+    public function testLikeCommentReply()
+    {
+        $reply = FactoryHelpers::createComment($this->user, $this->comment1);
+        $replyLikes = $reply->likes_count;
+
+        $this->browse(function ($browser) use ($reply, $replyLikes) {
+            $browser
+                ->loginAs($this->user2)
+                ->visit(new DocumentPage($this->document))
+                ->openCommentsTab()
+                ->addActionToComment('like', $reply)
+                ->assertCommentHasActionCount('like', $reply, $replyLikes + 1)
+                ;
+        });
+    }
+
+    public function testFlagCommentReply()
+    {
+        $reply = FactoryHelpers::createComment($this->user, $this->comment1);
+        $replyFlags = $reply->flags_count;
+
+        $this->browse(function ($browser) use ($reply, $replyFlags) {
+            $browser
+                ->loginAs($this->user2)
+                ->visit(new DocumentPage($this->document))
+                ->openCommentsTab()
+                ->addActionToComment('flag', $reply)
+                ->assertCommentHasActionCount('flag', $reply, $replyFlags + 1)
+                ;
+        });
+    }
+
+    public function testLikeNoteOnDocument()
+    {
+        $noteLikes = $this->note1->likes_count;
+
+        $this->browse(function ($browser) use ($noteLikes) {
+            $browser
+                ->loginAs($this->user2)
+                ->visit(new DocumentPage($this->document))
+                ->openNotesPane()
+                ->addActionToNote('like', $this->note1)
+                ->assertNoteHasActionCount('like', $this->note1, $noteLikes +1)
+                ;
+        });
+    }
+
+    public function testFlagNoteOnDocument()
+    {
+        $noteFlags = $this->note1->flags_count;
+
+        $this->browse(function ($browser) use ($noteFlags) {
+            $browser
+                ->loginAs($this->user2)
+                ->visit(new DocumentPage($this->document))
+                ->openNotesPane()
+                ->addActionToNote('flag', $this->note1)
+                ->assertNoteHasActionCount('flag', $this->note1, $noteFlags +1)
+                ;
+        });
+    }
+
+    public function testLikeNoteReply()
+    {
+        $reply = FactoryHelpers::createComment($this->user, $this->note1);
+        $replyLikes = $reply->likes_count;
+
+        $this->browse(function ($browser) use ($reply, $replyLikes) {
+            $browser
+                ->loginAs($this->user2)
+                ->visit(new DocumentPage($this->document))
+                ->openNotesPane()
+                ->addActionToComment('like', $reply)
+                ->assertCommentHasActionCount('like', $reply, $replyLikes + 1)
+                ;
+        });
+    }
+
+    public function testFlagNoteReply()
+    {
+        $reply = FactoryHelpers::createComment($this->user, $this->note1);
+        $replyFlags = $reply->flags_count;
+
+        $this->browse(function ($browser) use ($reply, $replyFlags) {
+            $browser
+                ->loginAs($this->user2)
+                ->visit(new DocumentPage($this->document))
+                ->openNotesPane()
+                ->addActionToComment('flag', $reply)
+                ->assertCommentHasActionCount('flag', $reply, $replyFlags + 1)
+                ;
+        });
+    }
+
+    public function testSupportDocument()
+    {
+        $documentSupport = $this->document->support;
+
+        $this->browse(function ($browser) use ($documentSupport) {
+            $browser
+                ->loginAs($this->user2)
+                ->visit(new DocumentPage($this->document))
+                ->click('@supportBtn')
+                ->assertDocumentSupportCount($documentSupport + 1)
+                ;
+        });
+    }
+
+    public function testOpposeDocument()
+    {
+        $documentOppose = $this->document->oppose;
+
+        $this->browse(function ($browser) use ($documentOppose) {
+            $browser
+                ->loginAs($this->user2)
+                ->visit(new DocumentPage($this->document))
+                ->click('@opposeBtn')
+                ->assertDocumentOpposeCount($documentOppose + 1)
                 ;
         });
     }
