@@ -18,9 +18,8 @@ class DocumentPageTest extends DuskTestCase
     {
         parent::setUp();
 
-        // TODO: won't need to explicitly remove tokens after D122 land
-        $this->user = factory(User::class)->create([ 'token' => '' ]);
-        $this->user2 = factory(User::class)->create([ 'token' => '' ]);
+        $this->user = factory(User::class)->create();
+        $this->user2 = factory(User::class)->create();
         $this->sponsor = FactoryHelpers::createActiveSponsorWithUser($this->user);
 
         $this->document = factory(Document::class)->create([
