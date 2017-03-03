@@ -17,7 +17,16 @@ class PutSupport extends FormRequest
             return $this->redirect()->route('login');
         }
 
-        return true;
+        $document = null;
+
+        foreach (['document', 'documentTrashed'] as $key) {
+            if (!empty($this->route()->parameter($key))) {
+                $document = $this->route()->parameter($key);
+                break;
+            }
+        }
+
+        return $document && $document->canUserView($this->user());
     }
 
     /**

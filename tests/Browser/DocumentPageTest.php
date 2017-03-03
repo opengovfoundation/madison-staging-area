@@ -6,7 +6,6 @@ use Tests\DuskTestCase;
 use Tests\Browser\Pages\DocumentPage;
 use Tests\FactoryHelpers;
 
-use App\Models\Annotation;
 use App\Models\Doc as Document;
 use App\Models\DocContent;
 use App\Models\User;
@@ -18,9 +17,9 @@ class DocumentPageTest extends DuskTestCase
     {
         parent::setUp();
 
+        $this->sponsorUser = factory(User::class)->create();
         $this->user = factory(User::class)->create();
-        $this->user2 = factory(User::class)->create();
-        $this->sponsor = FactoryHelpers::createActiveSponsorWithUser($this->user);
+        $this->sponsor = FactoryHelpers::createActiveSponsorWithUser($this->sponsorUser);
 
         $this->document = factory(Document::class)->create([
             'publish_state' => Document::PUBLISH_STATE_PUBLISHED,
@@ -33,13 +32,13 @@ class DocumentPageTest extends DuskTestCase
         $firstWord = explode(' ', $this->document->content()->first()->content)[0];
         $secondWord = explode(' ', $this->document->content()->first()->content)[1];
 
-        $this->note1 = FactoryHelpers::addNoteToDocument($this->user, $this->document, $firstWord);
-        $this->note2 = FactoryHelpers::addNoteToDocument($this->user, $this->document, $secondWord);
+        $this->note1 = FactoryHelpers::addNoteToDocument($this->sponsorUser, $this->document, $firstWord);
+        $this->note2 = FactoryHelpers::addNoteToDocument($this->sponsorUser, $this->document, $secondWord);
 
-        $this->comment1 = FactoryHelpers::createComment($this->user, $this->document);
-        $this->comment2 = FactoryHelpers::createComment($this->user, $this->document);
+        $this->comment1 = FactoryHelpers::createComment($this->sponsorUser, $this->document);
+        $this->comment2 = FactoryHelpers::createComment($this->sponsorUser, $this->document);
 
-        $this->commentReply = FactoryHelpers::createComment($this->user, $this->comment1);
+        $this->commentReply = FactoryHelpers::createComment($this->sponsorUser, $this->comment1);
     }
 
     public function testCanSeeDocumentContent()
@@ -227,13 +226,13 @@ class DocumentPageTest extends DuskTestCase
     {
         $this->browse(function ($browser) {
             $browser
-                ->loginAs($this->user2)
+                ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
                 ->openCommentsTab()
                 ->fillAndSubmitCommentForm()
                 ;
 
-            $newComment = Annotation::where('annotation_type_type', Annotation::TYPE_COMMENT)
+            $newComment = $this->document->allComments()
                 ->orderBy('created_at', 'desc')
                 ->first();
 
@@ -249,13 +248,13 @@ class DocumentPageTest extends DuskTestCase
     {
         $this->browse(function ($browser) {
             $browser
-                ->loginAs($this->user2)
+                ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
                 ->openCommentsTab()
                 ->fillAndSubmitCommentReplyForm($this->comment1)
                 ;
 
-            $newComment = Annotation::where('annotation_type_type', Annotation::TYPE_COMMENT)
+            $newComment = $this->document->allComments()
                 ->orderBy('created_at', 'desc')
                 ->first();
 
@@ -271,12 +270,12 @@ class DocumentPageTest extends DuskTestCase
     {
         $this->browse(function ($browser) {
             $browser
-                ->loginAs($this->user2)
+                ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
                 ->addNoteToContent()
                 ;
 
-            $newNote = Annotation::where('annotation_type_type', Annotation::TYPE_COMMENT)
+            $newNote = $this->document->allComments()
                 ->orderBy('created_at', 'desc')
                 ->first();
 
@@ -292,13 +291,13 @@ class DocumentPageTest extends DuskTestCase
     {
         $this->browse(function ($browser) {
             $browser
-                ->loginAs($this->user2)
+                ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
                 ->openNotesPane()
                 ->addReplyToNote($this->note1)
                 ;
 
-            $newNote = Annotation::where('annotation_type_type', Annotation::TYPE_COMMENT)
+            $newNote = $this->document->allComments()
                 ->orderBy('created_at', 'desc')
                 ->first();
 
@@ -316,7 +315,7 @@ class DocumentPageTest extends DuskTestCase
 
         $this->browse(function ($browser) use ($commentLikes) {
             $browser
-                ->loginAs($this->user2)
+                ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
                 ->openCommentsTab()
                 ->addActionToComment('like', $this->comment1)
@@ -331,7 +330,7 @@ class DocumentPageTest extends DuskTestCase
 
         $this->browse(function ($browser) use ($commentFlags) {
             $browser
-                ->loginAs($this->user2)
+                ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
                 ->openCommentsTab()
                 ->addActionToComment('flag', $this->comment1)
@@ -342,12 +341,12 @@ class DocumentPageTest extends DuskTestCase
 
     public function testLikeCommentReply()
     {
-        $reply = FactoryHelpers::createComment($this->user, $this->comment1);
+        $reply = FactoryHelpers::createComment($this->sponsorUser, $this->comment1);
         $replyLikes = $reply->likes_count;
 
         $this->browse(function ($browser) use ($reply, $replyLikes) {
             $browser
-                ->loginAs($this->user2)
+                ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
                 ->openCommentsTab()
                 ->addActionToComment('like', $reply)
@@ -358,12 +357,12 @@ class DocumentPageTest extends DuskTestCase
 
     public function testFlagCommentReply()
     {
-        $reply = FactoryHelpers::createComment($this->user, $this->comment1);
+        $reply = FactoryHelpers::createComment($this->sponsorUser, $this->comment1);
         $replyFlags = $reply->flags_count;
 
         $this->browse(function ($browser) use ($reply, $replyFlags) {
             $browser
-                ->loginAs($this->user2)
+                ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
                 ->openCommentsTab()
                 ->addActionToComment('flag', $reply)
@@ -378,7 +377,7 @@ class DocumentPageTest extends DuskTestCase
 
         $this->browse(function ($browser) use ($noteLikes) {
             $browser
-                ->loginAs($this->user2)
+                ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
                 ->openNotesPane()
                 ->addActionToNote('like', $this->note1)
@@ -393,7 +392,7 @@ class DocumentPageTest extends DuskTestCase
 
         $this->browse(function ($browser) use ($noteFlags) {
             $browser
-                ->loginAs($this->user2)
+                ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
                 ->openNotesPane()
                 ->addActionToNote('flag', $this->note1)
@@ -404,12 +403,12 @@ class DocumentPageTest extends DuskTestCase
 
     public function testLikeNoteReply()
     {
-        $reply = FactoryHelpers::createComment($this->user, $this->note1);
+        $reply = FactoryHelpers::createComment($this->sponsorUser, $this->note1);
         $replyLikes = $reply->likes_count;
 
         $this->browse(function ($browser) use ($reply, $replyLikes) {
             $browser
-                ->loginAs($this->user2)
+                ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
                 ->openNotesPane()
                 ->addActionToComment('like', $reply)
@@ -420,12 +419,12 @@ class DocumentPageTest extends DuskTestCase
 
     public function testFlagNoteReply()
     {
-        $reply = FactoryHelpers::createComment($this->user, $this->note1);
+        $reply = FactoryHelpers::createComment($this->sponsorUser, $this->note1);
         $replyFlags = $reply->flags_count;
 
         $this->browse(function ($browser) use ($reply, $replyFlags) {
             $browser
-                ->loginAs($this->user2)
+                ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
                 ->openNotesPane()
                 ->addActionToComment('flag', $reply)
@@ -440,7 +439,7 @@ class DocumentPageTest extends DuskTestCase
 
         $this->browse(function ($browser) use ($documentSupport) {
             $browser
-                ->loginAs($this->user2)
+                ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
                 ->click('@supportBtn')
                 ->assertDocumentSupportCount($documentSupport + 1)
@@ -454,7 +453,7 @@ class DocumentPageTest extends DuskTestCase
 
         $this->browse(function ($browser) use ($documentOppose) {
             $browser
-                ->loginAs($this->user2)
+                ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
                 ->click('@opposeBtn')
                 ->assertDocumentOpposeCount($documentOppose + 1)

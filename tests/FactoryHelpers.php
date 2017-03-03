@@ -76,10 +76,8 @@ class FactoryHelpers
         return $sponsor;
     }
 
-    public static function subscribeUsersToAllNotifications()
+    public static function subscribeUsersToAllNotifications($users)
     {
-        $users = User::all();
-
         foreach ($users as $user) {
             $events = NotificationPreference::getValidNotificationsForUser($user);
 
