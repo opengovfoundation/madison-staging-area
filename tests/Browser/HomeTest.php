@@ -29,7 +29,7 @@ class HomeTest extends DuskTestCase
     {
         $this->browse(function ($browser) {
             $browser->visit(new HomePage);
-            $browser->with('@mainFeatured', function ($featured) {
+            $browser->with('@featured', function ($featured) {
                 $featured->assertSee($this->document2->title);
             });
         });
@@ -42,8 +42,7 @@ class HomeTest extends DuskTestCase
 
             $browser->visit(new HomePage);
 
-            $browser->assertSeeIn('@mainFeatured', $this->document1->title);
-            $browser->assertDontSeeIn('@mainFeatured', $this->document2->title);
+            $browser->assertSeeIn('@featured', $this->document1->title);
             $browser->assertDontSeeIn('@featured', $this->document2->title);
         });
     }
@@ -58,10 +57,6 @@ class HomeTest extends DuskTestCase
 
             $browser->assertSeeIn('@featured', $this->document1->title);
             $browser->assertSeeIn('@featured', $this->document2->title);
-
-            // Most recently "featured" document shows up first
-            $browser->assertSeeIn('@mainFeatured', $this->document2->title);
-            $browser->assertDontSeeIn('@mainFeatured', $this->document1->title);
         });
     }
 
