@@ -576,21 +576,7 @@ class Doc extends Model
                 ;
         }
 
-        $return_docs = [];
-        foreach ($docs as $key => $doc) {
-            $doc->enableCounts();
-            $doc->enableSponsors();
-            $return_doc = $doc->toArray();
-
-            $return_doc['introtext'] = $doc->introtext()->first()['meta_value'];
-            $return_doc['updated_at'] = date('c', strtotime($return_doc['updated_at']));
-            $return_doc['created_at'] = date('c', strtotime($return_doc['created_at']));
-            $return_doc['featuredImageUrl'] = $doc->getFeaturedImageUrl();
-
-            $return_docs[] = $return_doc;
-        }
-
-        return $return_docs;
+        return $docs;
     }
 
     public static function allOwnedBy($userId)
