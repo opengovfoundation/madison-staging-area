@@ -66,8 +66,9 @@ class DocumentController extends Controller
         }
 
         if ($request->has('title')) {
-            $title = $request->get('title');
-            $documentsQuery->where('title', 'LIKE', "%$title%");
+            $documentsQuery->searchTitle($request->get('title'));
+        } elseif ($request->has('q')) {
+            $documentsQuery->search($request->get('q'));
         }
 
         // So this part of the query is a little crazy. It basically grabs

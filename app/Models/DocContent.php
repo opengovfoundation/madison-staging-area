@@ -97,4 +97,11 @@ class DocContent extends Model
     {
         return 'doc-'.$content->doc->id.'-'.$content->page.'-'.$format;
     }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query
+            ->whereRaw('MATCH (content) AGAINST (? IN BOOLEAN MODE)', [$search])
+            ;
+    }
 }

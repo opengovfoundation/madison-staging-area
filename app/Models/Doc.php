@@ -749,4 +749,21 @@ class Doc extends Model
     {
         return 'slug';
     }
+
+    public function scopeSearchTitle($query, $search)
+    {
+        return $query
+            ->whereRaw('MATCH (title) AGAINST (? IN BOOLEAN MODE)', [$search])
+            ;
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query
+            ->searchTitle($search)
+            ->orWhereHas('content', function ($q) use ($search) {
+                $q->search($search);
+            })
+            ;
+    }
 }
