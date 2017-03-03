@@ -57,6 +57,18 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <li>
+                            {{ Form::open(['route' => 'documents.index', 'method' => 'get', 'class' => 'navbar-form']) }}
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="{{ trans('messages.search.placeholder') }}" name="title" type="text">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">
+                                            <i class="fa fa-search" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            {{ Form::close() }}
+                        </li>
+                        <li>
                             <a href="{{ route('documents.index') }}">
                                 <strong>@lang('messages.document.list')</strong>
                             </a>
