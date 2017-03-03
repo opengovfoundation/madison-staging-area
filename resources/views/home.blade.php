@@ -7,12 +7,12 @@
     @include('home.partials.welcome');
 
     <h2>@lang('messages.home.featured_title')</h2>
-    <div class="row">
+    <div class="row featured">
         @each('home.partials.document-card', $featuredDocuments, 'document')
     </div>
 
     <h2>@lang('messages.home.popular_title')</h2>
-    <div class="row">
+    <div class="row popular">
         @each('home.partials.document-card', $popularDocuments, 'document')
     </div>
     <div class="row">
