@@ -750,20 +750,24 @@ class Doc extends Model
         return 'slug';
     }
 
-    public function scopeSearchTitle($query, $search)
+    public function scopeSearch($query, $search)
     {
+        // TODO: tweak $search to AND terms by default
+
         return $query
-            ->whereRaw('MATCH (title) AGAINST (? IN BOOLEAN MODE)', [$search])
+            ->join('doc_contents', 'docs.id', '=', 'doc_contents.doc_id')
+            ->selectRaw('
+                docs.*,
+                MATCH (docs.title) AGAINST (? IN BOOLEAN MODE) as title_relevance,
+                MATCH (doc_contents.content) AGAINST (? IN BOOLEAN MODE) as content_relevance
+            ', [$search, $search])
             ;
     }
 
-    public function scopeSearch($query, $search)
+    public function scopeOrderByRelevance($query, $dir = 'DESC')
     {
         return $query
-            ->searchTitle($search)
-            ->orWhereHas('content', function ($q) use ($search) {
-                $q->search($search);
-            })
+            ->orderByRaw("(title_relevance + content_relevance) $dir")
             ;
     }
 }

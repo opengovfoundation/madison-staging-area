@@ -65,10 +65,11 @@ class DocumentController extends Controller
             });
         }
 
-        if ($request->has('title')) {
-            $documentsQuery->searchTitle($request->get('title'));
-        } elseif ($request->has('q')) {
+        if ($request->has('q')) {
             $documentsQuery->search($request->get('q'));
+
+            // TODO: do this here, or below? or generally how to handle this
+            $documentsQuery->orderByRelevance();
         }
 
         // So this part of the query is a little crazy. It basically grabs
