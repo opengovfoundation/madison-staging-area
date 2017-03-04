@@ -761,6 +761,8 @@ class Doc extends Model
                 MATCH (docs.title) AGAINST (? IN BOOLEAN MODE) as title_relevance,
                 MATCH (doc_contents.content) AGAINST (? IN BOOLEAN MODE) as content_relevance
             ', [$search, $search])
+            ->having('title_relevance', '>', '0')
+            ->orHaving('content_relevance', '>', '0')
             ;
     }
 
