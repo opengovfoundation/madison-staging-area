@@ -37,6 +37,8 @@ return [
     'type' => 'Type',
     'view' => 'View',
     'get_started' => 'Get Started',
+    'relevance' => 'Relevance',
+    'relevance_ordering_warning' => 'Ordering by relevance only works with a search query, default order has been used.',
 
     // Authentication Stuff
     'password' => 'Password',
