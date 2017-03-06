@@ -6,10 +6,12 @@
         <div class="caption">
             <div class="intro">
                 <h4>
-                    {{ $document->title }}
+                    <a href="{{ route('documents.show', $document) }}">
+                        {{ $document->title }}
+                    </a>
                     <br>
                     <small class="text-muted">
-                        {{ trans('messages.document.sponsoredby') }} {{ join(', ', $document->sponsors()->pluck('display_name')->toArray()) }}
+                        {{ $document->sponsors->implode('display_name', ', ') }}
                     </small>
                 </h4>
                 <p>{{ $document->introtext }}</p>
@@ -20,11 +22,9 @@
             <div class="row">
                 <div class="col-md-6">
                     <small class="text-muted">{{ $document->created_at->toDateString() }}</small>
-                    <br>
-                    <small class="text-muted">{{ $document->comment_count }} {{ trans('messages.document.comments') }}</small>
                 </div>
-                <div class="col-md-6">
-                    <a href="{{ route('documents.show', $document) }}" class="btn btn-default btn-sm pull-right" role="button">@lang('messages.document.read')</a>
+                <div class="col-md-6 text-right">
+                    <small class="text-muted">{{ $document->all_comments_count }} {{ trans('messages.document.comments') }}</small>
                 </div>
             </div>
         </div>
