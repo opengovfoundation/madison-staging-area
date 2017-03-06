@@ -67,9 +67,6 @@ class DocumentController extends Controller
 
         if ($request->has('q')) {
             $documentsQuery->search($request->get('q'));
-
-            // TODO: do this here, or below? or generally how to handle this
-            $documentsQuery->orderByRelevance();
         }
 
         // So this part of the query is a little crazy. It basically grabs
@@ -196,8 +193,20 @@ class DocumentController extends Controller
 
             $totalCount = count(Document::getActiveIds()); // total items possible
         } else {
+            // if a specific sort order wasn't requested and they had a search
+            // query, prioritize ordering by search relevance
+            if ($request->has('q')
+                && (!$request->has('order') || $orderField === 'relevance')
+            ) {
+                $documentsQuery->orderByRelevance();
+            } elseif ($orderField === 'relevance' && !$request->has('q')) {
+                // relevance ordering only makes sense with a query
+                $documentQuery->orderBy('updated_at', 'desc');
+            } else {
+                $documentsQuery->orderby($orderField, $orderDir);
+            }
+
             $orderedAndLimitedDocuments = $documentsQuery
-                ->orderby($orderField, $orderDir)
                 ->offset($offset)
                 ->limit($limit)
                 ->get()
