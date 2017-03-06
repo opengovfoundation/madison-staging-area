@@ -29,5 +29,4 @@ class SearchQueryCompilerTest extends TestCase
     {
         $this->assertEquals($expected, SearchQueryCompiler::compile($query));
     }
-
 }
