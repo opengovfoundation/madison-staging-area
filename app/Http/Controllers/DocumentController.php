@@ -175,6 +175,9 @@ class DocumentController extends Controller
         // execute the query
         $documents = null;
         $limit = $request->input('limit', 10);
+        $offset = $request->input('page', 0) * $limit;
+        $orderedAndLimitedDocuments = collect([]);
+        $totalCount = 0;
 
         if ($orderField === 'activity') {
             // ordering by activity is special
@@ -188,25 +191,42 @@ class DocumentController extends Controller
                 ->get()
                 ;
 
-            $offset = $request->input('page', 0) * $limit;
             $orderedAndLimitedDocuments = Document::sortByActive($unorderedDocuments)
                 ->slice($offset, $limit);
 
-            $documents = new LengthAwarePaginator(
-                $orderedAndLimitedDocuments,
-                count(Document::getActiveIds()), // total items possible
-                $limit,
-                Paginator::resolveCurrentPage(),
-                [
-                    'path' => Paginator::resolveCurrentPath(),
-                    'pageName' => 'page'
-                ]
-            );
+            $totalCount = count(Document::getActiveIds()); // total items possible
         } else {
-            $documents = $documentsQuery
+            $orderedAndLimitedDocuments = $documentsQuery
                 ->orderby($orderField, $orderDir)
-                ->paginate($limit);
+                ->offset($offset)
+                ->limit($limit)
+                ->get()
+                ;
+
+            // TODO: backup/remove having clause for title_relevance and
+            // content_relevance
+            // OR
+            //
+            // $totalCount = $documentsQuery
+            //     ->getCountForPagination()
+            //     ;
+            $totalCount = $documentsQuery
+                ->addSelect(\DB::raw('count(*) as count'))
+                ->get()
+                ;
+            $totalCount = $totalCount[0]->count;
         }
+
+        $documents = new LengthAwarePaginator(
+            $orderedAndLimitedDocuments,
+            $totalCount, // total items possible
+            $limit,
+            Paginator::resolveCurrentPage(),
+            [
+                'path' => Paginator::resolveCurrentPath(),
+                'pageName' => 'page'
+            ]
+        );
 
         $documentsCapabilities = [];
         $baseDocumentCapabilities = [
