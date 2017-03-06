@@ -556,29 +556,6 @@ class Doc extends Model
         return null;
     }
 
-
-    public static function getFeaturedOrRecent()
-    {
-        $docs = static::getFeatured();
-
-        // If we don't have a document, just find anything recent.
-        if (empty($docs)) {
-            $docs =
-                static::with('categories')
-                ->with('sponsors')
-                ->with('statuses')
-                ->with('dates')
-                ->where('publish_state', '=', static::PUBLISH_STATE_PUBLISHED)
-                ->where('is_template', '!=', '1')
-                ->orderBy('created_at', 'desc')
-                ->limit(1)
-                ->get()
-                ;
-        }
-
-        return $docs;
-    }
-
     public static function allOwnedBy($userId)
     {
         $rawDocs = \DB::select(
