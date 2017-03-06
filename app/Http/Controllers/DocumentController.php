@@ -172,7 +172,7 @@ class DocumentController extends Controller
         // execute the query
         $documents = null;
         $limit = $request->input('limit', 10);
-        $offset = ($request->input('page', 1) - 1) * $limit;
+        $page = $request->input('page', 1);
         $orderedAndLimitedDocuments = collect([]);
         $totalCount = 0;
 
@@ -184,15 +184,25 @@ class DocumentController extends Controller
             // discussion states, we could not do this and simply have all
             // other documents sorted to the bottom instead of excluded
             $unorderedDocuments = $documentsQuery
-                ->whereIn('id', Document::getActiveIds())
+                ->whereIn('docs.id', Document::getActiveIds())
                 ->get()
                 ;
 
             $orderedAndLimitedDocuments = Document::sortByActive($unorderedDocuments)
-                ->slice($offset, $limit);
+                ->forPage($page, $limit);
 
             $totalCount = count(Document::getActiveIds()); // total items possible
         } else {
+            // do the count query first, ordering doesn't matter to it, we
+            // can't just use the normal pagination methods for this due to
+            // how the search query works with it's extra select statements
+            // and havings
+            $totalCount = with(clone $documentsQuery)
+                ->addSelect(\DB::raw('count(*) as count'))
+                ->first()
+                ;
+            $totalCount = $totalCount ? $totalCount->count : 0;
+
             // if a specific sort order wasn't requested and they had a search
             // query, prioritize ordering by search relevance
             if ($request->has('q')
@@ -201,20 +211,14 @@ class DocumentController extends Controller
                 $documentsQuery->orderByRelevance();
             } elseif ($orderField === 'relevance' && !$request->has('q')) {
                 // relevance ordering only makes sense with a query
-                $documentQuery->orderBy('updated_at', 'desc');
+                flash(trans('messages.relevance_ordering_warning'));
+                $documentsQuery->orderBy('updated_at', 'desc');
             } else {
                 $documentsQuery->orderby($orderField, $orderDir);
             }
 
-            $totalCount = with(clone $documentsQuery)
-                ->addSelect(\DB::raw('count(*) as count'))
-                ->get()
-                ;
-            $totalCount = $totalCount[0]->count;
-
             $orderedAndLimitedDocuments = $documentsQuery
-                ->offset($offset)
-                ->limit($limit)
+                ->forPage($page, $limit)
                 ->get()
                 ;
         }
@@ -223,7 +227,7 @@ class DocumentController extends Controller
             $orderedAndLimitedDocuments,
             $totalCount, // total items possible
             $limit,
-            Paginator::resolveCurrentPage(),
+            $page,
             [
                 'path' => Paginator::resolveCurrentPath(),
                 'pageName' => 'page'
