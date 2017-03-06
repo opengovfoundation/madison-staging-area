@@ -13,12 +13,16 @@ class SearchQueryCompilerTest extends TestCase
     {
         return [
             ['test me', '+test* +me*'],
+            ['test |me', '+test* me*'],
+            ['test |"me"', '+test* "me"'],
             ['"test me"', '+"test me"'],
             ['some "test me" more', '+some* +"test me" +more*'],
             ['+test +me', '+test* +me*'],
             ['+apple ~macintosh', '+apple* ~macintosh*'],
             ['test -me', '+test* -me*'],
             ['apple (>turnover <strudel)', '+apple* +(>turnover <strudel)'],
+            ['apple -(>turnover <strudel)', '+apple* -(>turnover <strudel)'],
+            ['"word1 word2 word3" @8', '+"word1 word2 word3" @8'],
         ];
     }
 
