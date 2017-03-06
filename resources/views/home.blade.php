@@ -4,12 +4,14 @@
 
 @section('content')
 
-    @include('home.partials.welcome');
+    @include('home.partials.welcome')
 
-    <h2>@lang('messages.home.featured_title')</h2>
-    <div class="row featured">
-        @each('home.partials.document-card', $featuredDocuments, 'document')
-    </div>
+    @if (collect($featuredDocuments)->count() > 0)
+        <h2>@lang('messages.home.featured_title')</h2>
+        <div class="row featured">
+            @each('home.partials.document-card', $featuredDocuments, 'document')
+        </div>
+    @endif
 
     <h2>@lang('messages.home.popular_title')</h2>
     <div class="row popular">
