@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Category;
 use App\Models\DocContent as DocumentContent;
+use App\Services\SearchQueryCompiler;
 use App\Traits\RootAnnotatableHelpers;
 use Event;
 use Exception;
@@ -752,7 +753,7 @@ class Doc extends Model
 
     public function scopeSearch($query, $search)
     {
-        // TODO: tweak $search to AND terms by default
+        $search = SearchQueryCompiler::compile($search);
 
         return $query
             ->join('doc_contents', 'docs.id', '=', 'doc_contents.doc_id')
