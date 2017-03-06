@@ -13,6 +13,7 @@ class SearchQueryCompilerTest extends TestCase
     {
         return [
             ['test me', '+test* +me*'],
+            ['test mé', '+test* +mé*'],
             ['test |me', '+test* me*'],
             ['test |"me"', '+test* "me"'],
             ['"test me"', '+"test me"'],

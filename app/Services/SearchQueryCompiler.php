@@ -6,7 +6,7 @@ class SearchQueryCompiler
 {
     public static function compile($search, $wildcard = true)
     {
-        preg_match_all('/[+-~<>|]*"[\w\s]+"|[+-~<>|]*\([+-~<>|\w\s]+\)|[+-~<>|\w]+|@\d+/', $search, $terms);
+        preg_match_all('/[+-~<>|]*(?:".+"|\(.+\))|[^\s]+/', $search, $terms);
         $terms = collect($terms[0]);
 
         $terms->transform(function ($term) use ($wildcard) {
