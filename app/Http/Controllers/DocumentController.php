@@ -214,7 +214,7 @@ class DocumentController extends Controller
                 flash(trans('messages.relevance_ordering_warning'));
                 $documentsQuery->orderBy('updated_at', 'desc');
             } else {
-                $documentsQuery->orderby($orderField, $orderDir);
+                $documentsQuery->orderBy($orderField, $orderDir);
             }
 
             $orderedAndLimitedDocuments = $documentsQuery
