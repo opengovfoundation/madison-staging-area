@@ -61,6 +61,11 @@
                                 <strong>@lang('messages.document.list')</strong>
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ route('sponsors.info') }}">
+                                <strong>@lang('messages.sponsor.become')</strong>
+                            </a>
+                        </li>
 
                         @foreach ($headerPages as $page)
                             <li><a href="{{ $page->getUrl() }}">{{ $page->nav_title }}</a></li>
