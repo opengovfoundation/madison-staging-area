@@ -14,7 +14,7 @@
                         {{ $document->sponsors->implode('display_name', ', ') }}
                     </small>
                 </h4>
-                <p>{{ $document->introtext }}</p>
+                <p>{{ $document->shortIntroText() }}</p>
             </div>
 
             <hr>
