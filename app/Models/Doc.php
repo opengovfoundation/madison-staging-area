@@ -137,14 +137,7 @@ class Doc extends Model
 
     public function getFeaturedAttribute()
     {
-        $featuredSetting = Setting::where('meta_key', '=', 'featured-doc')->first();
-
-        if ($featuredSetting) {
-            $docIds = explode(',', $featuredSetting->meta_value);
-            return in_array($this->id, $docIds);
-        }
-
-        return false;
+        return static::getFeaturedDocumentIds()->contains($this->id);
     }
 
     public function canUserEdit($user)
@@ -569,44 +562,29 @@ class Doc extends Model
 
     public static function getFeatured($onlyPublished = true)
     {
-        $featuredSetting = Setting::where('meta_key', '=', 'featured-doc')->first();
+        $docs = collect([]);
+        $featuredIds = static::getFeaturedDocumentIds();
 
-        if ($featuredSetting) {
+        if (!$featuredIds->isEmpty()) {
             // Make sure our featured document can be viewed by the public.
-            $featuredIds = explode(',', $featuredSetting->meta_value);
-            $docQuery = static::with('categories')
+            $docQuery = static
+                ::with('categories')
                 ->with('sponsors')
                 ->with('statuses')
                 ->with('dates')
                 ->whereIn('id', $featuredIds)
-                ->where('is_template', '!=', '1');
+                ->where('is_template', '!=', '1')
+                ->orderByRaw("FIELD(id,{$featuredIds->implode(',')})")
+                ;
 
             if ($onlyPublished) {
                 $docQuery->where('publish_state', '=', static::PUBLISH_STATE_PUBLISHED);
             }
 
             $docs = $docQuery->get();
-
-            if ($docs) {
-                // Reorder based on our previous list.
-                $tempDocs = [];
-                $orderList = array_flip($featuredIds);
-                foreach ($docs as $key=>$doc) {
-                    $tempDocs[(int) $orderList[$doc->id]] = $doc;
-                }
-
-                // If you set the key of an array value as we do above,
-                // PHP will internally store the object as an associative
-                // array (hash), not as a list, and will return the elements
-                // in the order assigned, not by the key order.
-                // This means our attempt to re-order the object will fail.
-                // The line below will restore the order. Ugh.
-                ksort($tempDocs);
-                return $tempDocs;
-            }
         }
 
-        return null;
+        return $docs;
     }
 
     public static function allOwnedBy($userId)
@@ -708,28 +686,20 @@ class Doc extends Model
 
     public function setAsFeatured()
     {
-        $featuredSetting = static::getFeaturedDocumentsSetting();
-        $docIds = explode(',', $featuredSetting->meta_value);
+        $docIds = static::getFeaturedDocumentIds();
 
-        if (!in_array($this->id, $docIds)) {
-            array_unshift($docIds, $this->id);
+        if (!$docIds->contains($this->id)) {
+            static::setFeaturedDocumentIds($docIds->prepend($this->id));
         }
-
-        $featuredSetting->meta_value = join(',', $docIds);
-        $featuredSetting->save();
     }
 
     public function removeAsFeatured()
     {
-        $featuredSetting = static::getFeaturedDocumentsSetting();
-        $docIds = explode(',', $featuredSetting->meta_value);
+        $docIds = static::getFeaturedDocumentIds();
 
-        if (in_array($this->id, $docIds)) {
-            $docIds = array_diff($docIds, [$this->id]);
+        if ($docIds->contains($this->id)) {
+            static::setFeaturedDocumentIds($docIds->diff([$this->id]));
         }
-
-        $featuredSetting->meta_value = join(',', $docIds);
-        $featuredSetting->save();
     }
 
     public static function getFeaturedDocumentsSetting()
@@ -742,6 +712,29 @@ class Doc extends Model
         }
 
         return $featuredSetting;
+    }
+
+    public static function getFeaturedDocumentIds()
+    {
+        $docIds = collect([]);
+
+        $featuredSetting = static::getFeaturedDocumentsSetting();
+        if ($featuredSetting->meta_value) {
+            $docIds = collect(explode(',', $featuredSetting->meta_value));
+        }
+
+        return $docIds;
+    }
+
+    public static function setFeaturedDocumentIds($ids)
+    {
+        if ($ids instanceof \Illuminate\Support\Collection) {
+            $ids = $ids->toArray();
+        }
+
+        $featuredSetting = static::getFeaturedDocumentsSetting();
+        $featuredSetting->meta_value = implode(',', $ids);
+        $featuredSetting->save();
     }
 
     public function getFeaturedImageUrl()
