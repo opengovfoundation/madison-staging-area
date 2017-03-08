@@ -198,6 +198,10 @@ return [
         'edit' => 'Edit Sponsor',
         'view_docs' => 'Documents',
 
+        'create_another' => 'Create Another Sponsor',
+        'create_another_header' => 'Need another sponsor?',
+        'create_another_body' => 'It doesn\'t happen often, but some people need create more than one sponsor account. Don\'t worry, the process is the same.',
+
         'member' => 'Member',
         'members' => 'Members',
 
