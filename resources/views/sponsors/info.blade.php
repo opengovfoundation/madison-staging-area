@@ -14,11 +14,11 @@
         <div class="row">
             <div class="col-md-6">
                 <ol class="lead">
-                    <li>{!! trans('messages.sponsor.info.step1', [ 'new_account_route' => route('register') ]) !!}</li>
-                    <li>{!! trans('messages.sponsor.info.step2', [ 'new_sponsor_route' => route('sponsors.create') ]) !!}</li>
-                    <li>{{ trans('messages.sponsor.info.step3') }}</li>
-                    <li>{{ trans('messages.sponsor.info.step4') }}</li>
-                    <li>{!! trans('messages.sponsor.info.step5', [ 'new_document_route' => route('documents.create') ]) !!}</li>
+                    <li>@lang('messages.sponsor.info.step1', [ 'linkOpen' => '<a href="' . route('register') . '">', 'linkClose' => '</a>' ])</li>
+                    <li>@lang('messages.sponsor.info.step2', [ 'linkOpen' => '<a href="' . route('sponsors.create') . '">', 'linkClose' => '</a>' ])</li>
+                    <li>@lang('messages.sponsor.info.step3')</li>
+                    <li>@lang('messages.sponsor.info.step4')</li>
+                    <li>@lang('messages.sponsor.info.step5', [ 'linkOpen' => '<a href="' . route('documents.create') . '">', 'linkClose' => '</a>' ])</li>
                 </ol>
 
                 <p><a class="btn btn-primary" href="/madison-mockups/users/sponsors/new.html" role="button">@lang('messages.sponsor.become')</a></p>

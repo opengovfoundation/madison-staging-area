@@ -63,7 +63,7 @@
                         </li>
                         <li>
                             <a href="{{ route('sponsors.info') }}">
-                                <strong>@lang('messages.sponsor.become')</strong>
+                                @lang('messages.sponsor.become')
                             </a>
                         </li>
 
