@@ -120,6 +120,11 @@ class Doc extends Model
         $introtext->save();
     }
 
+    public function shortIntroText()
+    {
+        return tokenTruncate(strip_tags($this->introtext), 140);
+    }
+
     public function dates()
     {
         return $this->hasMany('App\Models\Date');
@@ -712,4 +717,22 @@ class Doc extends Model
     {
         return 'slug';
     }
+}
+
+// http://stackoverflow.com/a/79986/738052
+function tokenTruncate($string, $desiredWidth) {
+    if (strlen($string) <= $desiredWidth) { return $string; }
+
+    $parts = preg_split('/([\s\n\r]+)/', $string, null, PREG_SPLIT_DELIM_CAPTURE);
+    $partsCount = count($parts);
+
+    $length = 0;
+    $lastPart = 0;
+
+    for (; $lastPart < $partsCount; ++$lastPart) {
+        $length += strlen($parts[$lastPart]);
+        if ($length > $desiredWidth) { break; }
+    }
+
+    return implode(array_slice($parts, 0, $lastPart)) . ' ...';
 }
