@@ -16,7 +16,7 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $featuredDocuments = Document::getFeatured();
-        $popularDocuments = Document::getActive(3);
+        $popularDocuments = Document::getActiveOrRecent(3);
 
         return view('home', compact([
             'selectedCategories',
