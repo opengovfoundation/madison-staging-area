@@ -25,6 +25,7 @@ class ListPage extends BasePage
     public function elements()
     {
         return [
+            '@deleteBtn' => '#content .destroy',
         ];
     }
 }
