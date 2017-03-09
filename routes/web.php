@@ -131,9 +131,7 @@ Route::get('/documents/{document}/moderate', 'DocumentController@moderate')
 
 
 // Sponsors
-Route::resource('sponsors', 'SponsorController', [
-    'except' => ['show']
-]);
+Route::resource('sponsors', 'SponsorController');
 
 Route::put('/sponsors/{sponsor}/status', 'SponsorController@updateStatus')
     ->name('sponsors.status.update');
