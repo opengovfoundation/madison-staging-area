@@ -8,7 +8,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        <h2>@lang('messages.home.how_it_works.title')</h2>
+        <h2 id="how-it-works">@lang('messages.home.how_it_works.title')</h2>
         <ol class="lead">
             <li>{!! trans('messages.home.how_it_works.step1') !!}</li>
             <li>{!! trans('messages.home.how_it_works.step2') !!}</li>
