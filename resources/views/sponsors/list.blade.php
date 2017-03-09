@@ -1,22 +1,11 @@
 @extends('layouts.app')
 
-@if ($onlyUserSponsors)
-    @section('pageTitle', trans('messages.sponsor.my_sponsors'))
-@else
-    @section('pageTitle', trans('messages.sponsor.list'))
-@endif
+@section('pageTitle', trans('messages.sponsor.list'))
 
 @section('content')
     <div class="page-header">
-        @if ($onlyUserSponsors)
-            @if (request()->user()->isAdmin())
-                {{ Html::linkRoute('sponsors.index', trans('messages.sponsor.all_sponsors'), ['all' => 'true'], ['class' => 'btn btn-default pull-right'])}}
-            @endif
-            <h1>{{ trans('messages.sponsor.my_sponsors') }}</h1>
-        @else
-            {{ Html::linkRoute('sponsors.index', trans('messages.sponsor.my_sponsors'), [], ['class' => 'btn btn-default pull-right'])}}
-            <h1>{{ trans('messages.sponsor.list') }}</h1>
-        @endif
+        <h1>{{ trans('messages.sponsor.list') }}</h1>
+
         <ol class="breadcrumb small">
             <li><a href="/madison-mockups/users/settings.html">@lang('messages.user.settings_pages.account')</a></li>
             <li class="active">@lang('messages.sponsor.list')</li>
@@ -33,9 +22,7 @@
                     <tr>
                         <th>@lang('messages.sponsor.name')</th>
                         <th>@lang('messages.created')</th>
-                        @if ($canSeeAtLeastOneStatus)
-                            <th>@lang('messages.sponsor.status')</th>
-                        @endif
+                        <th>@lang('messages.sponsor.status')</th>
                         <th>@lang('messages.sponsor.members')</th>
                         <th>@lang('messages.document.list')</th>
                         <th></th>
@@ -52,25 +39,9 @@
                             <td>
                                 @include('components/date', [ 'datetime' => $sponsor->created_at, ])
                             </td>
-                            @if ($canSeeAtLeastOneStatus)
-                                <td>
-                                    @if ($sponsorsCapabilities[$sponsor->id]['editStatus'])
-                                        {{ Form::open(['route' => ['sponsors.status.update', $sponsor->id], 'method' => 'put']) }}
-                                            {{ Form::select(
-                                                'status',
-                                                collect($validStatuses)->mapWithKeys_v2(function ($item) {return [$item => trans('messages.sponsor.statuses.'.$item)]; })->toArray(),
-                                                $sponsor->status,
-                                                [ 'onchange' => 'if (this.selectedIndex >= 0) this.form.submit();' ]
-                                                )
-                                            }}
-                                        {{ Form::close() }}
-                                    @elseif ($sponsorsCapabilities[$sponsor->id]['viewStatus'])
-                                        {{ trans('messages.sponsor.statuses.'.$sponsor->status) }}
-                                    @else
-                                        {{-- do nothing --}}
-                                    @endif
-                                </td>
-                            @endif
+                            <td>
+                                {{ trans('messages.sponsor.statuses.'.$sponsor->status) }}
+                            </td>
                             <td>{{ $sponsor->docs()->count() }}</td>
                             <td>{{ $sponsor->members()->count() }}</td>
                         </tr>

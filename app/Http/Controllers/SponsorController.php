@@ -11,145 +11,18 @@ use Auth;
 
 class SponsorController extends Controller
 {
-    /**
-     * Information page on becoming a sponsor.
-     */
-    public function info(Request $request)
-    {
-        return view('sponsors.info');
-    }
 
     /**
-     * Display a listing of the resource.
+     * List all sponsors for a particular user.
      *
-     * @return \Illuminate\Http\Response
      */
-    public function index(Requests\Index $request)
+    public function userSponsorsIndex(Requests\UserSponsors $request, User $user)
     {
-        $orderField = $request->input('order', 'updated_at');
-        $orderDir = $request->input('order_dir', 'DESC');
         $limit = $request->input('limit', 10);
-        $onlyUserSponsors = true;
-
-        $sponsorsQuery = Sponsor
-            ::query();
-
-        if ($request->has('name')) {
-            $name = $request->get('name');
-            $sponsorsQuery->where('name', 'LIKE', "%$name%");
-        }
-
-        // by default, only show sponsors that current user belongs to
-        $userIds = [$request->user()->id];
-
-        // query functions only available to admins
-        if ($request->user() && $request->user()->isAdmin()) {
-
-            // view all sponsors
-            if ($request->has('all') && $request->input('all') === 'true') {
-                $userIds = [];
-                $onlyUserSponsors = false;
-            }
-
-            // filter by user
-            if ($request->has('user_id')) {
-                $userIds = $request->input('user_id', $userIds);
-                $onlyUserSponsors = false;
-            }
-
-            // filter by specific sponsor
-            if ($request->has('id')) {
-                $sponsorsQuery
-                    ->whereIn('id', $request->input('id'));
-            }
-        }
-
-        if (!empty($userIds)) {
-            $sponsorsQuery->whereHas('members', function ($q) use ($userIds) {
-                $q->whereIn('sponsor_members.user_id', $userIds);
-            });
-        }
-
-        // if the user is logged in, lookup any sponsors they belong to so we
-        // can widen the verification states we will allow
-        $userSponsorIds = [];
-        if ($request->user()) {
-            if ($request->user()->isAdmin()) {
-                // we'll just act like an admin is a member of every sponsor
-                $userSponsorIds = Sponsor::select('id')->pluck('id')->toArray();
-            } else {
-                $userSponsorIds = $request->user()->sponsors()->pluck('sponsors.id')->toArray();
-            }
-        }
-
-        // grab all the verification statuses we want to consider
-        $requestedStatuses = $request->input('statuses', null);
-        if (!$requestedStatuses) {
-            // otherwise the are logged in and didn't specify any specific
-            // statuses, so default to them all
-            $requestedStatuses = Sponsor::getStatuses();
-        }
-
-        // limit the query to the verification statuses
-        $sponsorsQuery->where(function ($sponsorsQuery) use ($requestedStatuses, $userSponsorIds) {
-            foreach ($requestedStatuses as $status) {
-                $sponsorsQuery->orWhere(function ($query) use ($status, $userSponsorIds) {
-                    $query->where('status', $status);
-                    switch($status) {
-                        case Sponsor::STATUS_ACTIVE:
-                            // nothing needed
-                            break;
-                        case Sponsor::STATUS_PENDING:
-                            $query->whereIn('id', $userSponsorIds);
-                            break;
-                    }
-                });
-            }
-        });
-
-        // execute the query
-        $sponsors = $sponsorsQuery
-            ->orderby($orderField, $orderDir)
-            ->paginate($limit);
-
-        // easy list to expose or hide certain features in the UI
-        $sponsorsCapabilities = [];
-        $baseSponsorCapabilities = [
-            'viewDocs' => true,
-            'viewMembers' => true,
-            'open' => true,
-            'edit' => false,
-            'viewStatus' => false,
-            'editStatus' => false,
-        ];
-        $canSeeAtLeastOneStatus = false;
-
-        foreach ($sponsors as $sponsor) {
-            $caps = $baseSponsorCapabilities;
-            if ($request->user()) {
-                if ($request->user()->isAdmin()) {
-                    $caps = array_map(function ($item) { return true; }, $caps);
-                    $canSeeAtLeastOneStatus = true;
-                } elseif ($sponsor->hasMember($request->user()->id)) {
-                    $caps = array_map(function ($item) { return true; }, $caps);
-                    $caps['editStatus'] = false;
-                    $canSeeAtLeastOneStatus = true;
-                }
-            }
-            $sponsorsCapabilities[$sponsor->id] = $caps;
-        }
-
-        $users = User::all();
-        // only really needed if you are an admin, but doesn't hurt anything
-        $validStatuses = Sponsor::getStatuses();
+        $sponsors = $user->sponsors()->paginate($limit);
 
         return view('sponsors.list', compact([
-            'sponsors',
-            'sponsorsCapabilities',
-            'canSeeAtLeastOneStatus',
-            'users',
-            'validStatuses',
-            'onlyUserSponsors',
+            'sponsors'
         ]));
     }
 
