@@ -176,6 +176,9 @@ Route::get('/users/{user}/settings/notifications', 'UserController@editSettingsN
 Route::put('/users/{user}/settings/notifications', 'UserController@updateSettingsNotifications')
     ->name('users.settings.notifications.update');
 
+Route::get('/users/{user}/sponsors', 'SponsorController@userSponsorsIndex')
+    ->name('users.sponsors.index');
+
 
 // Pages
 Route::resource('pages', 'PageController', [
