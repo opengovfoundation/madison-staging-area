@@ -495,6 +495,7 @@ class Doc extends Model
         if ($documents->count() < $num) {
             $recentDocuments = static
                 ::where('publish_state', static::PUBLISH_STATE_PUBLISHED)
+                ->where('is_template', '!=', '1')
                 ->orderBy('created_at', 'desc')
                 ->take($num - $documents->count())
                 ;
