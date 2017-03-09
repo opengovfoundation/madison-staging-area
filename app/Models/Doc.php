@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Str;
 use App\Models\Category;
 use App\Models\DocContent as DocumentContent;
 use App\Services\SearchQueryCompiler;
 use App\Traits\RootAnnotatableHelpers;
+use GrahamCampbell\Markdown\Facades\Markdown;
 use Event;
 use Exception;
 use URL;
@@ -104,6 +106,7 @@ class Doc extends Model
 
     public function setIntroText($value)
     {
+        $htmlCacheKey = static::introtextHtmlCacheKey($this);
         $introtext = DocMeta
             ::where('meta_key', '=', 'intro-text')
             ->where('doc_id', $this->id)
@@ -118,12 +121,13 @@ class Doc extends Model
             $introtext->meta_value = $value;
         }
 
+        Cache::forget($htmlCacheKey);
         $introtext->save();
     }
 
     public function shortIntroText()
     {
-        return tokenTruncate(strip_tags($this->introtext), 140);
+        return Str::words(strip_tags($this->introtext_html), 15, ' ...');
     }
 
     public function dates()
@@ -314,6 +318,7 @@ class Doc extends Model
     public function enableIntrotext()
     {
         $this->appends[] = 'introtext';
+        $this->appends[] = 'introtext_html';
     }
 
     public function getIntrotextAttribute()
@@ -323,6 +328,29 @@ class Doc extends Model
         } else {
             return null;
         }
+    }
+
+    public function getIntrotextHtmlAttribute()
+    {
+        if ($this->introtext()->count()) {
+            $cacheKey = static::introtextHtmlCacheKey($this);
+
+            if (Cache::has($cacheKey)) {
+                return Cache::get($cacheKey);
+            }
+
+            $introtextHtml = Markdown::convertToHtml($this->introtext()->first()->meta_value);
+            Cache::forever($cacheKey, $introtextHtml);
+
+            return $introtextHtml;
+        }
+
+        return null;
+    }
+
+    protected static function introtextHtmlCacheKey(Doc $document)
+    {
+        return 'doc-'.$document->id.'-introtext-html';
     }
 
     public function getSponsorIdsAttribute()
@@ -454,6 +482,26 @@ class Doc extends Model
             ->with('sponsors')
             ->with('statuses')
             ->with('dates');
+    }
+
+    /**
+     * Get a number of active documents, filling in with recent documents if
+     * number requested is not fufilled.
+     */
+    public static function getActiveOrRecent($num = 10, $offset = 0)
+    {
+        $documents = collect(static::getActive($num, $offset));
+
+        if ($documents->count() < $num) {
+            $recentDocuments = static
+                ::where('publish_state', static::PUBLISH_STATE_PUBLISHED)
+                ->orderBy('created_at', 'desc')
+                ->take($num - $documents->count())
+                ;
+            $documents = $documents->union($recentDocuments->get());
+        }
+
+        return $documents;
     }
 
     /*
@@ -741,22 +789,4 @@ class Doc extends Model
             ->orderByRaw("(title_relevance + content_relevance) $dir")
             ;
     }
-}
-
-// http://stackoverflow.com/a/79986/738052
-function tokenTruncate($string, $desiredWidth) {
-    if (strlen($string) <= $desiredWidth) { return $string; }
-
-    $parts = preg_split('/([\s\n\r]+)/', $string, null, PREG_SPLIT_DELIM_CAPTURE);
-    $partsCount = count($parts);
-
-    $length = 0;
-    $lastPart = 0;
-
-    for (; $lastPart < $partsCount; ++$lastPart) {
-        $length += strlen($parts[$lastPart]);
-        if ($length > $desiredWidth) { break; }
-    }
-
-    return implode(array_slice($parts, 0, $lastPart)) . ' ...';
 }
