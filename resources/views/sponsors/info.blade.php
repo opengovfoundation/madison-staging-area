@@ -12,6 +12,7 @@
     </div>
     <div class="container">
         <div class="row">
+            <h2 id="get-started">@lang('messages.get_started')</h2>
             <div class="col-md-6">
                 <ol class="lead">
                     <li>@lang('messages.sponsor.info.step1', [ 'linkOpen' => '<a href="' . route('register') . '">', 'linkClose' => '</a>' ])</li>
