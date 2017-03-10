@@ -34,6 +34,7 @@ class EditPage extends BasePage
     {
         return [
             '@submitBtn' => '#content form button[type=submit]',
+            '@addPageBtn' => '.document-pages-toolbar .add-page',
         ];
     }
 }
