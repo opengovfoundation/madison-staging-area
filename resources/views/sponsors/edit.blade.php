@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="page-header">
-        <h1>{{ trans('messages.sponsor.edit') }}: {{ $sponsor->display_name }}</h1>
+        <h1>{{ $sponsor->display_name }}</h1>
         @include('components.breadcrumbs.sponsor', ['sponsor' => $sponsor])
     </div>
 

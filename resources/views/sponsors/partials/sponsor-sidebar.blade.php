@@ -6,7 +6,7 @@
             @lang('messages.document.list')
         </a>
         <a href="{{ route('sponsors.members.index', $sponsor) }}"
-            class="list-group-item {{ Request::route()->getName() !== 'sponsors.members.index' ?: 'active' }}">
+            class="list-group-item {{ !strpos(Request::route()->uri, 'members') ?: 'active' }}">
 
             @lang('messages.sponsor.members')
         </a>

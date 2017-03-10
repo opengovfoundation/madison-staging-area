@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="page-header">
-        <h1>{{ trans('messages.sponsor_member.list') }} - {{ $sponsor->display_name }}</h1>
+        <h1>{{ $sponsor->display_name }}</h1>
         @include('components.breadcrumbs.sponsor', ['sponsor' => $sponsor])
     </div>
 
@@ -17,15 +17,16 @@
                 <thead>
                     <tr>
                         <th>@lang('messages.sponsor.name')</th>
+                        <th>@lang('messages.user.email')</th>
                         <th>@lang('messages.sponsor_member.role')</th>
                         <th>@lang('messages.sponsor_member.joined')</th>
-                        <th>@lang('messages.actions')</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($members as $member)
                         <tr>
                             <td>{{ $member->name }}</td>
+                            <td>{{ $member->email }}</td>
                             <td>
                                 @if ($sponsor->isSponsorOwner(Auth::user()->id) || Auth::user()->isAdmin())
                                     {{ Form::open(['route' => ['sponsors.members.role.update', $sponsor, $member], 'method' => 'put']) }}
@@ -51,7 +52,9 @@
                                     @if ($sponsor->isSponsorOwner(Auth::user()->id) || Auth::user()->isAdmin())
                                         <div class="btn-group">
                                             {{ Form::open(['route' => ['sponsors.members.destroy', $sponsor, $member], 'method' => 'delete']) }}
-                                                <button type="submit" class="btn btn-default">{{ trans('messages.remove') }}</button>
+                                                <button type="submit" class="btn btn-xs btn-danger">
+                                                    <i class="fa fa-close"></i>
+                                                </button>
                                             {{ Form::close() }}
                                         </div>
                                     @endif
@@ -68,7 +71,7 @@
 
             <hr>
 
-            {{ Html::linkRoute('sponsors.members.create', trans('messages.sponsor_member.add'), [$sponsor], ['class' => 'btn btn-default'])}}
+            {{ Html::linkRoute('sponsors.members.create', trans('messages.sponsor_member.add'), [$sponsor], ['class' => 'btn btn-primary'])}}
         </div>
     </div>
 @endsection
