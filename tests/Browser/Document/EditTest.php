@@ -67,17 +67,49 @@ class EditTest extends DuskTestCase
                 ->loginAs($user)
                 ->visit($this->page)
                 ->type('title', 'test')
+                ->type('introtext', 'Some introtext')
                 ->select('publish_state', Document::PUBLISH_STATE_PUBLISHED)
+                ->select('discussion_state', Document::DISCUSSION_STATE_CLOSED)
                 ->click('@submitBtn')
                 ->assertPathIs($this->page->url())
                 ->assertVisible('.alert.alert-info')
                 ->assertInputValue('title', 'test')
+                ->assertInputValue('introtext', 'Some introtext')
                 ->assertSelected('publish_state', Document::PUBLISH_STATE_PUBLISHED)
+                ->assertSelected('discussion_state', Document::DISCUSSION_STATE_CLOSED)
                 ;
 
             $this->document = $this->document->fresh();
             $this->assertEquals('test', $this->document->title);
+            $this->assertEquals('Some introtext', $this->document->introtext);
             $this->assertEquals(Document::PUBLISH_STATE_PUBLISHED, $this->document->publish_state);
+            $this->assertEquals(Document::DISCUSSION_STATE_CLOSED, $this->document->discussion_state);
+
+            $browser
+                ->click('@addPageBtn')
+                ->assertPathIs($this->page->url())
+                ->assertQueryStringHas('page', '2')
+                ->assertVisible('.document-pages-toolbar .pagination')
+                ->assertInputValue('page_content', '')
+                ->type('page_content', 'Page 2 content')
+                ->click('@submitBtn')
+                ->assertPathIs($this->page->url())
+                ->assertQueryStringHas('page', '2')
+                ->assertVisible('.alert.alert-info')
+                ->assertInputValue('page_content', 'Page 2 content')
+                ;
+
+            $this->assertEquals('Page 2 content', $this->document->content()->where('page', 2)->first()->content);
+
+            $browser
+                ->type('slug', 'my-document')
+                ->click('@submitBtn')
+                ->assertInputValue('slug', 'my-document')
+                ->assertPathIs('/documents/my-document/edit')
+                ;
+
+            $this->document = $this->document->fresh();
+            $this->assertEquals('my-document', $this->document->slug);
         });
     }
 }
