@@ -86,7 +86,7 @@
             <hr>
 
             @if (Auth::user())
-                {{ Html::linkRoute('documents.create', trans('messages.document.create'), [], ['class' => 'btn btn-default'])}}
+                {{ Html::linkRoute('documents.create', trans('messages.document.new'), [], ['class' => 'btn btn-primary'])}}
             @endif
         </div>
     </div>
