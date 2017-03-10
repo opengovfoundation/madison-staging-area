@@ -36,6 +36,7 @@ return [
     'settings' => 'Settings',
     'type' => 'Type',
     'view' => 'View',
+    'add' => 'Add',
     'get_started' => 'Get Started',
     'relevance' => 'Relevance',
     'relevance_ordering_warning' => 'Ordering by relevance only works with a search query, default order has been used.',
@@ -178,6 +179,7 @@ return [
 
         'list' => 'Documents',
         'create' => 'Create Document',
+        'new' => 'New Document',
         'edit' => 'Edit Document',
     ],
 
@@ -232,6 +234,7 @@ return [
 
     'sponsor_member' => [
         'add' => 'Add a Member',
+        'add_user' => 'Add User',
         'create' => 'New Sponsor Member',
         'role_updated' => 'Sponsor member role updated',
 
