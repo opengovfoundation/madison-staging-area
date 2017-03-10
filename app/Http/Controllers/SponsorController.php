@@ -21,7 +21,7 @@ class SponsorController extends Controller
         if ($request->user() && !$request->user()->isAdmin()
             && $request->user()->sponsors()->count() == 1
         ) {
-            return redirect()->route('sponsors.show', $request->user()->sponsors()->first());
+            return redirect()->route('sponsors.documents.index', $request->user()->sponsors()->first());
         }
 
         $limit = $request->input('limit', 10);
@@ -133,4 +133,26 @@ class SponsorController extends Controller
         flash(trans('messages.sponsor.status_updated'));
         return redirect()->route('sponsors.index', ['sponsor' => $sponsor->id]);
     }
+
+    /**
+     * Lists documents for a given sponsor.
+     */
+    public function documentsIndex(Requests\DocumentsIndex $request, Sponsor $sponsor)
+    {
+        $limit = $request->input('limit', 10);
+        $documents = $sponsor->docs()->paginate($limit);
+        $documentsCapabilities = [];
+
+        foreach ($documents as $document) {
+            $documentsCapabilities[$document->id] = $document->capabilitiesForUser($request->user());
+        }
+
+        return view('sponsors.documents-list', compact([
+            'sponsor',
+            'documents',
+            'documentsCapabilities',
+        ]));
+    }
+
+
 }
