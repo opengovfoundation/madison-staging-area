@@ -5,15 +5,10 @@
 @section('content')
     <div class="page-header">
         <h1>{{ trans('messages.sponsor.list') }}</h1>
-
-        <ol class="breadcrumb small">
-            <li><a href="/madison-mockups/users/settings.html">@lang('messages.user.settings_pages.account')</a></li>
-            <li class="active">@lang('messages.sponsor.list')</li>
-        </ol>
+        @include('components.breadcrumbs.account')
     </div>
 
     @include('components.errors')
-
 
     <div class="row">
         <div class="col-md-9">
@@ -32,7 +27,7 @@
                     @foreach ($sponsors as $sponsor)
                         <tr>
                             <td>
-                                <a href="{{ route('sponsors.members.index', $sponsor) }}">
+                                <a href="{{ route('sponsors.documents.index', $sponsor) }}">
                                     {{ $sponsor->name }}
                                 </a>
                             </td>

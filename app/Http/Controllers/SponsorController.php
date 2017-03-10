@@ -13,20 +13,6 @@ class SponsorController extends Controller
 {
 
     /**
-     * List all sponsors for a particular user.
-     *
-     */
-    public function userSponsorsIndex(Requests\UserSponsors $request, User $user)
-    {
-        $limit = $request->input('limit', 10);
-        $sponsors = $user->sponsors()->paginate($limit);
-
-        return view('sponsors.list', compact([
-            'sponsors'
-        ]));
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -127,4 +113,26 @@ class SponsorController extends Controller
         flash(trans('messages.sponsor.status_updated'));
         return redirect()->route('sponsors.index', ['sponsor' => $sponsor->id]);
     }
+
+    /**
+     * Lists documents for a given sponsor.
+     */
+    public function documentsIndex(Requests\DocumentsIndex $request, Sponsor $sponsor)
+    {
+        $limit = $request->input('limit', 10);
+        $documents = $sponsor->docs()->paginate($limit);
+        $documentsCapabilities = [];
+
+        foreach ($documents as $document) {
+            $documentsCapabilities[$document->id] = $document->capabilitiesForUser($request->user());
+        }
+
+        return view('sponsors.documents-list', compact([
+            'sponsor',
+            'documents',
+            'documentsCapabilities',
+        ]));
+    }
+
+
 }

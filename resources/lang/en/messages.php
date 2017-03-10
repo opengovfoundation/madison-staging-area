@@ -153,6 +153,7 @@ return [
         'update_support' => 'Updated your support on this document',
 
         'publish_state' => 'Publish State',
+        'publish_state_short' => 'Publish',
         'publish_state_help' => 'If a document is set to "unpublished", only sponsors can view it. If it is set to private, anyone with the link can view it. Otherwise it is publicly viewable.',
         'publish_states' => [
             'all' => 'All',
@@ -164,6 +165,7 @@ return [
         ],
 
         'discussion_state' => 'Discussion State',
+        'discussion_state_short' => 'Discussion',
         'discussion_state_help' => 'If commenting is set to "open", users will be able to comment and make notes normally. If it is "closed", then existing comments will be viewable, but new comments can not happen. If it is set to "hidden", no new commenting can happen, and existing comments will not be viewable.',
         'discussion_states' => [
             \App\Models\Doc::DISCUSSION_STATE_OPEN => 'Open',
@@ -190,7 +192,9 @@ return [
             'step4' => 'Once approved, Madison administrators will help you make a plan to promote your document so you get the best public engagement possible.',
             'step5' => 'With a plan in place, you can :linkOpen publish a document :linkClose and hear the opinions of the public.',
         ],
-
+        'page_title_documents' => 'Documents | :sponsorName',
+        'page_title_members' => 'Members | :sponsorName',
+        'page_title_settings' => 'Settings | :sponsorName',
         'list' => 'Sponsors',
         'create' => 'Create Sponsor',
         'my_sponsors' => 'My Sponsors',
@@ -385,6 +389,7 @@ return [
         'updated_featured_documents' => 'Feature documents updated',
         'site_settings' => 'Site Settings',
         'custom_pages' => 'Custom Pages',
+        'pages' => 'Pages',
 
         'madison' => [
             'date_format' => 'Date Format',

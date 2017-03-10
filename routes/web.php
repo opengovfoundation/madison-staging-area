@@ -141,6 +141,9 @@ Route::resource('sponsors', 'SponsorController', [
 Route::put('/sponsors/{sponsor}/status', 'SponsorController@updateStatus')
     ->name('sponsors.status.update');
 
+Route::get('/sponsors/{sponsor}/documents', 'SponsorController@documentsIndex')
+    ->name('sponsors.documents.index');
+
 
 // Sponsor Members
 Route::resource('sponsors.members', 'SponsorMemberController');
@@ -178,7 +181,7 @@ Route::get('/users/{user}/settings/notifications', 'UserController@editSettingsN
 Route::put('/users/{user}/settings/notifications', 'UserController@updateSettingsNotifications')
     ->name('users.settings.notifications.update');
 
-Route::get('/users/{user}/sponsors', 'SponsorController@userSponsorsIndex')
+Route::get('/users/{user}/sponsors', 'UserController@sponsorsIndex')
     ->name('users.sponsors.index');
 
 
