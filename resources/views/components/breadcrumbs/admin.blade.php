@@ -10,5 +10,7 @@
         <li class="active">@lang('messages.admin.pages')</li>
     @elseif (strpos(Request::route()->uri, 'featured'))
         <li class="active">@lang('messages.admin.featured_documents')</li>
+    @elseif (strpos(Request::route()->uri, 'users'))
+        <li class="active">@lang('messages.admin.manage_users')</li>
     @endif
 </ol>
