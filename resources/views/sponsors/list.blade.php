@@ -37,8 +37,8 @@
                             <td>
                                 {{ trans('messages.sponsor.statuses.'.$sponsor->status) }}
                             </td>
-                            <td>{{ $sponsor->docs()->count() }}</td>
                             <td>{{ $sponsor->members()->count() }}</td>
+                            <td>{{ $sponsor->docs()->count() }}</td>
                         </tr>
                     @endforeach
                 </tbody>
