@@ -196,8 +196,8 @@ return [
             'step5' => 'With a plan in place, you can :linkOpen publish a document :linkClose and hear the opinions of the public.',
         ],
         'create_help' => [
-			'what_is_a_sponsor' => 'Sponsors are individuals and organizations that want to share a document with the public and hear their opinions using Madison. Add the public\'s voice and credibility to your proposal.',
-			'next_steps' => 'Completing this form will submit your request to the Madison administrators to authorize your sponsor account. You will be contacted within two business days to verify your request.',
+            'what_is_a_sponsor' => 'Sponsors are individuals and organizations that want to share a document with the public and hear their opinions using Madison. Add the public\'s voice and credibility to your proposal.',
+            'next_steps' => 'Completing this form will submit your request to the Madison administrators to authorize your sponsor account. You will be contacted within two business days to verify your request.',
         ],
         'page_title_documents' => 'Documents | :sponsorName',
         'page_title_members' => 'Members | :sponsorName',
