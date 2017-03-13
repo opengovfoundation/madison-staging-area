@@ -11,11 +11,11 @@
     @include('components.errors')
 
     <div class="row">
-		<div class="col-md-6">
-			<p class="lead">@lang('messages.sponsor.create_help.what_is_a_sponsor')</p>
-			<p>@lang('messages.sponsor.create_help.next_steps')</p>
-			<p><a href="{{ route('sponsors.info') }}">@lang('messages.learn_more')</a></p>
-		</div>
+        <div class="col-md-6">
+            <p class="lead">@lang('messages.sponsor.create_help.what_is_a_sponsor')</p>
+            <p>@lang('messages.sponsor.create_help.next_steps')</p>
+            <p><a href="{{ route('sponsors.info') }}">@lang('messages.learn_more')</a></p>
+        </div>
         <div class="col-md-6">
             {{ Form::open(['route' => ['sponsors.store']]) }}
                 @include('sponsors.partials.form')
