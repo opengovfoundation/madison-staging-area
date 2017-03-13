@@ -37,7 +37,9 @@ return [
     'type' => 'Type',
     'view' => 'View',
     'add' => 'Add',
+    'new' => 'New',
     'get_started' => 'Get Started',
+    'learn_more' => 'Learn more',
     'relevance' => 'Relevance',
     'relevance_ordering_warning' => 'Ordering by relevance only works with a search query, default order has been used.',
 
@@ -64,7 +66,6 @@ return [
         'home' => 'Home',
         'welcome' => 'Add your voice',
         'intro' => 'Legislation and regulations that impact your life are written every day. With Madison, you can work directly <em>with</em> the sponsors of these documents.',
-        'learn_more' => 'Learn more',
         'how_it_works' => [
             'title' => 'How it Works',
             'step1' => 'Elected officials share policy documents on Madison for public collaboration.',
@@ -194,6 +195,10 @@ return [
             'step4' => 'Once approved, Madison administrators will help you make a plan to promote your document so you get the best public engagement possible.',
             'step5' => 'With a plan in place, you can :linkOpen publish a document :linkClose and hear the opinions of the public.',
         ],
+        'create_help' => [
+			'what_is_a_sponsor' => 'Sponsors are individuals and organizations that want to share a document with the public and hear their opinions using Madison. Add the public\'s voice and credibility to your proposal.',
+			'next_steps' => 'Completing this form will submit your request to the Madison administrators to authorize your sponsor account. You will be contacted within two business days to verify your request.',
+        ],
         'page_title_documents' => 'Documents | :sponsorName',
         'page_title_members' => 'Members | :sponsorName',
         'page_title_settings' => 'Settings | :sponsorName',
@@ -227,7 +232,7 @@ return [
         'updated' => 'Sponsor updated.',
         'update_failed' => 'Sponsor update failed.',
 
-        'create' => 'New Sponsor',
+        'create' => 'Create a New Sponsor',
         'created' => 'Sponsor created',
         'create_failed' => 'Sponsor creation failed.',
     ],
