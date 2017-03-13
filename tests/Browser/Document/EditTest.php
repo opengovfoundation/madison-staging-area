@@ -30,19 +30,19 @@ class EditTest extends DuskTestCase
     public function testAdminCanEditDocument()
     {
         $admin = factory(User::class)->create()->makeAdmin();
-        $this->assertEditDoc($admin);
+        $this->userCanEditDocTest($admin);
     }
 
     public function testSponsorOwnerCanEditDocument()
     {
-        $this->assertEditDoc($this->sponsorOwner);
+        $this->userCanEditDocTest($this->sponsorOwner);
     }
 
     public function testSponsorEditorCanEditDocument()
     {
         $editor = factory(User::class)->create();
         $this->sponsor->addMember($editor->id, Sponsor::ROLE_EDITOR);
-        $this->assertEditDoc($editor);
+        $this->userCanEditDocTest($editor);
     }
 
     public function testSponsorStaffCannotEditDocument()
@@ -60,30 +60,39 @@ class EditTest extends DuskTestCase
         });
     }
 
-    protected function assertEditDoc($user)
+    protected function userCanEditDocTest($user)
     {
-        $this->browse(function ($browser) use ($user) {
+        $newData = [
+            'title' => 'test',
+            'introtext' => 'Some introtext',
+            'publish_state' => Document::PUBLISH_STATE_PUBLISHED,
+            'discussion_state' => Document::DISCUSSION_STATE_CLOSED,
+            'slug' => 'my-document',
+            'new_page_content' => 'Page 2 content',
+        ];
+
+        $this->browse(function ($browser) use ($user, $newData) {
             $browser
                 ->loginAs($user)
                 ->visit($this->page)
-                ->type('title', 'test')
-                ->type('introtext', 'Some introtext')
-                ->select('publish_state', Document::PUBLISH_STATE_PUBLISHED)
-                ->select('discussion_state', Document::DISCUSSION_STATE_CLOSED)
+                ->type('title', $newData['title'])
+                ->type('introtext', $newData['introtext'])
+                ->select('publish_state', $newData['publish_state'])
+                ->select('discussion_state', $newData['discussion_state'])
                 ->click('@submitBtn')
                 ->assertPathIs($this->page->url())
                 ->assertVisible('.alert.alert-info')
-                ->assertInputValue('title', 'test')
-                ->assertInputValue('introtext', 'Some introtext')
-                ->assertSelected('publish_state', Document::PUBLISH_STATE_PUBLISHED)
-                ->assertSelected('discussion_state', Document::DISCUSSION_STATE_CLOSED)
+                ->assertInputValue('title', $newData['title'])
+                ->assertInputValue('introtext', $newData['introtext'])
+                ->assertSelected('publish_state', $newData['publish_state'])
+                ->assertSelected('discussion_state', $newData['discussion_state'])
                 ;
 
             $this->document = $this->document->fresh();
-            $this->assertEquals('test', $this->document->title);
-            $this->assertEquals('Some introtext', $this->document->introtext);
-            $this->assertEquals(Document::PUBLISH_STATE_PUBLISHED, $this->document->publish_state);
-            $this->assertEquals(Document::DISCUSSION_STATE_CLOSED, $this->document->discussion_state);
+            $this->assertEquals($newData['title'], $this->document->title);
+            $this->assertEquals($newData['introtext'], $this->document->introtext);
+            $this->assertEquals($newData['publish_state'], $this->document->publish_state);
+            $this->assertEquals($newData['discussion_state'], $this->document->discussion_state);
 
             $browser
                 ->click('@addPageBtn')
@@ -91,25 +100,25 @@ class EditTest extends DuskTestCase
                 ->assertQueryStringHas('page', '2')
                 ->assertVisible('.document-pages-toolbar .pagination')
                 ->assertInputValue('page_content', '')
-                ->type('page_content', 'Page 2 content')
+                ->type('page_content', $newData['new_page_content'])
                 ->click('@submitBtn')
                 ->assertPathIs($this->page->url())
                 ->assertQueryStringHas('page', '2')
                 ->assertVisible('.alert.alert-info')
-                ->assertInputValue('page_content', 'Page 2 content')
+                ->assertInputValue('page_content', $newData['new_page_content'])
                 ;
 
-            $this->assertEquals('Page 2 content', $this->document->content()->where('page', 2)->first()->content);
+            $this->assertEquals($newData['new_page_content'], $this->document->content()->where('page', 2)->first()->content);
 
             $browser
-                ->type('slug', 'my-document')
+                ->type('slug', $newData['slug'])
                 ->click('@submitBtn')
-                ->assertInputValue('slug', 'my-document')
-                ->assertPathIs('/documents/my-document/edit')
+                ->assertInputValue('slug', $newData['slug'])
+                ->assertPathIs("/documents/{$newData['slug']}/edit")
                 ;
 
             $this->document = $this->document->fresh();
-            $this->assertEquals('my-document', $this->document->slug);
+            $this->assertEquals($newData['slug'], $this->document->slug);
         });
     }
 }

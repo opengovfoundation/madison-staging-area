@@ -107,7 +107,7 @@ class ListTest extends DuskTestCase
     public function testAdminCanDeleteDocument()
     {
         $admin = factory(User::class)->create()->makeAdmin();
-        $this->deleteDocument($admin, Document::PUBLISH_STATE_DELETED_ADMIN);
+        $this->deleteDocumentTest($admin, Document::PUBLISH_STATE_DELETED_ADMIN);
     }
 
     public function testSponsorCanSeeAllOfOwnDocuments()
@@ -134,7 +134,7 @@ class ListTest extends DuskTestCase
 
     public function testSponsorOwnerCanDeleteOwnDocument()
     {
-        $this->deleteDocument($this->sponsorUser, Document::PUBLISH_STATE_DELETED_USER);
+        $this->deleteDocumentTest($this->sponsorUser, Document::PUBLISH_STATE_DELETED_USER);
     }
 
     public function testSponsorCanNotSeeAllOfOtherSponsorDocuments()
@@ -180,7 +180,7 @@ class ListTest extends DuskTestCase
         });
     }
 
-    protected function deleteDocument($user, $status)
+    protected function deleteDocumentTest($user, $status)
     {
         $this->genDocs(1);
 
