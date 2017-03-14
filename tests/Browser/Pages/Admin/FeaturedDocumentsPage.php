@@ -25,6 +25,23 @@ class FeaturedDocumentsPage extends Page
     public function elements()
     {
         return [
+            '@moveUpBtn' => '.up',
+            '@moveUpBtnDisabled' => '.up[disabled]',
+            '@moveDownBtn' => '.down',
+            '@moveDownBtnDisabled' => '.down[disabled]',
+            '@unfeatureBtn' => '.unfeature',
         ];
+    }
+
+    public function getDocumentRowSelector($document)
+    {
+       return "#document-{$document->id}";
+    }
+
+    public function onDocumentRow(Browser $browser, $document, $fn)
+    {
+        $browser
+            ->with($this->getDocumentRowSelector($document), $fn)
+            ;
     }
 }

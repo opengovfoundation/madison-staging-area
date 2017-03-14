@@ -720,7 +720,10 @@ class Doc extends Model
 
         $featuredSetting = static::getFeaturedDocumentsSetting();
         if ($featuredSetting->meta_value) {
-            $docIds = collect(explode(',', $featuredSetting->meta_value));
+            $docIds = collect(explode(',', rtrim($featuredSetting->meta_value, ',')))
+                ->map(function ($strId) {
+                    return (int) $strId;
+                });
         }
 
         return $docIds;
