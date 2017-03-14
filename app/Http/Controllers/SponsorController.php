@@ -62,7 +62,7 @@ class SponsorController extends Controller
      */
     public function show($id)
     {
-        //
+        return redirect()->route('sponsors.documents.index', $id);
     }
 
     /**
