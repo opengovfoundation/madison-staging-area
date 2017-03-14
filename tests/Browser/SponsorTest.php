@@ -89,4 +89,19 @@ class SponsorTest extends DuskTestCase
                 ;
         });
     }
+
+    public function testShowRedirectsToDocumentList()
+    {
+        $user = factory(User::class)->create();
+        $sponsor = FactoryHelpers::createActiveSponsorWithUser($user);
+
+        $this->browse(function ($browser) use ($user, $sponsor) {
+            $browser
+                ->loginAs($user)
+                ->visitRoute('sponsors.show', $sponsor)
+                ->waitForText($sponsor->display_name)
+                ->assertRouteIs('sponsors.documents.index', $sponsor)
+                ;
+        });
+    }
 }
