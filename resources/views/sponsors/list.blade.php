@@ -20,7 +20,6 @@
                         <th>@lang('messages.sponsor.status')</th>
                         <th>@lang('messages.sponsor.members')</th>
                         <th>@lang('messages.document.list')</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
