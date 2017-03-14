@@ -735,8 +735,13 @@ class Doc extends Model
             $ids = $ids->toArray();
         }
 
+        $value = null;
+        if (!empty($ids)) {
+            $value = implode(',', $ids);
+        }
+
         $featuredSetting = static::getFeaturedDocumentsSetting();
-        $featuredSetting->meta_value = implode(',', $ids);
+        $featuredSetting->meta_value = $value;
         $featuredSetting->save();
     }
 
