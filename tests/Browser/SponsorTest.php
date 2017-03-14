@@ -69,8 +69,8 @@ class SponsorTest extends DuskTestCase
         $this->browse(function ($browser) use ($user, $sponsor) {
             $browser
                 ->loginAs($user)
-                ->visitRoute('sponsors.index')
-                ->assertRouteIs('sponsors.show', $sponsor)
+                ->visitRoute('users.sponsors.index', $user)
+                ->assertRouteIs('sponsors.documents.index', $sponsor)
                 ;
         });
     }
@@ -84,8 +84,8 @@ class SponsorTest extends DuskTestCase
         $this->browse(function ($browser) use ($user) {
             $browser
                 ->loginAs($user)
-                ->visitRoute('sponsors.index')
-                ->assertRouteIs('sponsors.index')
+                ->visitRoute('users.sponsors.index', $user)
+                ->assertRouteIs('users.sponsors.index', $user)
                 ;
         });
     }
