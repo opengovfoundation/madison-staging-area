@@ -33,23 +33,11 @@ class SponsorMember extends Model
 
     public function getNameAttribute()
     {
-        $user = User::where('id', '=', $this->user_id)->first();
-
-        if (!$user) {
-            throw new \Exception("Could not locate user with ID");
-        }
-
-        return "{$user->display_name}";
+        return "{$this->user->display_name}";
     }
 
     public function getEmailAttribute()
     {
-        $user = User::where('id', '=', $this->user_id)->first();
-
-        if (!$user) {
-            throw new \Exception("Could not locate user with ID");
-        }
-
-        return "{$user->email}";
+        return "{$this->user->email}";
     }
 }
