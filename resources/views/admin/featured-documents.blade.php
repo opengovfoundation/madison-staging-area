@@ -30,28 +30,16 @@
                             <td>
                                 {{ Form::open(['route' => ['admin.featured-documents.update', $document->id], 'method' => 'put', 'class' => 'inline']) }}
                                     <input type="hidden" name="action" value="up">
-                                    @if (!$loop->first)
-                                        <button type="submit" class="btn btn-xs btn-default up">
-                                            <i class="fa fa-arrow-up"></i>
-                                        </button>
-                                    @else
-                                        <button disabled class="btn btn-xs btn-default up">
-                                            <i class="fa fa-arrow-up"></i>
-                                        </button>
-                                    @endif
+                                    <button type="submit" class="btn btn-xs btn-default up" {!! $loop->first ? 'disabled' : null !!}>
+                                        <i class="fa fa-arrow-up"></i>
+                                    </button>
                                 {{ Form::close() }}
 
                                 {{ Form::open(['route' => ['admin.featured-documents.update', $document->id], 'method' => 'put', 'class' => 'inline']) }}
                                     <input type="hidden" name="action" value="down">
-                                    @if (!$loop->last)
-                                        <button type="submit" class="btn btn-xs btn-default down">
-                                            <i class="fa fa-arrow-down"></i>
-                                        </button>
-                                    @else
-                                        <button disabled class="btn btn-xs btn-default down">
-                                            <i class="fa fa-arrow-down"></i>
-                                        </button>
-                                    @endif
+                                    <button type="submit" class="btn btn-xs btn-default down" {!! $loop->last ? 'disabled' : null !!}>
+                                        <i class="fa fa-arrow-down"></i>
+                                    </button>
                                 {{ Form::close() }}
                             </td>
 

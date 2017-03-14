@@ -9,7 +9,7 @@ use Laravel\Dusk\Browser;
 
 class FeaturedDocumentsTest extends AdminTestCase
 {
-    public function testEmpty()
+    public function testNone()
     {
         $this->browse(function ($browser) {
             $page = new Admin\FeaturedDocumentsPage;
@@ -31,13 +31,18 @@ class FeaturedDocumentsTest extends AdminTestCase
 
         $this->assertEquals([], Document::getFeaturedDocumentIds()->toArray());
 
-        $featuredDocs = $documents->take(2)->each(function ($document) {
-            $document->setAsFeatured();
-        });
+        $featuredDocs = $documents
+            ->take(2)
+            ->each
+            ->setAsFeatured()
+            // have the collection be in "featured" order
+            ->reverse()
+            ->values()
+            ;
         $nonFeaturedDocs = $documents->take(-1);
 
         $this->assertEquals(
-            $featuredDocs->pluck('id')->reverse()->values(),
+            $featuredDocs->pluck('id'),
             Document::getFeaturedDocumentIds()
         );
 
@@ -52,7 +57,9 @@ class FeaturedDocumentsTest extends AdminTestCase
                 ;
 
             foreach ($featuredDocs as $document) {
-                $browser->assertSee($document->title);
+                $browser->onDocumentRow($document, function ($row) use ($document) {
+                    $row->assertSee($document->title);
+                });
             }
 
             foreach ($nonFeaturedDocs as $document) {
@@ -86,9 +93,10 @@ class FeaturedDocumentsTest extends AdminTestCase
     {
         $documents = factory(Document::class, 2)
             ->create()
-            ->each(function ($document) {
-                $document->setAsFeatured();
-            });
+            ->each
+            ->setAsFeatured()
+            ->reverse()
+            ->values();
 
         $this->browse(function ($browser) use ($documents) {
             $page = new Admin\FeaturedDocumentsPage;
@@ -101,14 +109,14 @@ class FeaturedDocumentsTest extends AdminTestCase
                 ;
 
             $browser
-                ->onDocumentRow($featuredDocs->last(), function ($row) {
+                ->onDocumentRow($documents->last(), function ($row) {
                     $row
                         ->click('@moveUpBtn')
                         ;
                 })
                 ->assertPathIs($page->url())
                 ->assertVisible('.alert.alert-info')
-                ->onDocumentRow($featuredDocs->last(), function ($row) {
+                ->onDocumentRow($documents->last(), function ($row) {
                     $row
                         ->assertVisible('@moveUpBtnDisabled')
                         ->assertVisible('@moveDownBtn')
@@ -125,9 +133,10 @@ class FeaturedDocumentsTest extends AdminTestCase
     {
         $documents = factory(Document::class, 2)
             ->create()
-            ->each(function ($document) {
-                $document->setAsFeatured();
-            });
+            ->each
+            ->setAsFeatured()
+            ->reverse()
+            ->values();
 
         $this->browse(function ($browser) use ($documents) {
             $page = new Admin\FeaturedDocumentsPage;
@@ -152,14 +161,15 @@ class FeaturedDocumentsTest extends AdminTestCase
                 ;
 
             foreach ($documents as $document) {
-                $browser->assertSee($document->title);
+                $browser->onDocumentRow($document, function ($row) use ($document) {
+                    $row->assertSee($document->title);
+                });
             }
 
             $this->assertEquals(
-                $documents->pluck('id')->reverse()->values(),
+                $documents->pluck('id'),
                 Document::getFeaturedDocumentIds()
             );
-
         });
     }
 }
