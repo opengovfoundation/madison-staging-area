@@ -13,26 +13,6 @@ class SponsorController extends Controller
 {
 
     /**
-     * List all sponsors for a particular user.
-     *
-     */
-    public function userSponsorsIndex(Requests\UserSponsors $request, User $user)
-    {
-        if ($request->user() && !$request->user()->isAdmin()
-            && $request->user()->sponsors()->count() == 1
-        ) {
-            return redirect()->route('sponsors.documents.index', $request->user()->sponsors()->first());
-        }
-
-        $limit = $request->input('limit', 10);
-        $sponsors = $user->sponsors()->paginate($limit);
-
-        return view('sponsors.list', compact([
-            'sponsors'
-        ]));
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

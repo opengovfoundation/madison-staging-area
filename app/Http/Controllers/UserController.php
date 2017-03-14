@@ -141,6 +141,12 @@ class UserController extends Controller
      */
     public function sponsorsIndex(Requests\SponsorsIndex $request, User $user)
     {
+        if ($request->user() && !$request->user()->isAdmin()
+            && $request->user()->sponsors()->count() == 1
+        ) {
+            return redirect()->route('sponsors.documents.index', $request->user()->sponsors()->first());
+        }
+
         $limit = $request->input('limit', 10);
         $sponsors = $user->sponsors()->paginate($limit);
 
