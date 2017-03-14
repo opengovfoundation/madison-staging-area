@@ -26,7 +26,7 @@
                 </thead>
                 <tbody>
                     @foreach ($documents as $document)
-                        <tr>
+                        <tr id="document-{$document->id}">
                             <td>
                                 {{ Form::open(['route' => ['admin.featured-documents.update', $document->id], 'method' => 'put', 'class' => 'inline']) }}
                                     <input type="hidden" name="action" value="up">
