@@ -12,7 +12,7 @@ use Auth;
 class SponsorController extends Controller
 {
 
-	/**
+    /**
      * Information page on becoming a sponsor.
      */
     public function info(Request $request)
