@@ -19,9 +19,8 @@ class FeaturedDocumentsTest extends AdminTestCase
             $browser
                 ->loginAs($this->admin)
                 ->visit($page)
+                ->assertSee(trans('messages.admin.featured_documents'))
                 ;
-
-            // TODO: what should they see
         });
     }
 
@@ -63,7 +62,7 @@ class FeaturedDocumentsTest extends AdminTestCase
             }
 
             foreach ($nonFeaturedDocs as $document) {
-                $browser->assertDontSee($document->title);
+                $browser->assertDontSeeIn('table', $document->title);
             }
 
             # Correct buttons are disabled
@@ -157,7 +156,7 @@ class FeaturedDocumentsTest extends AdminTestCase
                 })
                 ->assertPathIs($page->url())
                 ->assertVisible('.alert.alert-info')
-                ->assertDontSee($unfeaturedDoc->title)
+                ->assertDontSeeIn('table', $unfeaturedDoc->title)
                 ;
 
             foreach ($documents as $document) {
@@ -168,6 +167,35 @@ class FeaturedDocumentsTest extends AdminTestCase
 
             $this->assertEquals(
                 $documents->pluck('id'),
+                Document::getFeaturedDocumentIds()
+            );
+        });
+    }
+
+    /**
+     * @depends testList
+     */
+    public function testAdd()
+    {
+        $documents = factory(Document::class, 3)->create();
+
+        $this->browse(function ($browser) use ($documents) {
+            $page = new Admin\FeaturedDocumentsPage;
+
+            $this->assertNonAdminsDenied($browser, $page);
+
+            $browser
+                ->loginAs($this->admin)
+                ->visit($page)
+                ->select('add_featured_doc_id', $documents->last()->id)
+                ->click('@addFeaturedDocBtn')
+                ->assertPathIs($page->url())
+                ->assertVisible('.alert.alert-info')
+                ->assertSeeIn('table', $documents->last()->title)
+                ;
+
+            $this->assertEquals(
+                collect([$documents->last()->id]),
                 Document::getFeaturedDocumentIds()
             );
         });

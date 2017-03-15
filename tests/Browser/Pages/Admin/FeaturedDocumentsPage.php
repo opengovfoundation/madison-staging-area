@@ -30,6 +30,8 @@ class FeaturedDocumentsPage extends Page
             '@moveDownBtn' => '.down',
             '@moveDownBtnDisabled' => '.down[disabled]',
             '@unfeatureBtn' => '.unfeature',
+            '@addFeaturedDocInput' => '.add-featured-document input',
+            '@addFeaturedDocBtn' => '.add-featured-document button[type=submit]',
         ];
     }
 
