@@ -13,6 +13,6 @@
             ) }}
         @endforeach
         <hr>
-        {{ Form::mSubmit() }}
+        {{ Form::mSubmit(trans('messages.save')) }}
     {{ Form::close() }}
 @endsection
