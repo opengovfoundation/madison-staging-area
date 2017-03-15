@@ -63,16 +63,20 @@
 
             <hr>
 
-            {{ Form::open(['route' => 'admin.featured-documents.add', 'method' => 'post', 'class' => 'form-inline add-featured-document']) }}
-                {{ Form::mSelect(
-                        'add_featured_doc_id',
-                        trans('messages.admin.add_featured_document'),
-                        collect($nonFeaturedDocuments)->mapWithKeys_v2(function ($item) {return [$item->id => $item->title]; })->toArray(),
-                        null,
-                        ['label-sr-only' => true]
-                        )
-                }}
-                {{ Form::mSubmit(trans('messages.admin.add_featured_document')) }}
+            {{ Form::open(['route' => 'admin.featured-documents.add', 'method' => 'post', 'class' => 'add-featured-document row']) }}
+                <div class="col-sm-9">
+                    {{ Form::mSelect(
+                            'add_featured_doc_id',
+                            trans('messages.admin.add_featured_document'),
+                            collect($nonFeaturedDocuments)->mapWithKeys_v2(function ($item) {return [$item->id => $item->title]; })->toArray(),
+                            null,
+                            ['label-sr-only' => true]
+                            )
+                    }}
+                </div>
+                <div class="col-sm-3">
+                    {{ Form::mSubmit(trans('messages.admin.add_featured_document')) }}
+                </div>
             {{ Form::close() }}
         </div>
     </div>
