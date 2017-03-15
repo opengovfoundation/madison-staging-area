@@ -39,6 +39,7 @@ return [
     'save' => 'Save',
     'add' => 'Add',
     'new' => 'New',
+    'save' => 'Save',
     'get_started' => 'Get Started',
     'learn_more' => 'Learn more',
     'relevance' => 'Relevance',
