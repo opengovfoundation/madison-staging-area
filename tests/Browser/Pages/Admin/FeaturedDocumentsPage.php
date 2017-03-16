@@ -25,9 +25,9 @@ class FeaturedDocumentsPage extends Page
     public function elements()
     {
         return [
-            '@moveUpBtn' => '.up',
+            '@moveUpBtn' => '.up:not([disabled])',
             '@moveUpBtnDisabled' => '.up[disabled]',
-            '@moveDownBtn' => '.down',
+            '@moveDownBtn' => '.down:not([disabled])',
             '@moveDownBtnDisabled' => '.down[disabled]',
             '@unfeatureBtn' => '.unfeature',
             '@addFeaturedDocInput' => '.add-featured-document input',
