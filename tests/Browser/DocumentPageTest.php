@@ -643,4 +643,23 @@ class DocumentPageTest extends DuskTestCase
             //);
         });
     }
+
+    public function testLoginToCommentRedirect()
+    {
+        $this->browse(function ($browser) {
+            $page = new DocumentPage($this->document);
+
+            $browser
+                ->visit($page)
+                ->openCommentsTab()
+                ->clickLink(trans('messages.document.login_to_comment'))
+                ->assertPathIs('/login')
+                ->type('email', $this->user->email)
+                ->type('password', 'secret')
+                ->press(trans('messages.login'))
+                ->assertPathIs($page->url())
+                ->assertAuthenticatedAs($this->user)
+                ;
+        });
+    }
 }

@@ -71,4 +71,21 @@ class RegisterController extends Controller
             'token' => str_random(),
         ]);
     }
+
+    /**
+     * The user has been registered.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function registered(Request $request, $user)
+    {
+        $redirectTo = $this->redirectPath();
+        if ($request->input('redirect')) {
+            $redirectTo = $request->input('redirect');
+        }
+
+        return redirect()->intended($redirectTo);
+    }
 }

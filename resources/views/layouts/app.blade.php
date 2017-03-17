@@ -85,8 +85,8 @@
 
                         <!-- Authentication Links -->
                         @if (Auth::guest())
-                            <li><a href="{{ url('/login') }}">@lang('messages.login')</a></li>
-                            <li><a href="{{ url('/register') }}">@lang('messages.register')</a></li>
+                            <li>{{ Html::linkRoute('login', trans('messages.login'), ['redirect' => $document->url]) }}</li>
+                            <li>{{ Html::linkRoute('register', trans('messages.register'), ['redirect' => $document->url]) }}</li>
                         @else
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
