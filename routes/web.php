@@ -135,7 +135,7 @@ Route::get('/become-a-sponsor', 'SponsorController@info')
     ->name('sponsors.info');
 
 Route::resource('sponsors', 'SponsorController', [
-    'except' => ['index'],
+    'except' => ['index', 'destroy'],
 ]);
 
 Route::put('/sponsors/{sponsor}/status', 'SponsorController@updateStatus')

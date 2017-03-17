@@ -1,18 +1,18 @@
 <div class="col-md-3">
     <div class="list-group">
         <a href="{{ route('sponsors.documents.index', $sponsor) }}"
-            class="list-group-item {{ Request::route()->getName() !== 'sponsors.documents.index' ?: 'active' }}">
+            class="list-group-item {{ active(['sponsors.documents.index']) }}">
 
             @lang('messages.document.list')
         </a>
         <a href="{{ route('sponsors.members.index', $sponsor) }}"
-            class="list-group-item {{ !strpos(Request::route()->uri, 'members') ?: 'active' }}">
+            class="list-group-item {{ active(['sponsors.members.index']) }}">
 
             @lang('messages.sponsor.members')
         </a>
         @if ($sponsor->isSponsorOwner(Auth::user()) || Auth::user()->isAdmin())
             <a href="{{ route('sponsors.edit', $sponsor) }}"
-                class="list-group-item {{ Request::route()->getName() !== 'sponsors.edit' ?: 'active' }}">
+                class="list-group-item {{ active(['sponsors.edit']) }}">
 
                 @lang('messages.settings')
             </a>

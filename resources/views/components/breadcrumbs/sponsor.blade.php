@@ -14,7 +14,7 @@
             {{ $sponsor->display_name }}
         </a>
     </li>
-    @if (strpos(Request::route()->uri, 'members') && strpos(Request::route()->uri, 'create'))
+    @if (Route::currentRouteName() === 'sponsors.members.create')
         <li>
             <a href="{{ route('sponsors.members.index', $sponsor) }}">
                 @lang('messages.sponsor.members')
@@ -22,17 +22,15 @@
         </li>
     @endif
 
-    @if (strpos(Request::route()->uri, 'documents'))
-        <li class="active">@lang('messages.document.list')</li>
-
-    @elseif (strpos(Request::route()->uri, 'members') && strpos(Request::route()->uri, 'create'))
-        <li class="active">@lang('messages.add')</li>
-
-    @elseif (strpos(Request::route()->uri, 'members'))
-        <li class="active">@lang('messages.sponsor.members')</li>
-
-    @elseif (strpos(Request::route()->uri, 'edit'))
-        <li class="active">@lang('messages.settings')</li>
-
-    @endif
+    <li class="active">
+        @if (Route::currentRouteName() === 'sponsors.documents.index')
+            @lang('messages.document.list')
+        @elseif (Route::currentRouteName() === 'sponsors.members.create')
+            @lang('messages.add')
+        @elseif (Route::currentRouteName() === 'sponsors.members.index')
+            @lang('messages.sponsor.members')
+        @elseif (Route::currentRouteName() === 'sponsors.edit')
+            @lang('messages.settings')
+        @endif
+    </li>
 </ol>
