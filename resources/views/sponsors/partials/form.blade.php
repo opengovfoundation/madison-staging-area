@@ -29,4 +29,4 @@
     </div>
 </div>
 <hr>
-{{ Form::mSubmit() }}
+{{ Form::mSubmit(trans('messages.save')) }}

@@ -36,6 +36,7 @@ return [
     'settings' => 'Settings',
     'type' => 'Type',
     'view' => 'View',
+    'save' => 'Save',
     'add' => 'Add',
     'new' => 'New',
     'get_started' => 'Get Started',
