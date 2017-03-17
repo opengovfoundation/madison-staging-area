@@ -4,17 +4,15 @@
             @lang('messages.administrator')
         </a>
     </li>
-    @if (strpos(Request::route()->uri, 'site'))
-        <li class="active">@lang('messages.settings')</li>
-
-    @elseif (strpos(Request::route()->uri, 'pages'))
-        <li class="active">@lang('messages.admin.pages')</li>
-
-    @elseif (strpos(Request::route()->uri, 'featured'))
-        <li class="active">@lang('messages.admin.featured_documents')</li>
-
-    @elseif (strpos(Request::route()->uri, 'users'))
-        <li class="active">@lang('messages.admin.manage_users')</li>
-
-    @endif
+    <li class="active">
+        @if (Route::currentRouteName() === 'admin.site.index')
+            @lang('messages.settings')
+        @elseif (Route::currentRouteName() === 'admin.pages.index')
+            @lang('messages.admin.pages')
+        @elseif (Route::currentRouteName() === 'admin.featured-documents.index')
+            @lang('messages.admin.featured_documents')
+        @elseif (Route::currentRouteName() === 'admin.users.index')
+            @lang('messages.admin.manage_users')
+        @endif
+    </li>
 </ol>
