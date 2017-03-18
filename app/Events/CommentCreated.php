@@ -42,6 +42,6 @@ class CommentCreated extends Event
 
     public static function getType()
     {
-        return static::TYPE_USER;
+        return static::TYPE_SPONSOR;
     }
 }

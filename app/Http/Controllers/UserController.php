@@ -50,12 +50,18 @@ class UserController extends Controller
             ->flip();
 
         // Build array of notifications and their selected status
-        $notificationPreferences = [];
+        $notificationPreferenceGroups = [];
         foreach ($validNotifications as $notificationName => $className) {
-            $notificationPreferences[$className] = isset($currentNotifications[$notificationName]);
+            if (!isset($notificationPreferenceGroups[$className::getType()])) {
+                $notificationPreferenceGroups[$className::getType()] = [];
+            }
+            $notificationPreferenceGroups[$className::getType()][$className] = isset($currentNotifications[$notificationName]);
         }
 
-        return view('users.settings.notifications', compact('user', 'notificationPreferences'));
+        // TODO: filter out notification preferences based on types, pass that to view and handle there
+        // -- ideally it should be one array and have them grouped by the type
+
+        return view('users.settings.notifications', compact('user', 'notificationPreferenceGroups'));
     }
 
     /**
