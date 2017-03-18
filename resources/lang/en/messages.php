@@ -320,6 +320,12 @@ return [
         'thank_you' => 'Thank you for using our application!',
         'unsubscribe' => 'If you do not wish to receive these notifications, you can unsubscribe in your user settings.',
 
+        'groups' => [
+            'user' => 'User Notifications',
+            'sponsor' => 'Sponsor Notifications',
+            'admin' => 'Admin Notifications',
+        ],
+
         // actual notification content
         'madison' => [
             'comment' => [
