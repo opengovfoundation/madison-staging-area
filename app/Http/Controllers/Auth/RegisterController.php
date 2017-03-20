@@ -82,7 +82,7 @@ class RegisterController extends Controller
     protected function registered(Request $request, $user)
     {
         $redirectTo = $this->redirectPath();
-        if ($request->input('redirect')) {
+        if ($request->has('redirect')) {
             $redirectTo = $request->input('redirect');
         }
 

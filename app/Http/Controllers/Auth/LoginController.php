@@ -48,7 +48,7 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         $redirectTo = $this->redirectPath();
-        if ($request->input('redirect')) {
+        if ($request->has('redirect')) {
             $redirectTo = $request->input('redirect');
         }
 

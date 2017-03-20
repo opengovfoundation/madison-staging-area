@@ -56,6 +56,7 @@
                     <div class="btn-group oppose-btn" role="group">
                             {{ Form::open(['route' => ['documents.support', $document], 'method' => 'put']) }}
                                 <input type="hidden" name="support" value="0">
+
                                 @if ($userSupport === false)
                                     <button type="submit" class="btn btn-warning">
                                         {{ trans('messages.document.opposed') }} ({{ $opposeCount }})
