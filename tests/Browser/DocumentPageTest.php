@@ -47,6 +47,8 @@ class DocumentPageTest extends DuskTestCase
 
         $this->commentReply = FactoryHelpers::createComment($this->sponsorUser, $this->comment1);
 
+        $this->page = new DocumentPage($this->document);
+
         // TODO: Mocking does not work with Dusk yet!
         // -- ref: https://github.com/laravel/dusk/issues/152
 
@@ -57,7 +59,8 @@ class DocumentPageTest extends DuskTestCase
     public function testCanSeeDocumentContent()
     {
         $this->browse(function ($browser) {
-            $browser->visit(new DocumentPage($this->document))
+            $browser
+                ->visit($this->page)
                 ->assertTitleContains($this->document->title)
                 ->assertSee($this->document->title)
                 ->assertSeeIn('@sponsorList', $this->document->sponsors()->first()->display_name)
@@ -72,7 +75,8 @@ class DocumentPageTest extends DuskTestCase
     public function testCanSeeDocumentStats()
     {
         $this->browse(function ($browser) {
-            $browser->visit(new DocumentPage($this->document))
+            $browser
+                ->visit($this->page)
                 ->assertSeeIn('@participantCount', '1')
                 ->assertSeeIn('@notesCount', '2')
                 ->assertSeeIn('@commentsCount', '3')
@@ -87,7 +91,8 @@ class DocumentPageTest extends DuskTestCase
         $this->document->update(['discussion_state' => Document::DISCUSSION_STATE_HIDDEN]);
 
         $this->browse(function ($browser) {
-            $browser->visit(new DocumentPage($this->document))
+            $browser
+                ->visit($this->page)
                 ->assertDontSee('@participantCount')
                 ->assertDontSee('@notesCount')
                 ->assertDontSee('@commentsCount')
@@ -106,7 +111,8 @@ class DocumentPageTest extends DuskTestCase
          * Not testing for timestamps here because they end up off by a second or so
          */
         $this->browse(function ($browser) {
-            $browser->visit(new DocumentPage($this->document))
+            $browser
+                ->visit($this->page)
                 ->openCommentsTab()
                 ->assertSeeComment($this->comment1)
                 ->assertSeeComment($this->comment2)
@@ -121,7 +127,8 @@ class DocumentPageTest extends DuskTestCase
          * Not testing for timestamps here because they end up off by a second or so
          */
         $this->browse(function ($browser) {
-            $browser->visit(new DocumentPage($this->document))
+            $browser
+                ->visit($this->page)
                 ->openNotesPane()
                 ->assertSeeNote($this->note1)
                 ->assertSeeNote($this->note2)
@@ -136,7 +143,8 @@ class DocumentPageTest extends DuskTestCase
         ]);
 
         $this->browse(function ($browser) {
-            $browser->visit(new DocumentPage($this->document))
+            $browser
+                ->visit($this->page)
                 ->assertSee('This action is unauthorized')
                 ;
         });
@@ -145,9 +153,11 @@ class DocumentPageTest extends DuskTestCase
     public function testLoginRedirectIfSupportWhenNotLoggedIn()
     {
         $this->browse(function ($browser) {
-            $browser->visit(new DocumentPage($this->document))
+            $browser
+                ->visit($this->page)
                 ->click('@supportBtn')
                 ->assertPathIs('/login')
+                ->assertLoginRedirectsBackToPage($this->user)
                 ;
         });
     }
@@ -155,9 +165,11 @@ class DocumentPageTest extends DuskTestCase
     public function testLoginRedirectIfOpposeWhenNotLoggedIn()
     {
         $this->browse(function ($browser) {
-            $browser->visit(new DocumentPage($this->document))
+            $browser
+                ->visit($this->page)
                 ->click('@opposeBtn')
                 ->assertPathIs('/login')
+                ->assertLoginRedirectsBackToPage($this->user)
                 ;
         });
     }
@@ -165,10 +177,12 @@ class DocumentPageTest extends DuskTestCase
     public function testLoginRedirectIfLikeCommentWhenNotLoggedIn()
     {
         $this->browse(function ($browser) {
-            $browser->visit(new DocumentPage($this->document))
+            $browser
+                ->visit($this->page)
                 ->openCommentsTab()
                 ->addActionToComment('like', $this->comment1)
                 ->assertPathIs('/login')
+                ->assertLoginRedirectsBackToPage($this->user)
                 ;
         });
     }
@@ -176,10 +190,12 @@ class DocumentPageTest extends DuskTestCase
     public function testLoginRedirectIfFlagCommentWhenNotLoggedIn()
     {
         $this->browse(function ($browser) {
-            $browser->visit(new DocumentPage($this->document))
+            $browser
+                ->visit($this->page)
                 ->openCommentsTab()
                 ->addActionToComment('flag', $this->comment1)
                 ->assertPathIs('/login')
+                ->assertLoginRedirectsBackToPage($this->user)
                 ;
         });
     }
@@ -187,10 +203,12 @@ class DocumentPageTest extends DuskTestCase
     public function testLoginRedirectIfLikeNoteWhenNotLoggedIn()
     {
         $this->browse(function ($browser) {
-            $browser->visit(new DocumentPage($this->document))
+            $browser
+                ->visit($this->page)
                 ->openNotesPane()
                 ->addActionToNote('like', $this->note1)
                 ->assertPathIs('/login')
+                ->assertLoginRedirectsBackToPage($this->user)
                 ;
         });
     }
@@ -198,10 +216,25 @@ class DocumentPageTest extends DuskTestCase
     public function testLoginRedirectIfFlagNoteWhenNotLoggedIn()
     {
         $this->browse(function ($browser) {
-            $browser->visit(new DocumentPage($this->document))
+            $browser
+                ->visit($this->page)
                 ->openNotesPane()
                 ->addActionToNote('flag', $this->note1)
                 ->assertPathIs('/login')
+                ->assertLoginRedirectsBackToPage($this->user)
+                ;
+        });
+    }
+
+    public function testLoginToCommentRedirect()
+    {
+        $this->browse(function ($browser) {
+            $browser
+                ->visit($this->page)
+                ->openCommentsTab()
+                ->clickLink(trans('messages.document.login_to_comment'))
+                ->assertPathIs('/login')
+                ->assertLoginRedirectsBackToPage($this->user)
                 ;
         });
     }
@@ -209,7 +242,8 @@ class DocumentPageTest extends DuskTestCase
     public function testCommentFormsHiddenIfNotLoggedIn()
     {
         $this->browse(function ($browser) {
-            $browser->visit(new DocumentPage($this->document))
+            $browser
+                ->visit($this->page)
                 ->openCommentsTab()
                 ->assertDontSee('@commentForm')
                 ->with(DocumentPage::commentSelector($this->comment1), function($commentDiv) {
@@ -222,7 +256,8 @@ class DocumentPageTest extends DuskTestCase
     public function testNoteReplyHiddenIfNotLoggedIn()
     {
         $this->browse(function ($browser) {
-            $browser->visit(new DocumentPage($this->document))
+            $browser
+                ->visit($this->page)
                 ->openNotesPane()
                 ->with(DocumentPage::noteSelector($this->note1), function($commentDiv) {
                     $commentDiv
@@ -240,7 +275,7 @@ class DocumentPageTest extends DuskTestCase
         $this->browse(function ($browser) {
             $browser
                 ->loginAs($this->user)
-                ->visit(new DocumentPage($this->document))
+                ->visit($this->page)
                 ->openCommentsTab()
                 ->fillAndSubmitCommentForm()
                 ;
@@ -270,7 +305,7 @@ class DocumentPageTest extends DuskTestCase
         $this->browse(function ($browser) {
             $browser
                 ->loginAs($this->user)
-                ->visit(new DocumentPage($this->document))
+                ->visit($this->page)
                 ->openCommentsTab()
                 ->fillAndSubmitCommentReplyForm($this->comment1)
                 ;
@@ -308,7 +343,7 @@ class DocumentPageTest extends DuskTestCase
         $this->browse(function ($browser) {
             $browser
                 ->loginAs($this->user)
-                ->visit(new DocumentPage($this->document))
+                ->visit($this->page)
                 ->addNoteToContent()
                 ;
 
@@ -337,7 +372,7 @@ class DocumentPageTest extends DuskTestCase
         $this->browse(function ($browser) {
             $browser
                 ->loginAs($this->user)
-                ->visit(new DocumentPage($this->document))
+                ->visit($this->page)
                 ->openNotesPane()
                 ->addReplyToNote($this->note1)
                 ;
@@ -377,7 +412,7 @@ class DocumentPageTest extends DuskTestCase
         $this->browse(function ($browser) use ($commentLikes) {
             $browser
                 ->loginAs($this->user)
-                ->visit(new DocumentPage($this->document))
+                ->visit($this->page)
                 ->openCommentsTab()
                 ->addActionToComment('like', $this->comment1)
                 ->assertCommentHasActionCount('like', $this->comment1, $commentLikes + 1)
@@ -404,7 +439,7 @@ class DocumentPageTest extends DuskTestCase
         $this->browse(function ($browser) use ($commentFlags) {
             $browser
                 ->loginAs($this->user)
-                ->visit(new DocumentPage($this->document))
+                ->visit($this->page)
                 ->openCommentsTab()
                 ->addActionToComment('flag', $this->comment1)
                 ->assertCommentHasActionCount('flag', $this->comment1, $commentFlags + 1)
@@ -432,7 +467,7 @@ class DocumentPageTest extends DuskTestCase
         $this->browse(function ($browser) use ($reply, $replyLikes) {
             $browser
                 ->loginAs($this->user)
-                ->visit(new DocumentPage($this->document))
+                ->visit($this->page)
                 ->openCommentsTab()
                 ->addActionToComment('like', $reply)
                 ->assertCommentHasActionCount('like', $reply, $replyLikes + 1)
@@ -460,7 +495,7 @@ class DocumentPageTest extends DuskTestCase
         $this->browse(function ($browser) use ($reply, $replyFlags) {
             $browser
                 ->loginAs($this->user)
-                ->visit(new DocumentPage($this->document))
+                ->visit($this->page)
                 ->openCommentsTab()
                 ->addActionToComment('flag', $reply)
                 ->assertCommentHasActionCount('flag', $reply, $replyFlags + 1)
@@ -487,7 +522,7 @@ class DocumentPageTest extends DuskTestCase
         $this->browse(function ($browser) use ($noteLikes) {
             $browser
                 ->loginAs($this->user)
-                ->visit(new DocumentPage($this->document))
+                ->visit($this->page)
                 ->openNotesPane()
                 ->addActionToNote('like', $this->note1)
                 ->assertNoteHasActionCount('like', $this->note1, $noteLikes +1)
@@ -514,7 +549,7 @@ class DocumentPageTest extends DuskTestCase
         $this->browse(function ($browser) use ($noteFlags) {
             $browser
                 ->loginAs($this->user)
-                ->visit(new DocumentPage($this->document))
+                ->visit($this->page)
                 ->openNotesPane()
                 ->addActionToNote('flag', $this->note1)
                 ->assertNoteHasActionCount('flag', $this->note1, $noteFlags +1)
@@ -542,7 +577,7 @@ class DocumentPageTest extends DuskTestCase
         $this->browse(function ($browser) use ($reply, $replyLikes) {
             $browser
                 ->loginAs($this->user)
-                ->visit(new DocumentPage($this->document))
+                ->visit($this->page)
                 ->openNotesPane()
                 ->addActionToComment('like', $reply)
                 ->assertCommentHasActionCount('like', $reply, $replyLikes + 1)
@@ -570,7 +605,7 @@ class DocumentPageTest extends DuskTestCase
         $this->browse(function ($browser) use ($reply, $replyFlags) {
             $browser
                 ->loginAs($this->user)
-                ->visit(new DocumentPage($this->document))
+                ->visit($this->page)
                 ->openNotesPane()
                 ->addActionToComment('flag', $reply)
                 ->assertCommentHasActionCount('flag', $reply, $replyFlags + 1)
@@ -597,7 +632,7 @@ class DocumentPageTest extends DuskTestCase
         $this->browse(function ($browser) use ($documentSupport) {
             $browser
                 ->loginAs($this->user)
-                ->visit(new DocumentPage($this->document))
+                ->visit($this->page)
                 ->click('@supportBtn')
                 ->assertDocumentSupportCount($documentSupport + 1)
                 ;
@@ -624,7 +659,7 @@ class DocumentPageTest extends DuskTestCase
         $this->browse(function ($browser) use ($documentOppose) {
             $browser
                 ->loginAs($this->user)
-                ->visit(new DocumentPage($this->document))
+                ->visit($this->page)
                 ->click('@opposeBtn')
                 ->assertDocumentOpposeCount($documentOppose + 1)
                 ;
@@ -641,25 +676,6 @@ class DocumentPageTest extends DuskTestCase
             //            ;
             //    }
             //);
-        });
-    }
-
-    public function testLoginToCommentRedirect()
-    {
-        $this->browse(function ($browser) {
-            $page = new DocumentPage($this->document);
-
-            $browser
-                ->visit($page)
-                ->openCommentsTab()
-                ->clickLink(trans('messages.document.login_to_comment'))
-                ->assertPathIs('/login')
-                ->type('email', $this->user->email)
-                ->type('password', 'secret')
-                ->press(trans('messages.login'))
-                ->assertPathIs($page->url())
-                ->assertAuthenticatedAs($this->user)
-                ;
         });
     }
 }
