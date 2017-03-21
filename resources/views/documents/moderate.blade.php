@@ -9,13 +9,22 @@
 
     @include('components.errors')
 
-    @if ($unhandledComments->count() > 0)
-        <h3>@lang('messages.document.comments_unhandled')</h3>
-        @include('documents.partials.comment_table', ['comments' => $unhandledComments, 'document' => $document])
-    @endif
+    <div class="row">
+        @include('documents.partials.manage-sidebar')
 
-    @if ($handledComments->count() > 0)
-        <h3>@lang('messages.document.comments_handled')</h3>
-        @include('documents.partials.comment_table', ['comments' => $handledComments, 'document' => $document])
-    @endif
+        <div class="col-md-9">
+            {{-- TODO: make better --}}
+            <a href="{{ route('documents.comments.index', [$document, 'download' => 'csv']) }}">@lang('messages.document.download_comments_csv')</a>
+
+            @if ($unhandledComments->count() > 0)
+                <h3>@lang('messages.document.comments_unhandled')</h3>
+                @include('documents.partials.comment_table', ['comments' => $unhandledComments, 'document' => $document])
+            @endif
+
+            @if ($handledComments->count() > 0)
+                <h3>@lang('messages.document.comments_handled')</h3>
+                @include('documents.partials.comment_table', ['comments' => $handledComments, 'document' => $document])
+            @endif
+        </div>
+    </div>
 @endsection
