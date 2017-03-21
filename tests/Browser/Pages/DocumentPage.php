@@ -282,9 +282,8 @@ class DocumentPage extends BasePage
     public function assertLoginRedirectsBackToPage(Browser $browser, $user)
     {
         $browser
-            ->type('email', $user->email)
-            ->type('password', 'secret')
-            ->press(trans('messages.login'))
+            ->on(new LoginPage)
+            ->fillAndSubmitLoginForm($user)
             ->assertPathIs($this->url())
             ->assertAuthenticatedAs($user)
             ;
