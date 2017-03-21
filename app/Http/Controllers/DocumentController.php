@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Document as Requests;
 use App\Events\DocumentPublished;
 use App\Events\SupportVoteChanged;
-use App\Models\Category;
 use App\Models\User;
 use App\Models\Doc as Document;
 use App\Models\DocContent as DocumentContent;
@@ -51,18 +50,6 @@ class DocumentController extends Controller
 
         if ($discussionStates) {
             $documentsQuery->whereIn('discussion_state', $discussionStates);
-        }
-
-        if ($request->has('category_id') && !in_array('any', $request->input('category_id'))) {
-            $documentsQuery->whereHas('categories', function ($q) use ($request) {
-                $ids = $request->input('category_id');
-                $q->whereIn('categories.id', $ids);
-            });
-        } elseif ($request->has('category')) {
-            $documentsQuery->whereHas('categories', function ($q) use ($request) {
-                $category = $request->input('category');
-                $q->where('categories.name', 'LIKE', "%$category%");
-            });
         }
 
         if ($request->has('q')) {
@@ -241,7 +228,6 @@ class DocumentController extends Controller
         }
 
         // for the query builder modal
-        $categories = Category::all();
         $sponsors = Sponsor::where('status', Sponsor::STATUS_ACTIVE)->get();
         $publishStates = static::validPublishStatesForQuery();
         $discussionStates = Document::validDiscussionStates();
@@ -250,7 +236,6 @@ class DocumentController extends Controller
         return view('documents.list', compact([
             'documents',
             'documentsCapabilities',
-            'categories',
             'sponsors',
             'publishStates',
             'discussionStates',
@@ -366,7 +351,6 @@ class DocumentController extends Controller
      */
     public function edit(Requests\Edit $request, Document $document)
     {
-        $categories = Category::all();
         $sponsors = Sponsor::where('status', Sponsor::STATUS_ACTIVE)->get();
         $publishStates = Document::validPublishStates();
         $discussionStates = Document::validDiscussionStates();
@@ -374,7 +358,6 @@ class DocumentController extends Controller
 
         return view('documents.edit', compact([
             'document',
-            'categories',
             'sponsors',
             'publishStates',
             'discussionStates',
@@ -401,7 +384,6 @@ class DocumentController extends Controller
 
         $document->setIntroText($request->input('introtext'));
         $document->sponsors()->sync([$request->input('sponsor_id')]);
-        $document->syncCategories($request->input('category_id'));
 
         // update content for correct page
         $pageContent = $document->content()->where('page', $request->input('page', 1))->first();

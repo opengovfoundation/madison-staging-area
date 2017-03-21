@@ -103,9 +103,7 @@ return [
         'slug' => 'Custom URL (slug)',
         'slug_help' => 'Will automatically be set based on title if blank. Only the letters a through z (lowercase), numbers 0 through 9, and hyphens (-) may be used.  For example: my-document',
         'introtext' => 'Intro Text',
-        'category' => 'Category',
         'content' => 'Content',
-        'categories' => 'Categories: ',
         'sponsor' => 'Sponsor',
         'sponsor_others' => 'and others',
 

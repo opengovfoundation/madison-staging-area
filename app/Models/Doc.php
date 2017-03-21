@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
-use App\Models\Category;
 use App\Models\DocContent as DocumentContent;
 use App\Services\SearchQueryCompiler;
 use App\Traits\RootAnnotatableHelpers;
@@ -189,47 +188,6 @@ class Doc extends Model
     public function getSponsorsAttribute()
     {
         return $this->sponsors()->get();
-    }
-
-    public function categories()
-    {
-        return $this->belongsToMany('App\Models\Category');
-    }
-
-    public function syncCategories($categoriesArray)
-    {
-        if (empty($categoriesArray)) {
-            $this->categories()->sync([]);
-            return;
-        }
-
-        $categoriesToSync = [];
-
-        foreach ($categoriesArray as $category) {
-            // if it's just a number, then it's the category id
-            if (is_numeric($category)) {
-                $categoriesToSync[] = $category;
-                continue;
-            }
-
-            // check if category has an id property
-            if (!isset($category['id'])) {
-                // Make sure category with same name doesn't already exist
-                $existingCategory = Category::where('name', $category['name'])->first();
-
-                if ($existingCategory) {
-                    $categoriesToSync[] = $existingCategory->id;
-                } else {
-                    $category = new Category(['name' => $category['name']]);
-                    $category->save();
-                    $categoriesToSync[] = $category->id;
-                }
-            } else {
-                $categoriesToSync[] = $category['id'];
-            }
-        }
-
-        $this->categories()->sync($categoriesToSync);
     }
 
     public function getPages()
@@ -454,8 +412,7 @@ class Doc extends Model
     public static function getEager()
     {
         return static
-            ::with('categories')
-            ->with('sponsors')
+            ::with('sponsors')
             ;
     }
 
@@ -551,8 +508,7 @@ class Doc extends Model
         if (!$featuredIds->isEmpty()) {
             // Make sure our featured document can be viewed by the public.
             $docQuery = static
-                ::with('categories')
-                ->with('sponsors')
+                ::with('sponsors')
                 ->whereIn('id', $featuredIds)
                 ->where('is_template', '!=', '1')
                 ->orderByRaw("FIELD(id,{$featuredIds->implode(',')})")
