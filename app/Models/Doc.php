@@ -400,41 +400,6 @@ class Doc extends Model
         return $this->hasMany('App\Models\DocMeta');
     }
 
-    /**
-     * TODO: Sponsor handling here is off. Is this method needed even?
-     * -- Only used in database seeding currently.
-     */
-    public static function createEmptyDocument(array $params)
-    {
-        $defaults = array(
-            'content' => "New Document Content",
-            'sponsor' => null,
-            'publish_state' => static::PUBLISH_STATE_UNPUBLISHED
-        );
-
-        $params = array_replace_recursive($defaults, $params);
-
-        if (is_null($params['sponsor'])) {
-            throw new \Exception("Sponsor Param Required");
-        }
-
-        $document = new Doc();
-
-        \DB::transaction(function () use ($document, $params) {
-            $document->title = $params['title'];
-            $document->publish_state = $params['publish_state'];
-            $document->save();
-
-            $document->sponsors()->sync([$params['sponsor']]);
-
-            $pageContent = $document->content()->first();
-            $pageContent->content = $params['content'];
-            $pageContent->save();
-        });
-
-        return $document;
-    }
-
     public static function prepareCountsAndDates($docs = [])
     {
         $return_docs = [];
