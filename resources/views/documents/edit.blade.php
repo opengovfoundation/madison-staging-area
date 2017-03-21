@@ -60,14 +60,7 @@
                         $document->sponsors->map(function($sponsor) { return $sponsor->id; })->first()
                         )
                 }}
-                {{ Form::mSelect(
-                        'category_id[]',
-                        trans('messages.document.category'),
-                        $categories->mapWithKeys_v2(function ($item) {return [$item->id => $item->name]; })->toArray(),
-                        $document->categories->map(function($cat) { return $cat->id; })->toArray(),
-                        ['multiple' => true]
-                        )
-                }}
+
                 <input type="hidden" name="page" value="{{ request()->input('page', 1) }}" />
                 {{ Form::mInput('textarea', 'page_content', trans('messages.document.content'), $pages->first()->content) }}
                 <div class="document-pages-toolbar">

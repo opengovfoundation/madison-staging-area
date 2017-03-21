@@ -33,14 +33,6 @@
                                ['multiple' => true]
                                )
                         }}
-                        {{ Form::mSelect(
-                               'category_id[]',
-                               trans('messages.document.category'),
-                               $categories->mapWithKeys_v2(function ($item) {return [$item->id => $item->name]; })->toArray(),
-                               null,
-                               ['multiple' => true]
-                               )
-                        }}
                         @if (Auth::user())
                             {{ Form::mSelect(
                                    'publish_state[]',
