@@ -26,7 +26,6 @@ class DatabaseSeeder extends Seeder
         'doc_contents',
         'doc_meta',
         'doc_sponsor',
-        'doc_status',
         'doc_types',
         'docs',
         'failed_jobs',
@@ -45,7 +44,6 @@ class DatabaseSeeder extends Seeder
         'settings',
         'sponsor_members',
         'sponsors',
-        'statuses',
         'user_meta',
         'users',
     ];

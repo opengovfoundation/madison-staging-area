@@ -203,11 +203,6 @@ class Doc extends Model
         return $this->sponsors()->get();
     }
 
-    public function statuses()
-    {
-        return $this->belongsToMany('App\Models\Status');
-    }
-
     public function categories()
     {
         return $this->belongsToMany('App\Models\Category');
@@ -444,7 +439,6 @@ class Doc extends Model
     {
         return static::with('categories')
             ->with('sponsors')
-            ->with('statuses')
             ->with('dates');
     }
 
@@ -541,7 +535,6 @@ class Doc extends Model
             $featuredIds = explode(',', $featuredSetting->meta_value);
             $docQuery = static::with('categories')
                 ->with('sponsors')
-                ->with('statuses')
                 ->with('dates')
                 ->whereIn('id', $featuredIds)
                 ->where('is_template', '!=', '1');
