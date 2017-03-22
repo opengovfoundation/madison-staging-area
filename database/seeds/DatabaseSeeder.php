@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
         'categories',
         'category_doc',
         'configs',
-        'dates',
         'doc_contents',
         'doc_meta',
         'doc_sponsor',

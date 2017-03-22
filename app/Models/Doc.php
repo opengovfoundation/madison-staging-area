@@ -130,11 +130,6 @@ class Doc extends Model
         return Str::words(strip_tags($this->introtext_html), 15, ' ...');
     }
 
-    public function dates()
-    {
-        return $this->hasMany('App\Models\Date');
-    }
-
     public function getFeaturedAttribute()
     {
         $featuredSetting = Setting::where('meta_key', '=', 'featured-doc')->first();
@@ -437,9 +432,10 @@ class Doc extends Model
      */
     public static function getEager()
     {
-        return static::with('categories')
+        return static
+            ::with('categories')
             ->with('sponsors')
-            ->with('dates');
+            ;
     }
 
     /**
@@ -535,7 +531,6 @@ class Doc extends Model
             $featuredIds = explode(',', $featuredSetting->meta_value);
             $docQuery = static::with('categories')
                 ->with('sponsors')
-                ->with('dates')
                 ->whereIn('id', $featuredIds)
                 ->where('is_template', '!=', '1');
 
