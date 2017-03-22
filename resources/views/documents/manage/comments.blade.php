@@ -5,6 +5,7 @@
 @section('content')
     <div class="page-header">
         <h1>@lang('messages.document.moderate_document', ['document' => $document->title])</h1>
+        @include('components.breadcrumbs.document', ['sponsor' => $document->sponsors()->first(), 'document' => $document])
     </div>
 
     @include('components.errors')

@@ -5,6 +5,7 @@
 @section('content')
     <div class="page-header">
         <h1>{{ trans('messages.document.edit') }}</h1>
+        @include('components.breadcrumbs.document', ['sponsor' => $document->sponsors()->first(), 'document' => $document])
     </div>
 
     @include('components.errors')
@@ -17,7 +18,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         {{ Form::mInput('text', 'title', trans('messages.document.title')) }}
-                        {{ Form::mInput('textarea', 'introtext', trans('messages.document.introtext')) }}
+                        {{ Form::mInput('textarea', 'introtext', trans('messages.document.introtext'), null, ['rows' => 2]) }}
 
                         {{ Form::mInput('file', 'featured-image', trans('messages.document.featured_image'), null, request()->user()->isAdmin() ? [] : ['disabled' => true]) }}
                         @if ($document->featuredImage)
@@ -49,7 +50,8 @@
 
                     <div class="col-md-4">
 
-                        <button type="submit" class="btn btn-primary btn-block">{{ trans('messages.save') }}</button>
+                        <button type="submit" class="btn btn-primary btn-block">@lang('messages.document.save')</button>
+                        <a href="{{ $document->url }}" class="btn btn-default btn-block">@lang('messages.document.view')</a>
 
                         <hr>
 
