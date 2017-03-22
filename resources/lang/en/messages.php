@@ -362,7 +362,7 @@ return [
                 ],
 
                 'published' => [
-                    'preference_description' => 'When document is published',
+                    'preference_description' => 'When new documents are published',
                     'subject' => ':document has been published',
                 ],
             ],

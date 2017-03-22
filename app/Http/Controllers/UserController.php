@@ -58,9 +58,6 @@ class UserController extends Controller
             $notificationPreferenceGroups[$className::getType()][$className] = isset($currentNotifications[$notificationName]);
         }
 
-        // TODO: filter out notification preferences based on types, pass that to view and handle there
-        // -- ideally it should be one array and have them grouped by the type
-
         return view('users.settings.notifications', compact('user', 'notificationPreferenceGroups'));
     }
 
