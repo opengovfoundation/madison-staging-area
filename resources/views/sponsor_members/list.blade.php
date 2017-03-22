@@ -52,7 +52,7 @@
                                     @if ($sponsor->isSponsorOwner(Auth::user()->id) || Auth::user()->isAdmin())
                                         <div class="btn-group">
                                             {{ Form::open(['route' => ['sponsors.members.destroy', $sponsor, $member], 'method' => 'delete']) }}
-                                                <button type="submit" class="btn btn-xs btn-danger">
+                                                <button type="submit" class="btn btn-xs btn-link">
                                                     <i class="fa fa-close"></i>
                                                 </button>
                                             {{ Form::close() }}
