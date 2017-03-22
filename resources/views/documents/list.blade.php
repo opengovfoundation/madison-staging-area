@@ -135,7 +135,7 @@
                                 @elseif ($cap === 'edit')
                                     <div class="btn-group" role="group">
                                         {{ Html::linkRoute(
-                                                'documents.edit',
+                                                'documents.manage.settings',
                                                 trans('messages.edit'),
                                                 ['document' => $document->slug],
                                                 ['class' => 'btn btn-default']

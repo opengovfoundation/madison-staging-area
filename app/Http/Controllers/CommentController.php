@@ -161,14 +161,14 @@ class CommentController extends Controller
     {
         $this->commentService->hideComment($comment, $request->user());
         flash(trans('messages.document.comment_hide_success'));
-        return redirect()->route('documents.moderate', $document);
+        return redirect()->route('documents.manage.comments', $document);
     }
 
     public function storeResolve(DocumentEditRequest $request, Document $document, Annotation $comment)
     {
         $this->commentService->resolveComment($comment, $request->user());
         flash(trans('messages.document.comment_resolve_success'));
-        return redirect()->route('documents.moderate', $document);
+        return redirect()->route('documents.manage.comments', $document);
     }
 
     /**
