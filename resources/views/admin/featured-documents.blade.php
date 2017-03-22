@@ -21,7 +21,6 @@
                         <th>@lang('messages.document.title')</th>
                         <th>@lang('messages.document.publish_state')</th>
                         <th></th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,14 +29,14 @@
                             <td>
                                 {{ Form::open(['route' => ['admin.featured-documents.update', $document->id], 'method' => 'put', 'class' => 'inline']) }}
                                     <input type="hidden" name="action" value="up">
-                                    <button type="submit" class="btn btn-xs btn-default up" {!! $loop->first ? 'disabled' : null !!}>
+                                    <button type="submit" class="btn btn-xs btn-link up" {!! $loop->first ? 'disabled' : null !!}>
                                         <i class="fa fa-arrow-up"></i>
                                     </button>
                                 {{ Form::close() }}
 
                                 {{ Form::open(['route' => ['admin.featured-documents.update', $document->id], 'method' => 'put', 'class' => 'inline']) }}
                                     <input type="hidden" name="action" value="down">
-                                    <button type="submit" class="btn btn-xs btn-default down" {!! $loop->last ? 'disabled' : null !!}>
+                                    <button type="submit" class="btn btn-xs btn-link down" {!! $loop->last ? 'disabled' : null !!}>
                                         <i class="fa fa-arrow-down"></i>
                                     </button>
                                 {{ Form::close() }}
@@ -50,7 +49,7 @@
                             <td class="text-right">
                                 {{ Form::open(['route' => ['admin.featured-documents.update', $document->id], 'method' => 'put']) }}
                                     <input type="hidden" name="action" value="remove">
-                                    <button type="submit" class="btn btn-xs btn-danger unfeature">
+                                    <button type="submit" class="btn btn-xs btn-link unfeature">
                                         <i class="fa fa-times"></i>
                                     </button>
                                 {{ Form::close() }}
