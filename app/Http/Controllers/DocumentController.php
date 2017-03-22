@@ -302,7 +302,7 @@ class DocumentController extends Controller
         $document->sponsors()->sync([$request->input('sponsor_id')]);
 
         flash(trans('messages.document.created'));
-        return redirect()->route('documents.edit', $document);
+        return redirect()->route('documents.manage.settings', $document);
     }
 
     /**
@@ -349,22 +349,6 @@ class DocumentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(Requests\Edit $request, Document $document)
-    {
-        $sponsors = Sponsor::where('status', Sponsor::STATUS_ACTIVE)->get();
-        $publishStates = Document::validPublishStates();
-        $discussionStates = Document::validDiscussionStates();
-        $pages = $document->content()->paginate(1);
-
-        return view('documents.edit', compact([
-            'document',
-            'sponsors',
-            'publishStates',
-            'discussionStates',
-            'pages',
-        ]));
-    }
-
     /**
      * Update the specified resource in storage.
      *
@@ -428,7 +412,7 @@ class DocumentController extends Controller
         }
 
         flash(trans('messages.document.updated'));
-        return redirect()->route('documents.edit', [
+        return redirect()->route('documents.manage.settings', [
             'document' => $document,
             'page' => $request->input('page', 1),
         ]);
@@ -480,7 +464,7 @@ class DocumentController extends Controller
         $document->save();
 
         flash(trans('messages.document.restored'));
-        return redirect()->route('documents.edit', $document);
+        return redirect()->route('documents.manage.settings', $document);
     }
 
     public function storePage(Requests\Edit $request, Document $document)
@@ -494,7 +478,7 @@ class DocumentController extends Controller
         $document->content()->save($documentContent);
 
         flash(trans('messages.document.page_added'));
-        return redirect()->route('documents.edit', ['document' => $document, 'page' => $page]);
+        return redirect()->route('documents.manage.settings', ['document' => $document, 'page' => $page]);
     }
 
     public function showImage(Requests\View $request, Document $document, $image)
@@ -521,7 +505,7 @@ class DocumentController extends Controller
             flash(trans('messages.document.featured_image_removed'));
         }
 
-        return redirect()->route('documents.edit', $document);
+        return redirect()->route('documents.manage.settings', $document);
     }
 
     public function updateSupport(Requests\PutSupport $request, Document $document)
@@ -559,7 +543,23 @@ class DocumentController extends Controller
         return redirect()->route('documents.show', $document);
     }
 
-    public function moderate(Requests\Moderate $request, Document $document)
+    public function manageSettings(Requests\Edit $request, Document $document)
+    {
+        $sponsors = Sponsor::where('status', Sponsor::STATUS_ACTIVE)->get();
+        $publishStates = Document::validPublishStates();
+        $discussionStates = Document::validDiscussionStates();
+        $pages = $document->content()->paginate(1);
+
+        return view('documents.manage.settings', compact([
+            'document',
+            'sponsors',
+            'publishStates',
+            'discussionStates',
+            'pages',
+        ]));
+    }
+
+    public function manageComments(Requests\Moderate $request, Document $document)
     {
         $allFlaggedComments = $document->allCommentsWithHidden->filter(function ($comment) {
             return $comment->flags_count;
@@ -576,7 +576,7 @@ class DocumentController extends Controller
             }
         });
 
-        return view('documents.moderate', compact([
+        return view('documents.manage.comments', compact([
             'document',
             'unhandledComments',
             'handledComments',

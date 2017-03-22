@@ -51,7 +51,7 @@
                             </td>
                             <td>
                                 @if ($documentsCapabilities[$document->id]['edit'])
-                                    <a href="{{ route('documents.edit', $document) }}"
+                                    <a href="{{ route('documents.manage.settings', $document) }}"
                                         title="@lang('messages.document.edit')">
 
                                         <i class="fa fa-pencil"></i>
