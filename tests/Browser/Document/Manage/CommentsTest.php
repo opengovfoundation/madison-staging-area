@@ -1,0 +1,127 @@
+<?php
+
+namespace Tests\Browser\Document\Manage;
+
+use App;
+use App\Models\Doc as Document;
+use App\Models\DocContent;
+use App\Models\Sponsor;
+use App\Models\User;
+use Tests\Browser\Pages\Document\Manage\CommentsPage;
+use Tests\DuskTestCase;
+use Tests\FactoryHelpers;
+
+class CommentsTest extends DuskTestCase
+{
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->sponsorOwner = factory(User::class)->create();
+        $this->sponsor = FactoryHelpers::createActiveSponsorWithUser($this->sponsorOwner);
+
+        $this->document = factory(Document::class)->create([
+            'publish_state' => Document::PUBLISH_STATE_UNPUBLISHED,
+        ]);
+        $this->document->content()->save(factory(DocContent::class)->make());
+        $this->document->sponsors()->save($this->sponsor);
+
+        $this->page = new CommentsPage($this->document);
+    }
+
+    public function testAdminCanModerateDocumentComments()
+    {
+        $admin = factory(User::class)->create()->makeAdmin();
+        $this->userCanModerateComments($admin);
+    }
+
+    public function testSponsorOwnerCanModerateDocumentComments()
+    {
+        $this->userCanModerateComments($this->sponsorOwner);
+    }
+
+    public function testSponsorEditorCanModerateDocumentComments()
+    {
+        $editor = factory(User::class)->create();
+        $this->sponsor->addMember($editor->id, Sponsor::ROLE_EDITOR);
+        $this->userCanModerateComments($editor);
+    }
+
+    // TODO: can they?
+    // public function testSponsorStaffCanModerateDocumentComments()
+    // {
+    //     $staff = factory(User::class)->create();
+    //     $this->sponsor->addMember($staff->id, Sponsor::ROLE_STAFF);
+    //     $this->userCanModerateComments($staff);
+    // }
+
+    public function testSponsorStaffCannotModerateDocumentComments()
+    {
+        $staff = factory(User::class)->create();
+        $this->sponsor->addMember($staff->id, Sponsor::ROLE_STAFF);
+
+        $this->browse(function ($browser) use ($staff) {
+            $browser
+                ->loginAs($staff)
+                ->visit($this->page)
+                // 403 status
+                ->assertSee('Whoops, looks like something went wrong')
+                ;
+        });
+    }
+
+    public function testSponsorCannotEditOtherDocument()
+    {
+        $otherSponsorOwner = factory(User::class)->create();
+        $otherSponsor = FactoryHelpers::createActiveSponsorWithUser($otherSponsorOwner);
+
+        $otherDocument = factory(Document::class)->create([
+            'publish_state' => Document::PUBLISH_STATE_UNPUBLISHED,
+        ]);
+        $otherDocument->content()->save(factory(DocContent::class)->make());
+        $otherDocument->sponsors()->save($otherSponsor);
+
+        $this->browse(function ($browser) use ($otherDocument) {
+            $browser
+                ->loginAs($this->sponsorOwner)
+                ->visit(new CommentsPage($otherDocument))
+                // 403 status
+                ->assertSee('Whoops, looks like something went wrong')
+                ;
+        });
+    }
+
+    protected function userCanModerateComments($user)
+    {
+        $comments = collect([]);
+        $annotationService = App::make('App\Services\Annotations');
+
+        foreach (range(0, 2) as $idx) {
+            $comment = FactoryHelpers::createComment($this->sponsorOwner, $this->document);
+
+            $annotationService->createAnnotationFlag($comment, $this->sponsorOwner, []);
+            $comments->push($comment);
+        }
+
+        $this->browse(function ($browser) use ($user, $comments) {
+            $browser
+                ->loginAs($user)
+                ->visit($this->page)
+                ->onCommentRow($comments[0], function ($row) {
+                    $row
+                        ->press('Hide')
+                        ->assertPathIs($this->page->url())
+                        ->assertSee('Hidden')
+                        ;
+                })
+                ->onCommentRow($comments[1], function ($row) {
+                    $row
+                        ->press('Resolve')
+                        ->assertPathIs($this->page->url())
+                        ->assertSee('Resolved')
+                        ;
+                })
+                ;
+        });
+    }
+}
