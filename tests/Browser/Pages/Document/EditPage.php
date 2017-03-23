@@ -22,7 +22,7 @@ class EditPage extends BasePage
      */
     public function url()
     {
-        return route('documents.edit', [$this->document], false);;
+        return route('documents.manage.settings', [$this->document], false);;
     }
 
     /**
