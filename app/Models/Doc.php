@@ -390,7 +390,7 @@ class Doc extends Model
         return $this->hasMany('App\Models\DocMeta');
     }
 
-    public function capabilitiesForUser(User $user)
+    public function capabilitiesForUser($user)
     {
         $caps = [
             'open' => true,
@@ -398,6 +398,8 @@ class Doc extends Model
             'delete' => false,
             'restore' => false,
         ];
+
+        if ($user === null) return $caps;
 
         if ($this->publish_state === static::PUBLISH_STATE_DELETED_ADMIN
             || $this->publish_state === static::PUBLISH_STATE_DELETED_USER
