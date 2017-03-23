@@ -18,13 +18,17 @@
             <a href="{{ route('documents.comments.index', [$document, 'download' => 'csv']) }}">@lang('messages.document.download_comments_csv')</a>
 
             @if ($unhandledComments->count() > 0)
-                <h3>@lang('messages.document.comments_unhandled')</h3>
-                @include('documents.partials.comment_table', ['comments' => $unhandledComments, 'document' => $document])
+                <div class="unhandled">
+                    <h3>@lang('messages.document.comments_unhandled')</h3>
+                    @include('documents.partials.comment_table', ['comments' => $unhandledComments, 'document' => $document])
+                </div>
             @endif
 
             @if ($handledComments->count() > 0)
-                <h3>@lang('messages.document.comments_handled')</h3>
-                @include('documents.partials.comment_table', ['comments' => $handledComments, 'document' => $document])
+                <div class="handled">
+                    <h3>@lang('messages.document.comments_handled')</h3>
+                    @include('documents.partials.comment_table', ['comments' => $handledComments, 'document' => $document])
+                </div>
             @endif
         </div>
     </div>

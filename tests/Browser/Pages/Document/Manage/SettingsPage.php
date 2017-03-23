@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Browser\Pages\Document;
+namespace Tests\Browser\Pages\Document\Manage;
 
 use App\Models\Doc as Document;
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\Page as BasePage;
 
-class EditPage extends BasePage
+class SettingsPage extends BasePage
 {
     public $document;
 
