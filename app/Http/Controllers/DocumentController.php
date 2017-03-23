@@ -367,7 +367,9 @@ class DocumentController extends Controller
         }
 
         $document->setIntroText($request->input('introtext'));
-        $document->sponsors()->sync([$request->input('sponsor_id')]);
+        if ($request->has('sponsor_id')) {
+            $document->sponsors()->sync([$request->input('sponsor_id')]);
+        };
 
         // update content for correct page
         $pageContent = $document->content()->where('page', $request->input('page', 1))->first();
