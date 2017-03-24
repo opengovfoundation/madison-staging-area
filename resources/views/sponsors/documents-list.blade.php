@@ -45,7 +45,7 @@
                             <td>{{ trans('messages.document.discussion_states.'.$document->discussion_state) }}</td>
                             <td>
                                 {{ $document->all_comments_count }}
-                                <a href="{{ route('documents.comments.index', [$document, 'download' => 'csv']) }}" title="{{ trans('messages.document.download_comments_csv') }}">
+                                <a href="{{ route('documents.comments.index', [$document, 'download' => 'csv', 'all' => true]) }}" title="{{ trans('messages.document.download_comments_csv') }}">
                                     <i class="fa fa-download" aria-hidden="true"></i>
                                 </a>
                             </td>
