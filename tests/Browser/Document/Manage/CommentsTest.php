@@ -91,6 +91,18 @@ class CommentsTest extends DuskTestCase
         });
     }
 
+    public function testSectionsAreNotVisibleWithNoFlaggedComments()
+    {
+        $this->browse(function ($browser) {
+            $browser
+                ->loginAs($this->sponsorOwner)
+                ->visit($this->page)
+                ->assertMissing('@unhandledSection')
+                ->assertMissing('@handledSection')
+                ;
+        });
+    }
+
     protected function userCanModerateComments($user)
     {
         $comments = collect([]);
