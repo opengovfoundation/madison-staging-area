@@ -286,6 +286,7 @@ return [
         'make_admin' => 'Make Admin',
         'remove_admin' => 'Remove Admin',
 
+        'settings' => 'User Settings',
         'settings_pages' => [
             'notifications' => 'Notifications',
             'password' => 'Password',
