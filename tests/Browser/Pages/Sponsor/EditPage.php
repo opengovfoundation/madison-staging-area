@@ -43,13 +43,6 @@ class EditPage extends Page
     public function elements()
     {
         return [
-            '@nameField' => 'input[name=name]',
-            '@displayNameField' => 'input[name=display_name]',
-            '@address1Field' => 'input[name=address1]',
-            '@cityField' => 'input[name=city]',
-            '@stateField' => 'input[name=state]',
-            '@postalCodeField' => 'input[name=postal_code]',
-            '@phoneField' => 'input[name=phone]',
             '@submitBtn' => '#content form button[type=submit]',
         ];
     }
