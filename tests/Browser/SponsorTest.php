@@ -112,20 +112,18 @@ class SponsorTest extends DuskTestCase
 
         $newSponsorData = factory(Sponsor::class)->make();
 
-        // TODO: assert non-owner can't edit
-
         $this->browse(function ($browser) use ($user, $sponsor, $newSponsorData) {
             $browser
                 ->loginAs($user)
                 ->visit(new SponsorPages\EditPage($sponsor))
                 ->assertFormHasDataForSponsor($sponsor)
-                ->type('@nameField', $newSponsorData->name)
-                ->type('@displayNameField', $newSponsorData->display_name)
-                ->type('@address1Field', $newSponsorData->address1)
-                ->type('@cityField', $newSponsorData->city)
-                ->type('@stateField', $newSponsorData->state)
-                ->type('@postalCodeField', $newSponsorData->postal_code)
-                ->type('@phoneField', $newSponsorData->phone)
+                ->type('name', $newSponsorData->name)
+                ->type('display_name', $newSponsorData->display_name)
+                ->type('address1', $newSponsorData->address1)
+                ->type('city', $newSponsorData->city)
+                ->type('state', $newSponsorData->state)
+                ->type('postal_code', $newSponsorData->postal_code)
+                ->type('phone', $newSponsorData->phone)
                 ->press('@submitBtn')
                 ->assertRouteIs('sponsors.edit', $sponsor)
                 ->assertFormHasDataForSponsor($sponsor->fresh())
