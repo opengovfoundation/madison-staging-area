@@ -4,7 +4,7 @@
 
 @section('manage_content')
     <p class="text-right">
-        <a href="{{ route('documents.comments.index', [$document, 'download' => 'csv']) }}" class="btn btn-primary">
+        <a href="{{ route('documents.comments.index', [$document, 'download' => 'csv', 'all' => true]) }}" class="btn btn-primary">
             @lang('messages.document.download_comments_csv')
         </a>
     </p>
