@@ -184,6 +184,7 @@ return [
         'edit' => 'Edit Document',
         'save' => 'Save Document',
         'view' => 'View Document',
+        'manage' => 'Manage Document',
     ],
 
     // Sponsor Stuff
