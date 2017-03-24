@@ -1,6 +1,6 @@
 @extends('documents.manage')
 
-@section('pageTitle', trans('messages.document.edit'))
+@section('pageTitle', trans('messages.settings'))
 
 @section('manage_content')
     {{ Form::model($document, ['route' => ['documents.update', $document], 'method' => 'put', 'files' => true]) }}
