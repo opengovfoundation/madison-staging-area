@@ -107,19 +107,40 @@ class CommentsTest extends DuskTestCase
             $browser
                 ->loginAs($user)
                 ->visit($this->page)
-                ->onCommentRow($comments[0], function ($row) {
+                ->with('@unhandledSection', function ($section) use ($comments) {
+                    foreach ($comments as $comment) {
+                        $section
+                            ->assertVisible($this->page->getCommentRowSelector($comment))
+                            ;
+                    }
+                })
+                ->onCommentRow($comments[0], function ($row) use ($comments) {
                     $row
                         ->press('Hide')
                         ->assertPathIs($this->page->url())
                         ->assertSee('Hidden')
                         ;
+
+                    $this->assertTrue($comments[0]->isHidden());
                 })
-                ->onCommentRow($comments[1], function ($row) {
+                ->onCommentRow($comments[1], function ($row) use ($comments) {
                     $row
                         ->press('Resolve')
                         ->assertPathIs($this->page->url())
                         ->assertSee('Resolved')
                         ;
+
+                    $this->assertTrue($comments[1]->isResolved());
+                })
+                ->assertVisible(
+                    '@unhandledSection '.$this->page->getCommentRowSelector($comments->last())
+                )
+                ->with('@handledSection', function ($section) use ($comments) {
+                    foreach ($comments->take(2) as $comment) {
+                        $section
+                            ->assertVisible($this->page->getCommentRowSelector($comment))
+                            ;
+                    }
                 })
                 ;
         });
