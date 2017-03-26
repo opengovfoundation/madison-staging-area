@@ -21,7 +21,7 @@ class AdminController extends Controller
     public function usersIndex(Requests\Users\Index $request)
     {
         $users = User::all();
-        return view('users.list', compact('users'));
+        return view('admin.manage-users', compact('users'));
     }
 
     public function sponsorsIndex(Requests\Sponsors\Index $request)
