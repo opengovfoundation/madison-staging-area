@@ -402,10 +402,12 @@ return [
         'pages' => 'Pages',
         'add_featured_document' => 'Add Featured Document',
 
+        'date_time_settings_title' => 'Date & Time',
+        'google_analytics_settings_title' => 'Google Analytics',
         'madison' => [
             'date_format' => 'Date Format',
             'time_format' => 'Time Format',
-            'google_analytics_property_id' => 'Google Analytics Property Id',
+            'google_analytics_property_id' => 'Google Analytics Key',
             'google_analytics_property_id_help' => 'The UA-XXXXX-Y string identifying which Google Analytics property you wish to track traffic against',
         ],
     ],
