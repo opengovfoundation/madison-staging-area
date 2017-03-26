@@ -7,6 +7,7 @@ use App\Models\Doc as Document;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Sponsor;
 use App\Http\Requests\Admin as Requests;
 use SiteConfigSaver;
 
@@ -21,6 +22,22 @@ class AdminController extends Controller
     {
         $users = User::all();
         return view('users.list', compact('users'));
+    }
+
+    public function sponsorsIndex(Requests\Sponsors\Index $request)
+    {
+        $limit = $request->input('limit', 10);
+        $sponsors = Sponsor::paginate($limit);
+        return view('admin.manage-sponsors', compact('sponsors'));
+    }
+
+    public function sponsorsPutStatus(Requests\Sponsors\PutStatus $request, Sponsor $sponsor)
+    {
+        $sponsor->status = $request->input('status');
+        $sponsor->save();
+
+        flash(trans('messages.sponsor.status_updated'));
+        return redirect()->route('admin.sponsors.index');
     }
 
     public function usersPostAdmin(Requests\Users\PostAdmin $request, User $user)

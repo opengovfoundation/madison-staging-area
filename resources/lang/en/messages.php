@@ -395,6 +395,7 @@ return [
         'admin_label' => 'Site Administration: :page',
         'featured_documents' => 'Featured Documents',
         'manage_users' => 'Manage Users',
+        'manage_sponsors' => 'Manage Sponsors',
         'updated_featured_documents' => 'Feature documents updated',
         'site_settings' => 'Site Settings',
         'custom_pages' => 'Custom Pages',
