@@ -9,7 +9,7 @@
                 {{ Form::mInput('text', 'title', trans('messages.document.title')) }}
                 {{ Form::mInput('textarea', 'introtext', trans('messages.document.introtext'), null, ['rows' => 2]) }}
 
-                {{ Form::mInput('file', 'featured-image', trans('messages.document.featured_image'), null, request()->user()->isAdmin() ? [] : ['disabled' => true]) }}
+                {{ Form::mInput('file', 'featured-image', trans('messages.document.featured_image')) }}
                 @if ($document->featuredImage)
                     <img src="{{ $document->getFeaturedImageUrl() }}"/>
 
