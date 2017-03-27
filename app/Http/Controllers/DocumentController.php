@@ -379,24 +379,7 @@ class DocumentController extends Controller
             $pageContent->save();
         }
 
-        // feature document stuff
-        if ($document->featured != (bool) $request->input('featured', false)) {
-            if (!$request->user()->isAdmin()) {
-                abort(403, 'Unauthorized.');
-            }
-
-            if ($request->input('featured')) {
-                $document->setAsFeatured();
-            } else {
-                $document->removeAsFeatured();
-            }
-        }
-
         if ($request->hasFile('featured-image')) {
-            if (!$request->user()->isAdmin()) {
-                abort(403, 'Unauthorized.');
-            }
-
             $file = $request->file('featured-image');
 
             // Keep a record of our previous featuredImage.
