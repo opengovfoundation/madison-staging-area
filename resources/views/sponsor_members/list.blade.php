@@ -24,7 +24,7 @@
                 </thead>
                 <tbody>
                     @foreach ($members as $member)
-                        <tr>
+                        <tr id="user-{{ $member->user->id }}">
                             <td>{{ $member->name }}</td>
                             <td>{{ $member->email }}</td>
                             <td>

@@ -159,4 +159,54 @@ class SponsorTest extends DuskTestCase
                 ;
         });
     }
+
+    public function testSponsorOwnerCanAddMembers()
+    {
+        $owner = factory(User::class)->create();
+        $sponsor = FactoryHelpers::createActiveSponsorWithUser($owner);
+
+        $user = factory(User::class)->create();
+        $role = Sponsor::ROLE_EDITOR;
+
+        $this->browse(function ($browser) use ($owner, $sponsor, $user, $role) {
+            $browser
+                ->loginAs($owner)
+                ->visitRoute('sponsors.members.index', $sponsor)
+                ->assertDontSeeIn('table', $user->display_name)
+                ->clickLink(trans('messages.sponsor_member.add'))
+                ->assertRouteIs('sponsors.members.create', $sponsor)
+                ->type('email', $user->email)
+                ->select('role', $role)
+                ->press(trans('messages.sponsor_member.add_user'))
+                ->assertRouteIs('sponsors.members.index', $sponsor)
+                ->assertSeeIn('table', $user->display_name)
+                ->assertSeeIn('tr#user-'.$user->id, trans('messages.sponsor_member.roles.'.$role))
+                ;
+        });
+    }
+
+    public function testNonSponsorOwnerCannotAddMembers()
+    {
+        // TODO
+    }
+
+    public function testSponsorOwnerCanRemoveMembers()
+    {
+        // TODO
+    }
+
+    public function testNonSponsorOwnerCannotRemoveMembers()
+    {
+        // TODO
+    }
+
+    public function testSponsorOwnerCanUpdateMemberRoles()
+    {
+        // TODO
+    }
+
+    public function testNonSponsorOwnerCannotUpdateMemberRoles()
+    {
+        // TODO
+    }
 }
