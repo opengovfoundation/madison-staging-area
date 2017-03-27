@@ -345,11 +345,6 @@ class DocumentController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    /**
      * Update the specified resource in storage.
      *
      * @return \Illuminate\Http\Response
@@ -367,9 +362,6 @@ class DocumentController extends Controller
         }
 
         $document->setIntroText($request->input('introtext'));
-        if ($request->has('sponsor_id')) {
-            $document->sponsors()->sync([$request->input('sponsor_id')]);
-        };
 
         // update content for correct page
         $pageContent = $document->content()->where('page', $request->input('page', 1))->first();
