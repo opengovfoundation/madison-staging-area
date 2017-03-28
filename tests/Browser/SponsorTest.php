@@ -171,9 +171,9 @@ class SponsorTest extends DuskTestCase
         $this->browse(function ($browser) use ($owner, $sponsor, $user, $role) {
             $browser
                 ->loginAs($owner)
-                ->visitRoute('sponsors.members.index', $sponsor)
+                ->visit(new SponsorPages\MembersPage($sponsor))
                 ->assertDontSeeIn('table', $user->display_name)
-                ->clickLink(trans('messages.sponsor_member.add'))
+                ->click('@addMemberButton')
                 ->assertRouteIs('sponsors.members.create', $sponsor)
                 ->type('email', $user->email)
                 ->select('role', $role)
@@ -187,26 +187,102 @@ class SponsorTest extends DuskTestCase
 
     public function testNonSponsorOwnerCannotAddMembers()
     {
-        // TODO
+        $owner = factory(User::class)->create();
+        $editor = factory(User::class)->create();
+
+        $sponsor = FactoryHelpers::createActiveSponsorWithUser($owner);
+        $sponsor->addMember($editor->id, Sponsor::ROLE_EDITOR);
+
+        $this->browse(function ($browser) use ($sponsor, $editor) {
+            $browser
+                ->loginAs($editor)
+                ->visit(new SponsorPages\MembersPage($sponsor))
+                ->assertMissing('@addMemberButton')
+                ->visitRoute('sponsors.members.create', $sponsor)
+                ->assertSee('Whoops, looks like something went wrong') // 403 status
+                ;
+        });
     }
 
     public function testSponsorOwnerCanRemoveMembers()
     {
-        // TODO
+        $owner = factory(User::class)->create();
+        $editor = factory(User::class)->create();
+
+        $sponsor = FactoryHelpers::createActiveSponsorWithUser($owner);
+        $sponsor->addMember($editor->id, Sponsor::ROLE_EDITOR);
+
+        $this->browse(function ($browser) use ($owner, $sponsor, $editor) {
+            $browser
+                ->loginAs($owner)
+                ->visit(new SponsorPages\MembersPage($sponsor))
+                ->assertSeeIn('table', $editor->display_name)
+                ->with('tr#user-' . $editor->id, function ($userRow) {
+                    $userRow->press('.remove');
+                })
+                ->assertVisible('.alert.alert-info') // some success
+                ->assertRouteIs('sponsors.members.index', $sponsor)
+                ->assertDontSeeIn('table', $editor->display_name)
+                ;
+        });
     }
 
     public function testNonSponsorOwnerCannotRemoveMembers()
     {
-        // TODO
+        $owner = factory(User::class)->create();
+        $editor = factory(User::class)->create();
+
+        $sponsor = FactoryHelpers::createActiveSponsorWithUser($owner);
+        $sponsor->addMember($editor->id, Sponsor::ROLE_EDITOR);
+
+        $this->browse(function ($browser) use ($sponsor, $editor) {
+            $browser
+                ->loginAs($editor)
+                ->visit(new SponsorPages\MembersPage($sponsor))
+                ->assertMissing('tr .remove')
+                ;
+        });
     }
 
     public function testSponsorOwnerCanUpdateMemberRoles()
     {
-        // TODO
+        $owner = factory(User::class)->create();
+        $editor = factory(User::class)->create();
+
+        $sponsor = FactoryHelpers::createActiveSponsorWithUser($owner);
+        $sponsor->addMember($editor->id, Sponsor::ROLE_EDITOR);
+
+        $newRole = Sponsor::ROLE_STAFF;
+
+        $this->browse(function ($browser) use ($owner, $sponsor, $editor, $newRole) {
+            $browser
+                ->loginAs($owner)
+                ->visit(new SponsorPages\MembersPage($sponsor))
+                ->assertSeeIn('table', $editor->display_name)
+                ->with('tr#user-' . $editor->id, function ($userRow) use ($newRole) {
+                    $userRow->select('role', $newRole);
+                })
+                ->assertVisible('.alert.alert-info') // some success
+                ->assertRouteIs('sponsors.members.index', $sponsor)
+                ->assertSeeIn('tr#user-' . $editor->id, trans('messages.sponsor_member.roles.'.$newRole))
+                ;
+        });
     }
 
     public function testNonSponsorOwnerCannotUpdateMemberRoles()
     {
-        // TODO
+        $owner = factory(User::class)->create();
+        $editor = factory(User::class)->create();
+
+        $sponsor = FactoryHelpers::createActiveSponsorWithUser($owner);
+        $sponsor->addMember($editor->id, Sponsor::ROLE_EDITOR);
+
+        $this->browse(function ($browser) use ($sponsor, $editor) {
+            $browser
+                ->loginAs($editor)
+                ->visit(new SponsorPages\MembersPage($sponsor))
+                ->assertMissing('tr select')
+                ;
+        });
     }
 }
