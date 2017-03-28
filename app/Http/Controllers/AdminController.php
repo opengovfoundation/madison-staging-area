@@ -105,12 +105,18 @@ class AdminController extends Controller
             }
         }
 
+        // We have to put the key into the desc properties since `groupBy` gets rid of them
+        $groupedSettingsDesc = collect($allSettingsDesc)->map(function ($setting, $key) {
+            $setting['key'] = $key;
+            return $setting;
+        })->groupBy('group');
+
         // reset config() to full settings
         (new \App\Config\Bootstrap\LoadConfiguration())
             ->bootstrap(app());
 
         return view('admin.site-settings', compact([
-            'allSettingsDesc',
+            'groupedSettingsDesc',
             'currentSettings',
             'options',
         ]));
@@ -248,14 +254,17 @@ class AdminController extends Controller
     {
         return [
             'madison.date_format' => [
+                'group' => 'date_time',
                 'type' => 'select',
                 'choices' => static::validDateFormats(),
             ],
             'madison.time_format' => [
+                'group' => 'date_time',
                 'type' => 'select',
                 'choices' => static::validTimeFormats(),
             ],
             'madison.google_analytics_property_id' => [
+                'group' => 'google_analytics',
                 'type' => 'text',
             ],
         ];

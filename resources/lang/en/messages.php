@@ -223,7 +223,7 @@ return [
 
         'status' => 'Status',
         'statuses' => [
-            \App\Models\Sponsor::STATUS_ACTIVE => 'Active',
+            \App\Models\Sponsor::STATUS_ACTIVE => 'Approved',
             \App\Models\Sponsor::STATUS_PENDING => 'Pending',
         ],
 
@@ -402,8 +402,10 @@ return [
         'pages' => 'Pages',
         'add_featured_document' => 'Add Featured Document',
 
-        'date_time_settings_title' => 'Date & Time',
-        'google_analytics_settings_title' => 'Google Analytics',
+        'setting_groups' => [
+            'date_time' => 'Date & Time',
+            'google_analytics' => 'Google Analytics',
+        ],
         'madison' => [
             'date_format' => 'Date Format',
             'time_format' => 'Time Format',
