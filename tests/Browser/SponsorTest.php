@@ -285,4 +285,27 @@ class SponsorTest extends DuskTestCase
                 ;
         });
     }
+
+    public function testEnsuresAtLeastOneOwner()
+    {
+        $owner = factory(User::class)->create();
+
+        $sponsor = FactoryHelpers::createActiveSponsorWithUser($owner);
+        $sponsor->addMember(factory(User::class)->create()->id, Sponsor::ROLE_EDITOR);
+
+        $originalRole = Sponsor::ROLE_OWNER;
+        $newRole = Sponsor::ROLE_STAFF;
+
+        $this->browse(function ($browser) use ($sponsor, $owner, $originalRole, $newRole) {
+            $browser
+                ->loginAs($owner)
+                ->visit(new SponsorPages\MembersPage($sponsor))
+                ->with('tr#user-' . $owner->id, function ($userRow) use ($originalRole, $newRole) {
+                    $userRow->select('role', $newRole);
+                })
+                ->assertSeeIn('.alert', trans('messages.sponsor_member.need_owner'))
+                ->assertSeeIn('tr#user-' . $owner->id, trans('messages.sponsor_member.roles.' . $originalRole))
+                ;
+        });
+    }
 }
