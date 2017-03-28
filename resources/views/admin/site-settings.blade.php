@@ -18,7 +18,7 @@
                 @foreach ($groupedSettingsDesc as $groupName => $settingsGroup)
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3>@lang('messages.admin.setting_groups.' . $groupName)</h3>
+                            <h3 class="panel-title">@lang('messages.admin.setting_groups.' . $groupName)</h3>
                         </div>
                         <div class="panel-body">
                             @foreach ($settingsGroup as $setting)
