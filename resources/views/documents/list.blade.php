@@ -119,7 +119,7 @@
                     @endif
                     <td>
                         <div class="btn-toolbar" role="toolbar">
-                            @can('view', $document)
+                            @if ($document->canUserView(Auth::user()))
                                 <div class="btn-group" role="group">
                                     {{ Html::linkRoute(
                                             'documents.show',
@@ -129,7 +129,7 @@
                                             )
                                     }}
                                 </div>
-                            @endcan
+                            @endif
 
                             @can ('viewManage', $document)
                                 <div class="btn-group" role="group">

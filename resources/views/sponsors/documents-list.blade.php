@@ -30,7 +30,7 @@
                     @foreach ($documents as $document)
                         <tr>
                             <td>
-                                @can('view', $document)
+                                @if ($document->canUserView(Auth::user()))
                                     <a href="{{ route('documents.show', $document) }}">{{ $document->title }}</a>
                                 @else
                                     {{ $document->title }}
