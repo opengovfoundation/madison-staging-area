@@ -91,14 +91,14 @@ class CommentsTest extends DuskTestCase
         });
     }
 
-    public function testSectionsAreNotVisibleWithNoFlaggedComments()
+    public function testSectionsAreEmptyWithNoFlaggedComments()
     {
         $this->browse(function ($browser) {
             $browser
                 ->loginAs($this->sponsorOwner)
                 ->visit($this->page)
-                ->assertMissing('@unhandledSection')
-                ->assertMissing('@handledSection')
+                ->assertSeeIn('@unhandledSection', trans('messages.none'))
+                ->assertSeeIn('@handledSection', trasn('messages.none'))
                 ;
         });
     }

@@ -52,7 +52,7 @@
                             <td>
                                 @can('viewManage', $document)
                                     <a href="{{ route('documents.manage.settings', $document) }}"
-                                        title="@lang('messages.document.edit')">
+                                        title="@lang('messages.document.manage')">
 
                                         <i class="fa fa-pencil"></i>
                                     </a>

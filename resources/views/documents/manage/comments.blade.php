@@ -9,25 +9,33 @@
         </a>
     </p>
 
-    @if ($unhandledComments->count() > 0)
-        <div class="panel panel-default unhandled">
-            <div  class="panel-heading">
-                <h3 class="panel-title">@lang('messages.document.comments_unhandled')</h3>
-            </div>
-            <div class="panel-body">
+    <div class="panel panel-default unhandled">
+        <div  class="panel-heading">
+            <h3 class="panel-title">@lang('messages.document.comments_unhandled')</h3>
+        </div>
+        <div class="panel-body">
+            @if ($unhandledComments->count() > 0)
                 @include('documents.partials.comment_table', ['comments' => $unhandledComments, 'document' => $document])
-            </div>
+            @else
+                <div class="text-center">
+                    @lang('messages.none')
+                </div>
+            @endif
         </div>
-    @endif
+    </div>
 
-    @if ($handledComments->count() > 0)
-        <div class="panel panel-default handled">
-            <div  class="panel-heading">
-                <h3 class="panel-title">@lang('messages.document.comments_handled')</h3>
-            </div>
-            <div class="panel-body">
-                @include('documents.partials.comment_table', ['comments' => $handledComments, 'document' => $document])
-            </div>
+    <div class="panel panel-default handled">
+        <div  class="panel-heading">
+            <h3 class="panel-title">@lang('messages.document.comments_handled')</h3>
         </div>
-    @endif
+        <div class="panel-body">
+            @if ($handledComments->count() > 0)
+                @include('documents.partials.comment_table', ['comments' => $handledComments, 'document' => $document])
+            @else
+                <div class="text-center">
+                    @lang('messages.none')
+                </div>
+            @endif
+        </div>
+    </div>
 @endsection
