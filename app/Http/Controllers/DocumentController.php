@@ -221,12 +221,6 @@ class DocumentController extends Controller
             ]
         );
 
-        $documentsCapabilities = [];
-
-        foreach ($documents as $document) {
-            $documentsCapabilities[$document->id] = $document->capabilitiesForUser($request->user());
-        }
-
         // for the query builder modal
         $sponsors = Sponsor::where('status', Sponsor::STATUS_ACTIVE)->get();
         $publishStates = static::validPublishStatesForQuery();
@@ -235,7 +229,6 @@ class DocumentController extends Controller
         // draw the page
         return view('documents.list', compact([
             'documents',
-            'documentsCapabilities',
             'sponsors',
             'publishStates',
             'discussionStates',
@@ -520,8 +513,10 @@ class DocumentController extends Controller
         return redirect()->route('documents.show', $document);
     }
 
-    public function manageSettings(Requests\Edit $request, Document $document)
+    public function manageSettings(Request $request, Document $document)
     {
+        $this->authorize('viewManage', $document);
+
         $sponsors = Sponsor::where('status', Sponsor::STATUS_ACTIVE)->get();
         $publishStates = Document::validPublishStates();
         $discussionStates = Document::validDiscussionStates();
@@ -536,8 +531,10 @@ class DocumentController extends Controller
         ]));
     }
 
-    public function manageComments(Requests\Moderate $request, Document $document)
+    public function manageComments(Request $request, Document $document)
     {
+        $this->authorize('viewManage', $document);
+
         $allFlaggedComments = $document->allCommentsWithHidden->filter(function ($comment) {
             return $comment->flags_count;
         });

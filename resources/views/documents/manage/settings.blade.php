@@ -4,7 +4,7 @@
 
 @section('manage_content')
     {{ Form::model($document, ['route' => ['documents.update', $document], 'method' => 'put', 'files' => true]) }}
-        <div class="row">
+        <fieldset class="row" {{ Auth::user()->cant('update', $document) ? 'disabled' : '' }}>
             <div class="col-md-8">
                 {{ Form::mInput('text', 'title', trans('messages.document.title')) }}
                 {{ Form::mInput('textarea', 'introtext', trans('messages.document.introtext'), null, ['rows' => 2]) }}
@@ -64,7 +64,7 @@
                 }}
                 {{ Form::mInput('text', 'slug', trans('messages.document.slug'), null, [], trans('messages.document.slug_help')) }}
             </div>
-        </div>
+        </fieldset>
     {{ Form::close() }}
 
 

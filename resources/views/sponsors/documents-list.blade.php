@@ -30,7 +30,7 @@
                     @foreach ($documents as $document)
                         <tr>
                             <td>
-                                @if ($documentsCapabilities[$document->id]['open'])
+                                @can('view', $document)
                                     <a href="{{ route('documents.show', $document) }}">{{ $document->title }}</a>
                                 @else
                                     {{ $document->title }}
@@ -50,7 +50,7 @@
                                 </a>
                             </td>
                             <td>
-                                @if ($documentsCapabilities[$document->id]['edit'])
+                                @can('viewManage', $document)
                                     <a href="{{ route('documents.manage.settings', $document) }}"
                                         title="@lang('messages.document.edit')">
 
@@ -59,7 +59,7 @@
                                 @endif
                             </td>
                             <td>
-                                @if ($documentsCapabilities[$document->id]['delete'])
+                                @can('delete', $document)
                                     <div class="btn-group" role="group">
                                         {{ Form::open(['route' => ['documents.destroy', $document], 'method' => 'delete']) }}
                                             <button type="submit" class="btn btn-xs btn-link">
@@ -70,7 +70,7 @@
                                 @endif
                             </td>
                             <td>
-                                @if ($documentsCapabilities[$document->id]['restore'])
+                                @if ($document->trashed() && Auth::user()->can('restore', $document))
                                     <div class="btn-group" role="group">
                                         {{ Form::open(['route' => ['documents.restore', $document], 'method' => 'delete']) }}
                                             <button type="submit" class="btn btn-xs btn-link">

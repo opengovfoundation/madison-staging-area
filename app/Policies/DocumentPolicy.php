@@ -30,7 +30,7 @@ class DocumentPolicy extends Policy
         if ($user) {
             if (
                 $document->publish_state == Document::PUBLISH_STATE_UNPUBLISHED
-                && $document->sponsors->filter(function ($sponsor) { return $sponsor->hasMember($user->id); })->isNotEmpty()
+                && $this->viewManage($user, $document)
             ) {
                 return true;
             }
@@ -41,7 +41,13 @@ class DocumentPolicy extends Policy
 
     public function viewManage(User $user, Document $document)
     {
-        return $document->sponsors->filter(function ($sponsor) { return $sponsor->hasMember($user->id); })->isNotEmpty();
+        return $document
+            ->sponsors
+            ->filter(function ($sponsor) use ($user) {
+                return $sponsor->hasMember($user->id);
+            })
+            ->isNotEmpty()
+            ;
     }
 
     /**
@@ -65,17 +71,13 @@ class DocumentPolicy extends Policy
      */
     public function update(User $user, Document $document)
     {
-        foreach ($document->sponsors as $sponsor) {
-            switch (true) {
-                case $sponsor instanceof Sponsor:
-                    return $sponsor->userHasRole($user, Sponsor::ROLE_EDITOR) || $sponsor->userHasRole($user, Sponsor::ROLE_OWNER);
-                    break;
-                default:
-                    throw new \Exception("Unknown Sponsor Type");
-            }
-        }
-
-        return false;
+        return $document
+            ->sponsors
+            ->filter(function ($sponsor) use ($user) {
+                return $sponsor->userCanCreateDocument($user);
+            })
+            ->isNotEmpty()
+            ;
     }
 
     /**
