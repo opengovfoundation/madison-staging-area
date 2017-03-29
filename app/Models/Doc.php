@@ -134,6 +134,22 @@ class Doc extends Model
         return static::getFeaturedDocumentIds()->contains($this->id);
     }
 
+    public function canUserView($user)
+    {
+        if (in_array(
+            $this->publish_state,
+            [static::PUBLISH_STATE_PUBLISHED, static::PUBLISH_STATE_PRIVATE]
+        )) {
+            return true;
+        }
+
+        if ($user) {
+            return $user->can('view', $this);
+        }
+
+        return false;
+    }
+
     public function sponsors()
     {
         return $this->belongsToMany('App\Models\Sponsor');

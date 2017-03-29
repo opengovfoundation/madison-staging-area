@@ -54,8 +54,7 @@ class SettingsTest extends DuskTestCase
             $browser
                 ->loginAs($staff)
                 ->visit($this->page)
-                // 403 status
-                ->assertSee('Whoops, looks like something went wrong')
+                ->assertVisible('fieldset[disabled]')
                 ;
         });
     }

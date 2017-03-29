@@ -27,13 +27,11 @@ class DocumentPolicy extends Policy
             return true;
         }
 
-        if ($user) {
-            if (
-                $document->publish_state == Document::PUBLISH_STATE_UNPUBLISHED
-                && $this->viewManage($user, $document)
-            ) {
-                return true;
-            }
+        if (
+            $document->publish_state == Document::PUBLISH_STATE_UNPUBLISHED
+            && $this->viewManage($user, $document)
+        ) {
+            return true;
         }
 
         return false;
