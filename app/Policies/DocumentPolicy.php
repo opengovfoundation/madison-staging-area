@@ -96,4 +96,9 @@ class DocumentPolicy extends Policy
     {
         return $this->delete($user, $document);
     }
+
+    public function moderate(User $user, Document $document)
+    {
+       return $this->viewManage($user, $document);
+    }
 }

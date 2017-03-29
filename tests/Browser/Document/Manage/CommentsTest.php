@@ -47,27 +47,11 @@ class CommentsTest extends DuskTestCase
         $this->userCanModerateComments($editor);
     }
 
-    // TODO: can they?
-    // public function testSponsorStaffCanModerateDocumentComments()
-    // {
-    //     $staff = factory(User::class)->create();
-    //     $this->sponsor->addMember($staff->id, Sponsor::ROLE_STAFF);
-    //     $this->userCanModerateComments($staff);
-    // }
-
-    public function testSponsorStaffCannotModerateDocumentComments()
+    public function testSponsorStaffCanModerateDocumentComments()
     {
         $staff = factory(User::class)->create();
         $this->sponsor->addMember($staff->id, Sponsor::ROLE_STAFF);
-
-        $this->browse(function ($browser) use ($staff) {
-            $browser
-                ->loginAs($staff)
-                ->visit($this->page)
-                // 403 status
-                ->assertSee('Whoops, looks like something went wrong')
-                ;
-        });
+        $this->userCanModerateComments($staff);
     }
 
     public function testSponsorCannotEditOtherDocument()
@@ -98,7 +82,7 @@ class CommentsTest extends DuskTestCase
                 ->loginAs($this->sponsorOwner)
                 ->visit($this->page)
                 ->assertSeeIn('@unhandledSection', trans('messages.none'))
-                ->assertSeeIn('@handledSection', trasn('messages.none'))
+                ->assertSeeIn('@handledSection', trans('messages.none'))
                 ;
         });
     }
