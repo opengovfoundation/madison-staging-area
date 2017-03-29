@@ -21,7 +21,7 @@ class View extends FormRequest
             }
         }
 
-        return $document && $document->canUserView($this->user());
+        return $document && $this->user()->can('view', $document);
     }
 
     /**

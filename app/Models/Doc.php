@@ -134,50 +134,6 @@ class Doc extends Model
         return static::getFeaturedDocumentIds()->contains($this->id);
     }
 
-    public function canUserEdit($user)
-    {
-        if ($user->hasRole('Admin')) {
-            return true;
-        }
-
-        foreach ($this->sponsors as $sponsor) {
-            switch (true) {
-                case $sponsor instanceof Sponsor:
-                    return $sponsor->userHasRole($user, Sponsor::ROLE_EDITOR) || $sponsor->userHasRole($user, Sponsor::ROLE_OWNER);
-                    break;
-                default:
-                    throw new \Exception("Unknown Sponsor Type");
-            }
-        }
-
-        return false;
-    }
-
-    public function canUserView($user)
-    {
-        if (in_array(
-            $this->publish_state,
-            [static::PUBLISH_STATE_PUBLISHED, static::PUBLISH_STATE_PRIVATE]
-        )) {
-            return true;
-        }
-
-        if ($user) {
-            if ($user->hasRole('Admin')) {
-                return true;
-            }
-
-            if (
-                $this->publish_state == static::PUBLISH_STATE_UNPUBLISHED
-                && $this->canUserEdit($user)
-            ) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public function sponsors()
     {
         return $this->belongsToMany('App\Models\Sponsor');

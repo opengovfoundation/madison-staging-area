@@ -13,10 +13,6 @@ class PutSupport extends FormRequest
      */
     public function authorize()
     {
-        if (!$this->user()) {
-            return $this->redirect()->route('login');
-        }
-
         $document = null;
 
         foreach (['document', 'documentTrashed'] as $key) {
@@ -26,7 +22,7 @@ class PutSupport extends FormRequest
             }
         }
 
-        return $document && $document->canUserView($this->user());
+        return $document && $this->user()->can('view', $document);
     }
 
     /**
