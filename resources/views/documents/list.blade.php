@@ -135,7 +135,7 @@
                                 <div class="btn-group" role="group">
                                     {{ Html::linkRoute(
                                             'documents.manage.settings',
-                                            trans('messages.edit'),
+                                            trans('messages.manage'),
                                             ['document' => $document->slug],
                                             ['class' => 'btn btn-default']
                                             )
