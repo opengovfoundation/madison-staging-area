@@ -75,7 +75,7 @@ class PopulateIndividualSponsorsAsGroups extends Migration
                 // no record, create a new one
                 $meta_record = new UserMeta([
                     'user_id' => $individual_group->user_id,
-                    'meta_key' => UserMeta::TYPE_INDEPENDENT_SPONSOR,
+                    'meta_key' => 'independent_sponsor',
                     'meta_value' => $individual_group->status === 'active' ? 1 : 0
                 ]);
             } else {

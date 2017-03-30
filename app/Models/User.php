@@ -36,11 +36,7 @@ class User extends Authenticatable
 
     protected $hidden = ['password', 'token', 'last_login', 'deleted_at', 'roles', 'remember_token'];
     protected $fillable = ['fname', 'lname', 'email', 'password', 'token'];
-    protected $appends = ['display_name', 'independent_sponsor'];
-
-    const STATUS_VERIFIED = 'verified';
-    const STATUS_PENDING = 'pending';
-    const STATUS_DENIED = 'denied';
+    protected $appends = ['display_name'];
 
     /**
      *  getDisplayName.
