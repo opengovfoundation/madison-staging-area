@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Sponsor;
 use Closure;
 
 class UnapprovedSponsorRedirect
@@ -17,12 +18,10 @@ class UnapprovedSponsorRedirect
     {
         $sponsor = $request->route()->parameter('sponsor');
 
-        if (empty($sponsor)) {
-            return $next($request);
-        }
-
-        if (!$sponsor->isActive()) {
+        if (($sponsor instanceof Sponsor) && !$sponsor->isActive()) {
             return redirect()->route('sponsors.awaiting-approval');
         }
+
+        return $next($request);
     }
 }

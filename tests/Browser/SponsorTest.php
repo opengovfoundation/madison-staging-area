@@ -17,8 +17,8 @@ class SponsorTest extends DuskTestCase
     {
         $this->browse(function ($browser) {
             $browser
-                ->visit(new SponsorPages\CreatePage)
-                ->assertSee('unauthorized')
+                ->visit((new SponsorPages\CreatePage)->url())
+                ->assertRouteIs('login')
                 ;
         });
     }
@@ -42,7 +42,7 @@ class SponsorTest extends DuskTestCase
 
             $sponsor = Sponsor::first();
 
-            $browser->assertRouteIs('sponsors.members.index', $sponsor);
+            $browser->assertRouteIs('sponsors.awaiting-approval');
 
             $this->assertEquals($sponsor->status, Sponsor::STATUS_PENDING);
 
@@ -306,6 +306,34 @@ class SponsorTest extends DuskTestCase
                 ->assertSeeIn('.alert', trans('messages.sponsor_member.need_owner'))
                 ->assertSeeIn('tr#user-' . $owner->id, trans('messages.sponsor_member.roles.' . $originalRole))
                 ;
+        });
+    }
+
+    public function testSponsorOwnerRedirectedToPendingPageIfSponsorNotApproved()
+    {
+        $owner = factory(User::class)->create();
+        $sponsor = factory(Sponsor::class)->create([
+            'status' => Sponsor::STATUS_PENDING,
+        ]);
+        $sponsor->addMember($owner->id, Sponsor::ROLE_OWNER);
+
+        $this->browse(function ($browser) use ($owner, $sponsor) {
+            $browser
+                ->loginAs($owner)
+                ;
+
+            $sponsorPages = [
+                (new SponsorPages\EditPage($sponsor))->url(),
+                (new SponsorPages\MembersPage($sponsor))->url(),
+                route('sponsors.documents.index', $sponsor),
+            ];
+
+            foreach ($sponsorPages as $page) {
+                $browser
+                    ->visit($page)
+                    ->assertRouteIs('sponsors.awaiting-approval')
+                    ;
+            }
         });
     }
 }
