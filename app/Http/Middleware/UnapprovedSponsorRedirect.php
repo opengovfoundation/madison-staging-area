@@ -15,11 +15,11 @@ class UnapprovedSponsorRedirect
      */
     public function handle($request, Closure $next)
     {
-        if (empty($request->route()->parameter('sponsor'))) {
+        $sponsor = $request->route()->parameter('sponsor');
+
+        if (empty($sponsor)) {
             return $next($request);
         }
-
-        $sponsor = $request->route()->parameter('sponsor');
 
         if (!$sponsor->isActive()) {
             return redirect()->route('sponsors.awaiting-approval');
