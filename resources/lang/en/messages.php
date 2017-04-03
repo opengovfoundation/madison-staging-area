@@ -129,6 +129,7 @@ return [
         'replies' => 'Replies',
         'add_reply' => 'Add your reply',
         'note_reply' => 'Reply to this note',
+        'support_prompt' => 'What do you think of this document?',
         'support' => 'Support',
         'oppose' => 'Oppose',
         'supported' => 'Supported',
