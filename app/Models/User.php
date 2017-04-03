@@ -16,7 +16,6 @@ use App\Models\Annotation;
 use App\Models\Sponsor;
 use App\Models\SponsorMember;
 use App\Models\Role;
-use App\Models\UserMeta;
 
 use DB;
 
@@ -190,20 +189,6 @@ class User extends Authenticatable
     public function getReminderEmail()
     {
         return $this->email;
-    }
-
-    /**
-     *  user_meta.
-     *
-     *  Eloquent hasMany relationship for UserMeta
-     *
-     *  @param void
-     *
-     *  @return Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function user_meta()
-    {
-        return $this->hasMany('App\Models\UserMeta');
     }
 
     /**
