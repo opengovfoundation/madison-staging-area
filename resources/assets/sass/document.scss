@@ -18,3 +18,7 @@
   -webkit-column-gap: $intro-column-gap;
   column-gap: $intro-column-gap;
 }
+
+.support-btns .btn-group {
+  z-index: 2000;
+}
