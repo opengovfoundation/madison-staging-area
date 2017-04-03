@@ -120,7 +120,7 @@ return [
         'download_comments_csv' => 'Download Comments (as CSV)',
         'collaborators' => 'Collaborators',
         'collaborators_count' => ':count collaborators',
-        'sponsoredby' => 'Sponsored by',
+        'sponsoredby' => 'Shared for feedback by :sponsors',
         'featured' => 'Featured',
         'featured_image' => 'Featured Image',
         'featured_image_remove' => 'Remove Featured Image',
