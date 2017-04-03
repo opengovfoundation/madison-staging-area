@@ -13,10 +13,7 @@ class DropUserMetaStuff extends Migration
      */
     public function up()
     {
-        DB::table('user_meta')
-            ->whereIn('meta_key', ['admin_contact', 'verify'])
-            ->delete()
-            ;
+        Schema::drop('user_meta');
     }
 
     /**
@@ -26,6 +23,14 @@ class DropUserMetaStuff extends Migration
      */
     public function down()
     {
-        // no going back
+        Schema::create('user_meta', function ($table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->string('meta_key');
+            $table->string('meta_value');
+            $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->on_delete('cascade');
+        });
     }
 }
