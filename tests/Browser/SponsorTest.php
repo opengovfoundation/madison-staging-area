@@ -130,7 +130,7 @@ class SponsorTest extends DuskTestCase
         $owner = factory(User::class)->create();
         $sponsor = FactoryHelpers::createActiveSponsorWithUser($owner);
 
-        $admin = factory(User::class)->create()->makeAdmin;
+        $admin = factory(User::class)->create()->makeAdmin();
 
         $this->userCanCreateDocumentsForSponsor($admin, $sponsor);
     }
