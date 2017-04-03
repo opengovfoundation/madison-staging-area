@@ -5,3 +5,16 @@
 .anchor-target {
   background-color: rgba(0, 128, 0, 0.3) !important;
 }
+
+.introtext {
+  $intro-column-count: 2;
+  $intro-column-gap: floor(($grid-gutter-width / 2));
+
+  -moz-column-count: $intro-column-count;
+  -webkit-column-count: $intro-column-count;
+  column-count: $intro-column-count;
+
+  -moz-column-gap: $intro-column-gap;
+  -webkit-column-gap: $intro-column-gap;
+  column-gap: $intro-column-gap;
+}

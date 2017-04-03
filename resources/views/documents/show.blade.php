@@ -7,17 +7,21 @@
 @endpush
 
 @section('content')
-    <div class="page-header">
-        <h1>{{ $document->title }}</h1>
-        <h3 class="sponsors">
-            <small>
-            Sponsored by:
-            {{ $document->sponsors->implode('display_name', ', ') }}
-            </small>
-        </h3>
-    </div>
-
     @include('components.errors')
+
+    <div class="jumbotron">
+        <h1>{{ $document->title }}</h1>
+        <p class="sponsors">
+            @lang('messages.document.sponsoredby', ['sponsors' => $document->sponsors->implode('display_name', ', ')])
+        </p>
+
+        @if (!empty($document->introtext))
+            <hr>
+            <div class="introtext">
+                {!! $document->introtext !!}
+            </div>
+        @endif
+    </div>
 
     @if ($document->discussion_state !== \App\Models\Doc::DISCUSSION_STATE_HIDDEN)
         <div class="row">
@@ -68,15 +72,6 @@
                             {{ Form::close() }}
                     </div>
                 </p>
-            </div>
-        </div>
-    @endif
-
-    @if (!empty($document->introtext))
-        <div class="panel panel-default">
-            <div class="panel-heading">@lang('messages.document.introtext')</div>
-            <div class="panel-body">
-                {!! $document->introtext !!}
             </div>
         </div>
     @endif
