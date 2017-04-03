@@ -19,6 +19,11 @@
   column-gap: $intro-column-gap;
 }
 
-.support-btns .btn-group {
-  z-index: 2000;
+.support-btns {
+  margin-left: 1em;
+  margin-bottom: 1em;
+
+  .btn-group {
+    z-index: 2000;
+  }
 }
