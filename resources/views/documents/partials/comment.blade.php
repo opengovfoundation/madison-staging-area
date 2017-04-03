@@ -1,69 +1,67 @@
-<div class="comment" id="{{ $comment->str_id }}">
-    <h4>
-        <strong>{{ $comment->user->display_name }}</strong>
-        <span class="small">{{ $comment->created_at->diffForHumans() }}</span>
-    </h4>
+<div class="media-left">
+    <img class="media-object" alt="user profile image" src="{{ $comment->user->avatar }}">
+</div>
 
-    <p>{{ $comment->annotationType->content }}</p>
+<div class="media-body">
+    <div class="comment-content">
+        <h4 class="media-heading">
+            {{ $comment->user->display_name }}
+            <br>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="activity-actions pull-left">
-                <a class="thumbs-up" onclick="$(this).trigger('madison.addAction')"
-                    data-action-type="likes" data-annotation-id="{{ $comment->str_id }}"
-                    title="{{ trans('messages.document.like') }}"
-                    aria-label="{{ trans('messages.document.like') }}" role="button">
-
-                    <span class="action-count">{{ $comment->likes_count }}</span>
+            <a class="link" href="{{ $comment->getLink() }}"
+                aria-label="{{ trans('messages.permalink') }}" role="button"
+                title="{{ trans('messages.permalink') }}">
+            <small>@include('components/relative-time', [ 'datetime' => $comment->created_at ])</small>
                 </a>
+        </h4>
 
-                <a class="flag" onclick="$(this).trigger('madison.addAction')"
-                    data-action-type="flags" data-annotation-id="{{ $comment->str_id }}"
-                    title="{{ trans('messages.document.flag') }}"
-                    aria-label="{{ trans('messages.document.flag') }}" role="button">
+        <div class="activity-actions pull-right">
+            <a class="thumbs-up" onclick="$(this).trigger('madison.addAction')"
+                data-action-type="likes" data-annotation-id="{{ $comment->str_id }}"
+                title="{{ trans('messages.document.like') }}"
+                aria-label="{{ trans('messages.document.like') }}" role="button">
 
-                    <span class="action-count">{{ $comment->flags_count }}</span>
+                <span class="action-count">{{ $comment->likes_count }}</span>
+            </a>
+
+            <a class="flag" onclick="$(this).trigger('madison.addAction')"
+                data-action-type="flags" data-annotation-id="{{ $comment->str_id }}"
+                title="{{ trans('messages.document.flag') }}"
+                aria-label="{{ trans('messages.document.flag') }}" role="button">
+
+                <span class="action-count">{{ $comment->flags_count }}</span>
+            </a>
+
+            @if ($comment->annotatable_type === \App\Models\Doc::ANNOTATABLE_TYPE)
+                <a class="comments" aria-label="{{ trans('messages.document.replies') }}
+                    title="{{ trans('messages.document.replies') }} role="button"
+                    data-comment-id="{{ $comment->str_id }}">
+
+                    <span class="action-count">{{ $comment->comments()->count() }}</span>
                 </a>
-
-                <a class="link" href="{{ $comment->getLink() }}"
-                    aria-label="{{ trans('messages.permalink') }}" role="button"
-                    title="{{ trans('messages.permalink') }}">&nbsp;</a>
-
-                @if ($comment->annotatable_type === \App\Models\Doc::ANNOTATABLE_TYPE)
-                    <a class="comments" aria-label="{{ trans('messages.document.replies') }}
-                        title="{{ trans('messages.document.replies') }} role="button"
-                        data-comment-id="{{ $comment->str_id }}">
-
-                        <span class="action-count">{{ $comment->comments()->count() }}</span>
-                    </a>
-                @endif
-            </div>
+            @endif
         </div>
+
+        @if (!empty($comment->data['quote']))
+            <a onclick="anchorToHighlight('{{ $comment->str_id }}')">
+                <blockquote>
+                    <p>{{ $comment->data['quote'] }}</p>
+                </blockquote>
+            </a>
+        @endif
+
+        <p>{{ $comment->annotationType->content }}</p>
     </div>
 
-    <div class="row comment-replies">
-        @if (Auth::user() && $comment->annotatable_type === \App\Models\Doc::ANNOTATABLE_TYPE)
-            <div class="col-md-12">
-                <hr>
-                {{ Form::open(['route' => ['documents.comments.storeReply', $comment->annotatable_id, $comment->id], 'class' => 'comment-form']) }}
-                    {{ Form::mInput(
-                        'textarea',
-                        'text',
-                        trans('messages.document.add_reply'),
-                        null,
-                        [ 'rows' => 3 ]
-                    ) }}
-                    {{ Form::mSubmit() }}
-                {{ Form::close() }}
-            </div>
-        @endif
+    @if (Auth::user() && $comment->annotatable_type === \App\Models\Doc::ANNOTATABLE_TYPE)
+        <div class="clearfix"></div>
+
+        @include('documents.partials.new-comment-form', ['route' => ['documents.comments.storeReply', $comment->annotatable_id, $comment->id]])
+    @endif
+
+    <div class="comment-replies">
         @if ($comment->comments()->count() > 0)
-            <div class="col-md-12">
-                <hr>
-                @each ('documents/partials/comment', $comment->comments()->get(), 'comment')
-            </div>
+            @each('documents/partials/comment-div', $comment->comments()->get(), 'comment')
         @endif
     </div>
-
-    <hr>
 </div>

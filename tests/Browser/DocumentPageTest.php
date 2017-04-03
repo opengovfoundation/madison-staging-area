@@ -85,13 +85,8 @@ class DocumentPageTest extends DuskTestCase
 
         $this->browse(function ($browser) {
             $browser->visit(new DocumentPage($this->document))
-                ->assertDontSee('@participantCount')
-                ->assertDontSee('@notesCount')
-                ->assertDontSee('@commentsCount')
                 ->assertDontSee('@supportBtn')
                 ->assertDontSee('@opposeBtn')
-                ->assertDontSee('@contentTab')
-                ->assertDontSee('@commentsTab')
                 ->assertDontSee('@annotationGroups')
                 ;
         });
@@ -104,7 +99,6 @@ class DocumentPageTest extends DuskTestCase
          */
         $this->browse(function ($browser) {
             $browser->visit(new DocumentPage($this->document))
-                ->openCommentsTab()
                 ->assertSeeComment($this->comment1)
                 ->assertSeeComment($this->comment2)
                 ->assertSeeReplyToComment($this->comment1, $this->commentReply)
@@ -163,7 +157,6 @@ class DocumentPageTest extends DuskTestCase
     {
         $this->browse(function ($browser) {
             $browser->visit(new DocumentPage($this->document))
-                ->openCommentsTab()
                 ->addActionToComment('like', $this->comment1)
                 ->assertPathIs('/login')
                 ;
@@ -174,7 +167,6 @@ class DocumentPageTest extends DuskTestCase
     {
         $this->browse(function ($browser) {
             $browser->visit(new DocumentPage($this->document))
-                ->openCommentsTab()
                 ->addActionToComment('flag', $this->comment1)
                 ->assertPathIs('/login')
                 ;
@@ -207,7 +199,6 @@ class DocumentPageTest extends DuskTestCase
     {
         $this->browse(function ($browser) {
             $browser->visit(new DocumentPage($this->document))
-                ->openCommentsTab()
                 ->assertDontSee('@commentForm')
                 ->with(DocumentPage::commentSelector($this->comment1), function($commentDiv) {
                     $commentDiv->assertDontSee('@commentForm');
@@ -238,7 +229,6 @@ class DocumentPageTest extends DuskTestCase
             $browser
                 ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
-                ->openCommentsTab()
                 ->fillAndSubmitCommentForm()
                 ;
 
@@ -268,7 +258,6 @@ class DocumentPageTest extends DuskTestCase
             $browser
                 ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
-                ->openCommentsTab()
                 ->fillAndSubmitCommentReplyForm($this->comment1)
                 ;
 
@@ -375,7 +364,6 @@ class DocumentPageTest extends DuskTestCase
             $browser
                 ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
-                ->openCommentsTab()
                 ->addActionToComment('like', $this->comment1)
                 ->assertCommentHasActionCount('like', $this->comment1, $commentLikes + 1)
                 ;
@@ -402,7 +390,6 @@ class DocumentPageTest extends DuskTestCase
             $browser
                 ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
-                ->openCommentsTab()
                 ->addActionToComment('flag', $this->comment1)
                 ->assertCommentHasActionCount('flag', $this->comment1, $commentFlags + 1)
                 ;
@@ -430,7 +417,6 @@ class DocumentPageTest extends DuskTestCase
             $browser
                 ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
-                ->openCommentsTab()
                 ->addActionToComment('like', $reply)
                 ->assertCommentHasActionCount('like', $reply, $replyLikes + 1)
                 ;
@@ -458,7 +444,6 @@ class DocumentPageTest extends DuskTestCase
             $browser
                 ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
-                ->openCommentsTab()
                 ->addActionToComment('flag', $reply)
                 ->assertCommentHasActionCount('flag', $reply, $replyFlags + 1)
                 ;

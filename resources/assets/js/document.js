@@ -46,6 +46,16 @@ window.showComments = function () {
   $('a[href="#comments"]').tab('show');
 };
 
+window.anchorToHighlight = function (id) {
+  var noteHighlight = $('#page_content').find('.annotator-hl[data-annotation-id='+id+']');
+  if (noteHighlight.length) {
+    noteHighlight[0].scrollIntoView();
+    $('.anchor-target').removeClass('anchor-target');
+    $(noteHighlight[0]).addClass('anchor-target');
+    return;
+  }
+};
+
 window.revealComment = function (docId) {
   var noteReplyHash = window.location.hash.match(/^#annsubcomment_([0-9]+)-?([0-9]+)?$/);
   var noteHash = window.location.hash.match(/^#annotation_([0-9]+)$/);
@@ -69,7 +79,7 @@ window.revealComment = function (docId) {
       showComments();
       comments[0].scrollIntoView();
       $('.anchor-target').removeClass('anchor-target');
-      $(comments[0]).addClass('anchor-target');
+      $(comments[0]).find('.comment-content').first().addClass('anchor-target');
       var parentComment = $(comments[0]).parents('.comment');
       if (parentComment.length) {
         showCommentReplies(parentComment[0].id);
@@ -78,7 +88,7 @@ window.revealComment = function (docId) {
     }
 
     // look for highlight in the document content
-    var noteHighlight = $('#content').find('[data-annotation-id='+id+']');
+    var noteHighlight = $('#page_content').find('.annotator-hl[data-annotation-id='+id+']');
     if (noteHighlight.length) {
       noteHighlight[0].scrollIntoView();
       $('.anchor-target').removeClass('anchor-target');
@@ -105,5 +115,16 @@ window.revealComment = function (docId) {
     }
   } else {
     hash.resolve(window.location.hash.slice(1));
+  }
+};
+
+window.toggleNewCommentForm = function (elem) {
+  var parents = $(elem).parents('.new-comment-form');
+  if (parents.length) {
+    var $collapsedContent = $(parents[0]).find('.collapsed-content');
+    var $expandedContent = $(parents[0]).find('.expanded-content');
+
+    $collapsedContent.toggleClass('hide');
+    $expandedContent.toggleClass('hide');
   }
 };

@@ -3,6 +3,19 @@
 // Actions
 .activity-actions {
   color: $gray;
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  a {
+    color: $text-muted;
+
+    &:hover,
+    &:focus {
+      color: $link-color;
+      text-decoration: none;
+    }
+  }
 
   .thumbs-up {
     @extend .fa;
@@ -45,12 +58,12 @@
   cursor:pointer;
 
   .annotation-group-count {
-    .fa-stack-1x {
-      color: white;
+    .fa {
+      color: $gray;
     }
 
-    .fa-stack-2x {
-      color: $gray;
+    .badge {
+      margin-left: 1em;
     }
   }
 
@@ -158,10 +171,6 @@
     color: $gray;
   }
 
-  .comment {
-    margin-left: 40px;
-  }
-
   .reply-action, .activity-actions {
     display: inline-block;
   }
@@ -235,5 +244,15 @@
   // Hide all inline annotations for now.
   .annotator-outer {
     display: none;
+  }
+}
+
+.comment-content {
+  position: relative;
+}
+
+.comment-replies {
+  .media:first-child {
+    margin-top: 15px;
   }
 }

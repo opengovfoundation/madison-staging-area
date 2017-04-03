@@ -36,19 +36,15 @@ class DocumentPage extends BasePage
         return [
             '@sponsorList' => '.jumbotron .sponsors',
             '@stats' => '.document-stats',
-            '@participantCount' => '.participants-count',
-            '@commentsCount' => '.comments-count',
-            '@notesCount' => '.notes-count',
             '@supportBtn' => '.support-btn button',
             '@opposeBtn' => '.oppose-btn button',
-            '@contentTab' => '.nav-tabs a[href="#content"]',
-            '@commentsTab' => '.nav-tabs a[href="#comments"]',
             '@noteBubble' => '.annotation-group',
             '@notesPane' => '.annotation-list',
-            '@commentsPane' => '#comments.comments',
-            '@contentPane' => '#content #page_content',
+            '@commentsDiv' => '#comments.comments',
+            '@contentDiv' => '#content #page_content',
             '@likeCount' => '.activity-actions a[data-action-type="likes"] .action-count',
             '@flagCount' => '.activity-actions a[data-action-type="flags"] .action-count',
+            '@newCommentForm' => '.new-comment-form',
             '@addCommentForm' => '.comment-form',
             '@noteReplyForm' => '.add-subcomment-form',
             '@submitBtn' => 'button[type="submit"]',
@@ -65,15 +61,6 @@ class DocumentPage extends BasePage
             ->click('@noteBubble')
             ->pause(700) // Ensure enough time for notes pane to expand
             ->assertVisible('@notesPane')
-            ;
-    }
-
-    public function openCommentsTab(Browser $browser)
-    {
-        $browser
-            ->waitFor('@noteBubble') // Ensures annotator has added action callbacks to comments
-            ->click('@commentsTab')
-            ->waitFor('@commentsPane')
             ;
     }
 
