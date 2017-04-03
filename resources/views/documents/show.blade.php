@@ -9,6 +9,10 @@
 @section('content')
     @include('components.errors')
 
+    @can('viewManage', $document)
+        <a href="{{ route('documents.manage.comments', $document) }}" class="btn btn-default pull-right">@lang('messages.document.moderate')</a>
+    @endcan
+
     <div class="jumbotron">
         <h1>{{ $document->title }}</h1>
         <p class="sponsors">
@@ -24,59 +28,6 @@
     </div>
 
     @if ($document->discussion_state !== \App\Models\Doc::DISCUSSION_STATE_HIDDEN)
-        <div class="row">
-            <div class="col-md-12">
-                <p>
-                    <div class="document-stats pull-right lead">
-                        <span class="participants-count">
-                            <strong>{{ trans('messages.document.participants') }}:</strong> {{ $userCount }}
-                        </span>
-                        <span class="comments-count">
-                            <strong>{{ trans('messages.document.comments') }}</strong>: {{ $commentCount }}
-                        </span>
-                        <span class="notes-count">
-                            <strong>{{ trans('messages.document.notes') }}</strong>: {{ $noteCount }}
-                        </span>
-                        @can('viewManage', $document)
-                            <a href="{{ route('documents.manage.comments', $document) }}" class="btn btn-default">@lang('messages.document.moderate')</a>
-                        @endcan
-                    </div>
-
-                    <div class="btn-group support-btn" role="group">
-                            {{ Form::open(['route' => ['documents.support', $document], 'method' => 'put']) }}
-                                <input type="hidden" name="support" value="1">
-
-                                @if ($userSupport === true)
-                                    <button type="submit" class="btn btn-success">
-                                        {{ trans('messages.document.supported') }} ({{ $supportCount }})
-                                    </button>
-                                @else
-                                    <button type="submit" class="btn btn-default">
-                                        {{ trans('messages.document.support') }} ({{ $supportCount }})
-                                    </button>
-                                @endif
-                            {{ Form::close() }}
-                    </div>
-                    <div class="btn-group oppose-btn" role="group">
-                            {{ Form::open(['route' => ['documents.support', $document], 'method' => 'put']) }}
-                                <input type="hidden" name="support" value="0">
-                                @if ($userSupport === false)
-                                    <button type="submit" class="btn btn-warning">
-                                        {{ trans('messages.document.opposed') }} ({{ $opposeCount }})
-                                    </button>
-                                @else
-                                    <button type="submit" class="btn btn-default">
-                                        {{ trans('messages.document.oppose') }} ({{ $opposeCount }})
-                                    </button>
-                                @endif
-                            {{ Form::close() }}
-                    </div>
-                </p>
-            </div>
-        </div>
-    @endif
-
-    @if ($document->discussion_state !== \App\Models\Doc::DISCUSSION_STATE_HIDDEN)
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
                 <a href="#content" role="tab" data-toggle="tab">@lang('messages.document.content')</a>
@@ -89,9 +40,52 @@
 
     <div class="tab-content">
         <div class="active tab-pane row" id="content" role="tabpanel">
-            <section id="page_content" class="col-md-8">
-                {!! $documentPages->first()->rendered() !!}
-            </section>
+            <div class="col-md-8">
+                @if ($document->discussion_state !== \App\Models\Doc::DISCUSSION_STATE_HIDDEN)
+                    <div class="support-btns pull-right text-center">
+                        <div>
+                            <small>@lang('messages.document.support_prompt')</small>
+                        </div>
+                        <div class="btn-group support-btn" role="group">
+                                {{ Form::open(['route' => ['documents.support', $document], 'method' => 'put']) }}
+                                    <input type="hidden" name="support" value="1">
+
+                                    @if ($userSupport === true)
+                                        <button type="submit" class="btn btn-primary btn-xs">
+                                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                            {{ trans('messages.document.supported') }} ({{ $supportCount }})
+                                        </button>
+                                    @else
+                                        <button type="submit" class="btn btn-default btn-xs">
+                                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                            {{ trans('messages.document.support') }} ({{ $supportCount }})
+                                        </button>
+                                    @endif
+                                {{ Form::close() }}
+                        </div>
+                        <div class="btn-group oppose-btn" role="group">
+                                {{ Form::open(['route' => ['documents.support', $document], 'method' => 'put']) }}
+                                    <input type="hidden" name="support" value="0">
+                                    @if ($userSupport === false)
+                                        <button type="submit" class="btn btn-primary btn-xs">
+                                            <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+                                            {{ trans('messages.document.opposed') }} ({{ $opposeCount }})
+                                        </button>
+                                    @else
+                                        <button type="submit" class="btn btn-default btn-xs">
+                                            <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+                                            {{ trans('messages.document.oppose') }} ({{ $opposeCount }})
+                                        </button>
+                                    @endif
+                                {{ Form::close() }}
+                        </div>
+                    </div>
+                @endif
+
+                <section id="page_content">
+                    {!! $documentPages->first()->rendered() !!}
+                </section>
+            </div>
 
             <aside class="annotation-container col-md-4"></aside>
         </div>
