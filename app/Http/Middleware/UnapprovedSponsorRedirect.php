@@ -17,8 +17,9 @@ class UnapprovedSponsorRedirect
     public function handle($request, Closure $next)
     {
         $sponsor = $request->route()->parameter('sponsor');
+        $isAdmin = $request->user() && $request->user()->isAdmin();
 
-        if (($sponsor instanceof Sponsor) && !$sponsor->isActive()) {
+        if (!$isAdmin && ($sponsor instanceof Sponsor) && !$sponsor->isActive()) {
             return redirect()->route('sponsors.awaiting-approval');
         }
 

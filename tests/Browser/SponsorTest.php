@@ -385,13 +385,40 @@ class SponsorTest extends DuskTestCase
             $sponsorPages = [
                 (new SponsorPages\EditPage($sponsor))->url(),
                 (new SponsorPages\MembersPage($sponsor))->url(),
-                route('sponsors.documents.index', $sponsor),
+                route('sponsors.documents.index', [$sponsor], false),
             ];
 
             foreach ($sponsorPages as $page) {
                 $browser
                     ->visit($page)
                     ->assertRouteIs('sponsors.awaiting-approval')
+                    ;
+            }
+        });
+    }
+
+    public function testAdminNotRedirectedToPendingPageIfSponsorNotApproved()
+    {
+        $admin = factory(User::class)->create()->makeAdmin();
+        $sponsor = factory(Sponsor::class)->create([
+            'status' => Sponsor::STATUS_PENDING,
+        ]);
+
+        $this->browse(function ($browser) use ($admin, $sponsor) {
+            $browser
+                ->loginAs($admin)
+                ;
+
+            $sponsorPages = [
+                (new SponsorPages\EditPage($sponsor))->url(),
+                (new SponsorPages\MembersPage($sponsor))->url(),
+                route('sponsors.documents.index', [$sponsor], false),
+            ];
+
+            foreach ($sponsorPages as $page) {
+                $browser
+                    ->visit($page)
+                    ->assertPathIs($page)
                     ;
             }
         });
