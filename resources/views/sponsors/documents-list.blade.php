@@ -100,22 +100,31 @@
     </div>
 
     @if (Auth::user() && $sponsor->userCanCreateDocument(Auth::user()))
-        <div class="modal fade" id="new-document-modal">
+        <div class="modal fade" id="new-document-modal" tabindex="-1" role="dialog" aria-labelledby="new-document-modal-label">
             <div class="modal-dialog" role="document">
                 {{ Form::open(['route' => ['documents.store'], 'class' => 'modal-content']) }}
                     <div class="modal-header">
-                        <h2>@lang('messages.document.new')</h2>
+                        <h2 id="new-document-modal-label">@lang('messages.document.new')</h2>
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="sponsor_id" value="{{ $sponsor->id }}">
                         {{ Form::mInput('text', 'title', trans('messages.document.title')) }}
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">@lang('messages.close')</button>
                         {{ Form::mSubmit() }}
                     </div>
                 {{ Form::close() }}
             </div>
         </div>
     @endif
+
+    @push('scripts')
+        <script>
+            $('#new-document-modal').on('shown.bs.modal', function(e) {
+                $(e.target).find('input[name=title]').focus();
+            });
+        </script>
+    @endpush
 
 @endsection
