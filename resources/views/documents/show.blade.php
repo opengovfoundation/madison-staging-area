@@ -40,7 +40,7 @@
 
     <div class="tab-content">
         <div class="active tab-pane row" id="content" role="tabpanel">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 @if ($document->discussion_state !== \App\Models\Doc::DISCUSSION_STATE_HIDDEN)
                     <div class="support-btns pull-right text-center">
                         <div>
@@ -50,33 +50,29 @@
                                 {{ Form::open(['route' => ['documents.support', $document], 'method' => 'put']) }}
                                     <input type="hidden" name="support" value="1">
 
-                                    @if ($userSupport === true)
-                                        <button type="submit" class="btn btn-primary btn-xs">
-                                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                                            {{ trans('messages.document.supported') }} ({{ $supportCount }})
-                                        </button>
-                                    @else
-                                        <button type="submit" class="btn btn-default btn-xs">
-                                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                                            {{ trans('messages.document.support') }} ({{ $supportCount }})
-                                        </button>
-                                    @endif
+                                    <button type="submit" class="btn btn-primary btn-xs {{ $userSupport === true ? 'active' : '' }}">
+                                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                        @if ($userSupport === true)
+                                            {{ trans('messages.document.supported') }}
+                                        @else
+                                            {{ trans('messages.document.support') }}
+                                        @endif
+                                        ({{ $supportCount }})
+                                    </button>
                                 {{ Form::close() }}
                         </div>
                         <div class="btn-group oppose-btn" role="group">
                                 {{ Form::open(['route' => ['documents.support', $document], 'method' => 'put']) }}
                                     <input type="hidden" name="support" value="0">
-                                    @if ($userSupport === false)
-                                        <button type="submit" class="btn btn-primary btn-xs">
-                                            <i class="fa fa-thumbs-down" aria-hidden="true"></i>
-                                            {{ trans('messages.document.opposed') }} ({{ $opposeCount }})
-                                        </button>
-                                    @else
-                                        <button type="submit" class="btn btn-default btn-xs">
-                                            <i class="fa fa-thumbs-down" aria-hidden="true"></i>
-                                            {{ trans('messages.document.oppose') }} ({{ $opposeCount }})
-                                        </button>
-                                    @endif
+                                    <button type="submit" class="btn btn-primary btn-xs {{ $userSupport === false ? 'active' : '' }}">
+                                        <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+                                        @if ($userSupport === false)
+                                                {{ trans('messages.document.opposed') }}
+                                        @else
+                                                {{ trans('messages.document.oppose') }}
+                                        @endif
+                                        ({{ $opposeCount }})
+                                    </button>
                                 {{ Form::close() }}
                         </div>
                     </div>
@@ -87,7 +83,7 @@
                 </section>
             </div>
 
-            <aside class="annotation-container col-md-4"></aside>
+            <aside class="annotation-container col-md-2"></aside>
         </div>
 
         @if ($document->discussion_state !== \App\Models\Doc::DISCUSSION_STATE_HIDDEN)
