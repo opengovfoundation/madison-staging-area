@@ -5,14 +5,16 @@
 @section('content')
     <div class="page-header">
         <h1>{{ trans('messages.sponsor.list') }}</h1>
-        @include('components.breadcrumbs.account')
+        @if ($sponsors->count() > 0)
+            @include('components.breadcrumbs.account')
+        @endif
     </div>
 
     @include('components.errors')
 
     @if ($sponsors->count() === 0)
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-9">
                <p class="lead">@lang('messages.sponsor.not_a_sponsor.title')</p>
                <p>@lang('messages.sponsor.not_a_sponsor.body')</p>
                <p>
