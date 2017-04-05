@@ -104,7 +104,7 @@
             <div class="modal-dialog" role="document">
                 {{ Form::open(['route' => ['documents.store'], 'class' => 'modal-content']) }}
                     <div class="modal-header">
-                        <h2 id="new-document-modal-label">@lang('messages.document.new')</h2>
+                        <h2 class="modal-title" id="new-document-modal-label">@lang('messages.document.new')</h2>
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="sponsor_id" value="{{ $sponsor->id }}">
