@@ -33,6 +33,19 @@
     padding: 5px 15px;
   }
 
+  ul.nav li ul.nav {
+    display: none;
+    padding-left: 20px;
+  }
+
+  ul.nav li.active {
+    font-weight: bold;
+
+    ul.nav {
+      display: block;
+    }
+  }
+
   .affix, .affix-bottom, .affix-top {
     width: 360px;
   }
