@@ -123,9 +123,10 @@
                     // Set the outline to be affixed
                     $('#document-outline ul').affix({
                         offset: {
-                            top: $('#document-outline').position().top,
+                            top: $('#document-outline').position().top - 5,
                             bottom: function() {
-                                return (this.bottom = $('footer.nav').outerHeight() + 100)
+                                // The <hr> vertical margin is 20px, hence 40
+                                return (this.bottom = $('footer.nav').outerHeight() + 40)
                             }
                         }
                     });
