@@ -38,6 +38,7 @@ class DocumentPage extends BasePage
             '@stats' => '.document-stats',
             '@supportBtn' => '.support-btn button',
             '@opposeBtn' => '.oppose-btn button',
+            '@outline' => '#document-outline',
             '@noteBubble' => '.annotation-group',
             '@notesPane' => '.annotation-list',
             '@commentsDiv' => '#comments.comments',
