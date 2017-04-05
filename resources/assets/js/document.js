@@ -133,16 +133,18 @@ window.toggleNewCommentForm = function (elem) {
   }
 };
 
-window.buildDocumentOutline = function(outlineContainer, documentContent) {
+window.buildDocumentOutline = function (outlineContainer, documentContent) {
   var contentHeadings = $(documentContent).find('h1,h2,h3,h4,h5,h6').toArray();
   var outlineTree = contentHeadings.reduce(buildOutlineTree, []);
+
+  // Create HTML from the outline tree and put into container
   $(outlineContainer).find('ul').append(outlineTree.reduce(buildItemHtml, ''));
 
   // Set the outline to be affixed
   $(outlineContainer).children('ul').affix({
     offset: {
       top: $('#document-outline').position().top - 5,
-      bottom: function() {
+      bottom: function () {
         // The <hr> vertical margin is 20px, hence 40
         return (this.bottom = $('footer.nav').outerHeight() + 40)
       }
@@ -152,7 +154,7 @@ window.buildDocumentOutline = function(outlineContainer, documentContent) {
   // Set scrollspy on the outline
   $('body').scrollspy({ target: outlineContainer });
 
-  function buildOutlineTree(outlineTree, heading, idx) {
+  function buildOutlineTree (outlineTree, heading, idx) {
     var lastTopLevelHeading = outlineTree[outlineTree.length - 1];
 
     var newHeading = {
@@ -172,7 +174,7 @@ window.buildDocumentOutline = function(outlineContainer, documentContent) {
     return outlineTree;
   }
 
-  function buildItemHtml(html, item) {
+  function buildItemHtml (html, item) {
     html += '<li><a href="#' + item.id + '">' + item.text + '</a>';
 
     if (item.subHeadings.length > 0) {
