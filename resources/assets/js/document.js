@@ -120,6 +120,7 @@ window.buildDocumentOutline = function (outlineContainer, documentContent) {
     offset: { top: $('#document-outline').position().top - 5 }
   });
 
+  // Prevents affixed outline from overlapping footer
   $(window).scroll(function (e) {
     var $affixedOutlineList = $(outlineContainer).children('ul');
 
