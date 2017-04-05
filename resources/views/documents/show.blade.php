@@ -107,21 +107,49 @@
 
                     // Build the document outline
                     var $outlineList = $('#document-outline ul');
-                    var contentHeadings = [];
+                    var contentHeadings = $('#page_content').find('h1,h2,h3,h4,h5,h6').toArray();
 
-                    $('#page_content').find('h1,h2,h3,h4,h5,h6').each(function(idx, el) {
-                        var headingId = 'toc-heading-' + contentHeadings.length;
-                        var itemHtml = '<li><a href="#' + headingId + '">' + $(el).text() + '</a><li>';
-                        contentHeadings.push(itemHtml);
-                        $(el).attr('id', headingId);
-                    });
+                    var outlineTree = contentHeadings.reduce(function(acc, el, idx) {
+                        var lastTopLevelHeading = acc[acc.length - 1];
 
-                    contentHeadings.forEach(function(heading) {
-                        $outlineList.append(heading);
-                    });
+                        var newHeading = {
+                            el: el,
+                            level: parseInt(el.tagName[1]),
+                            id: 'toc-heading-' + idx,
+                            text: $(el).text(),
+                            subHeadings: []
+                        };
+
+                        if (!lastTopLevelHeading || newHeading.level <= lastTopLevelHeading.level) {
+                            acc.push(newHeading);
+                        } else {
+                            acc[acc.length - 1].subHeadings.push(newHeading);
+                        }
+
+                        return acc;
+                    }, []);
+
+                    $outlineList.append(outlineTree.reduce(generateItemHtml, ''));
+
+                    function generateItemHtml(html, item) {
+                        html += '<li><a href="#' + item.id + '">' + item.text + '</a>';
+
+                        if (item.subHeadings.length > 0) {
+                            html += '<ul class="nav">';
+                            html += item.subHeadings.reduce(generateItemHtml, '');
+                            html += '</ul>';
+                        }
+
+                        html += '</li>';
+
+                        // Side effect! Attach ID to the heading element
+                        $(item.el).attr('id', item.id);
+
+                        return html;
+                    }
 
                     // Set the outline to be affixed
-                    $('#document-outline ul').affix({
+                    $('#document-outline > ul').affix({
                         offset: {
                             top: $('#document-outline').position().top - 5,
                             bottom: function() {
@@ -130,6 +158,8 @@
                             }
                         }
                     });
+
+                    $('body').scrollspy({ target: '#document-outline' });
 
                     // race-y with loading annotaions, so it's called again
                     // in annotator-madison.js after annotator.js has loaded
