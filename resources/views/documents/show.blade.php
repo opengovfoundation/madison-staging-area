@@ -105,61 +105,7 @@
                         {{ $document->discussion_state !== \App\Models\Doc::DISCUSSION_STATE_OPEN ? 1 : 0 }}
                     );
 
-                    // Build the document outline
-                    var $outlineList = $('#document-outline ul');
-                    var contentHeadings = $('#page_content').find('h1,h2,h3,h4,h5,h6').toArray();
-
-                    var outlineTree = contentHeadings.reduce(function(acc, el, idx) {
-                        var lastTopLevelHeading = acc[acc.length - 1];
-
-                        var newHeading = {
-                            el: el,
-                            level: parseInt(el.tagName[1]),
-                            id: 'toc-heading-' + idx,
-                            text: $(el).text(),
-                            subHeadings: []
-                        };
-
-                        if (!lastTopLevelHeading || newHeading.level <= lastTopLevelHeading.level) {
-                            acc.push(newHeading);
-                        } else {
-                            acc[acc.length - 1].subHeadings.push(newHeading);
-                        }
-
-                        return acc;
-                    }, []);
-
-                    $outlineList.append(outlineTree.reduce(generateItemHtml, ''));
-
-                    function generateItemHtml(html, item) {
-                        html += '<li><a href="#' + item.id + '">' + item.text + '</a>';
-
-                        if (item.subHeadings.length > 0) {
-                            html += '<ul class="nav">';
-                            html += item.subHeadings.reduce(generateItemHtml, '');
-                            html += '</ul>';
-                        }
-
-                        html += '</li>';
-
-                        // Side effect! Attach ID to the heading element
-                        $(item.el).attr('id', item.id);
-
-                        return html;
-                    }
-
-                    // Set the outline to be affixed
-                    $('#document-outline > ul').affix({
-                        offset: {
-                            top: $('#document-outline').position().top - 5,
-                            bottom: function() {
-                                // The <hr> vertical margin is 20px, hence 40
-                                return (this.bottom = $('footer.nav').outerHeight() + 40)
-                            }
-                        }
-                    });
-
-                    $('body').scrollspy({ target: '#document-outline' });
+                    window.buildDocumentOutline('#document-outline', '#page_content');
 
                     // race-y with loading annotaions, so it's called again
                     // in annotator-madison.js after annotator.js has loaded
