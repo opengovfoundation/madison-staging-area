@@ -67,7 +67,11 @@ class DocumentPageTest extends DuskTestCase
                 ;
 
             foreach (explode("\n\n", $this->document->content()->first()->content) as $p) {
-                $browser->assertSee($p);
+                $contentLine = trim(str_replace('#', '', $p));
+                if ($p && $p !== '') {
+                    // Strip out markdown header tags
+                    $browser->assertSee($contentLine);
+                }
             }
         });
     }
