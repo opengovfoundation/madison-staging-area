@@ -36,17 +36,21 @@
     </div>
 
     <div class="row">
-        <div class="col-md-10">
+        <div id="document-outline" class="col-md-4 panel hidden-sm">
+            <ul class="nav"></ul>
+        </div>
+
+        <div class="col-md-7 col-sm-11">
             @include('documents.partials.support-btns')
 
             <section id="page_content">
                 {!! $documentPages->first()->rendered() !!}
             </section>
+
+            {{ $documentPages->appends(request()->query())->fragment('page_content')->links() }}
         </div>
 
-        <aside class="annotation-container col-md-2"></aside>
-
-        {{ $documentPages->appends(request()->query())->fragment('page_content')->links() }}
+        <aside class="annotation-container col-md-1"></aside>
     </div>
 
     @if ($document->discussion_state !== \App\Models\Doc::DISCUSSION_STATE_HIDDEN)
@@ -102,6 +106,31 @@
                         {{ request()->user() ? request()->user()->id : 'null' }},
                         {{ $document->discussion_state !== \App\Models\Doc::DISCUSSION_STATE_OPEN ? 1 : 0 }}
                     );
+
+                    // Build the document outline
+                    var $outlineList = $('#document-outline ul');
+                    var contentHeadings = [];
+
+                    $('#page_content').find('h1,h2,h3,h4,h5,h6').each(function(idx, el) {
+                        var headingId = 'toc-heading-' + contentHeadings.length;
+                        var itemHtml = '<li><a href="#' + headingId + '">' + $(el).text() + '</a><li>';
+                        contentHeadings.push(itemHtml);
+                        $(el).attr('id', headingId);
+                    });
+
+                    contentHeadings.forEach(function(heading) {
+                        $outlineList.append(heading);
+                    });
+
+                    // Set the outline to be affixed
+                    $('#document-outline ul').affix({
+                        offset: {
+                            top: $('#document-outline').position().top,
+                            bottom: function() {
+                                return (this.bottom = $('footer.nav').outerHeight() + 100)
+                            }
+                        }
+                    });
 
                     // race-y with loading annotaions, so it's called again
                     // in annotator-madison.js after annotator.js has loaded

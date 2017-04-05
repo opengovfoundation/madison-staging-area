@@ -65,3 +65,19 @@ blockquote {
 .comment-replies-toggle {
   margin-top: 1em;
 }
+
+#document-outline {
+  ul.nav li a {
+    padding: 5px 15px;
+  }
+
+  .affix {
+    width: 360px;
+    top: 15px;
+  }
+  .affix-top {}
+}
+
+@media only screen and (max-width: $screen-sm-min) {
+
+}
