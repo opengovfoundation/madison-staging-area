@@ -64,5 +64,10 @@
   }
 }
 
-@media only screen and (max-width: $screen-sm-min) {
+@media only screen and (max-width: $screen-lg-min) {
+  #document-outline {
+    .affix, .affix-bottom, .affix-top {
+      width: 300px;
+    }
+  }
 }
