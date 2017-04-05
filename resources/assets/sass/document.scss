@@ -51,8 +51,14 @@
   }
 
   .affix-top { position: relative; }
-  .affix { top: 15px; }
-  .affix-bottom { position: absolute; }
+  .affix {
+    position: fixed;
+    top: 15px;
+    overflow-y: scroll;
+  }
+  .affix-bottom {
+    position: absolute;
+  }
 }
 
 @media only screen and (max-width: $screen-sm-min) {
