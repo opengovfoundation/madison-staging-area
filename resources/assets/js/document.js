@@ -117,12 +117,22 @@ window.buildDocumentOutline = function (outlineContainer, documentContent) {
 
   // Set the outline to be affixed
   $(outlineContainer).children('ul').affix({
-    offset: {
-      top: $('#document-outline').position().top - 5,
-      bottom: function () {
-        // The <hr> vertical margin is 20px, hence 40
-        return (this.bottom = $('footer.nav').outerHeight() + 40)
-      }
+    offset: { top: $('#document-outline').position().top - 5 }
+  });
+
+  $(window).scroll(function (e) {
+    var $affixedOutlineList = $(outlineContainer).children('ul');
+
+    var scrollBottom = $(this).scrollTop() + $(window).height();
+    var viewportHeight = $(window).height();
+
+    var footerHeight = $('footer.nav').outerHeight() + 40; // 40 for hr margin above footer
+    var footerTop = $(document).height() - footerHeight;
+
+    if (scrollBottom > footerTop) {
+      $affixedOutlineList.height(viewportHeight - (footerHeight - ($(document).height() - scrollBottom)) - 15);
+    } else {
+      $affixedOutlineList.height(viewportHeight - 30);
     }
   });
 
