@@ -67,20 +67,23 @@ blockquote {
 }
 
 #document-outline {
-  ul.nav li a {
-    padding: 5px 15px;
-  }
-
-  ul.nav li ul.nav {
-    display: none;
-    padding-left: 20px;
-  }
-
-  ul.nav li.active {
-    font-weight: bold;
+  ul.nav li {
+    a {
+      padding: 5px 15px;
+    }
 
     ul.nav {
-      display: block;
+      display: none;
+      padding-left: 20px;
+    }
+
+    &.active {
+      font-weight: bold;
+
+      ul.nav {
+        font-weight: normal;
+        display: block;
+      }
     }
   }
 
