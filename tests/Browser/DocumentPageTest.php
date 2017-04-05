@@ -6,6 +6,7 @@ use Tests\DuskTestCase;
 use Tests\Browser\Pages\DocumentPage;
 use Tests\FactoryHelpers;
 use Illuminate\Support\Facades\Notification;
+use Faker;
 use App\Models\Annotation;
 use App\Models\Doc as Document;
 use App\Models\DocContent;
@@ -70,6 +71,43 @@ class DocumentPageTest extends DuskTestCase
                     $browser->assertSee($contentLine);
                 }
             }
+        });
+    }
+
+    public function testCanSeeDocumentOutline()
+    {
+        $faker = Faker\Factory::create();
+
+        $content = "# Heading 1\n\n";
+        $content .= $faker->paragraphs(rand(3, 5), true) . "\n\n";
+        $content .= "## Subheading 1\n\n";
+        $content .= $faker->paragraphs(rand(3, 5), true) . "\n\n";
+        $content .= "## Subheading 2\n\n";
+        $content .= $faker->paragraphs(rand(3, 5), true) . "\n\n";
+        $content .= "# Heading 2\n\n";
+        $content .= $faker->paragraphs(rand(3, 5), true) . "\n\n";
+        $content .= "### Subheading 3\n\n";
+        $content .= $faker->paragraphs(rand(3, 5), true) . "\n\n";
+
+        $this->document->content()->delete();
+        $this->document->content()->save(factory(DocContent::class)->make([
+            'content' => $content,
+        ]));
+
+        $this->browse(function ($browser) {
+            $browser->visit(new DocumentPage($this->document))
+                ->waitFor('#document-outline ul li')
+                ->assertSeeIn('@outline', 'Heading 1')
+                ->assertSeeIn('@outline', 'Heading 2')
+                ->assertDontSeeIn('@outline', 'Subheading 1')
+                ->assertDontSeeIn('@outline', 'Subheading 2')
+                ->assertDontSeeIn('@outline', 'Subheading 3')
+                ->clickLink('Heading 1')
+                ->assertSeeIn('@outline', 'Subheading 1')
+                ->assertSeeIn('@outline', 'Subheading 2')
+                ->clickLink('Heading 2')
+                ->assertSeeIn('@outline', 'Subheading 3')
+                ;
         });
     }
 
