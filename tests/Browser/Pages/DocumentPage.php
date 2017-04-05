@@ -43,6 +43,7 @@ class DocumentPage extends BasePage
             '@opposeBtn' => '.oppose-btn button',
             '@contentTab' => '.nav-tabs a[href="#content"]',
             '@commentsTab' => '.nav-tabs a[href="#comments"]',
+            '@outline' => '#document-outline',
             '@noteBubble' => '.annotation-group',
             '@notesPane' => '.annotation-list',
             '@commentsPane' => '#comments.comments',
