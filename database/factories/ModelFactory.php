@@ -84,7 +84,7 @@ $factory->define(Document::class, function (Faker\Generator $faker) {
 $factory->define(DocContent::class, function (Faker\Generator $faker) {
     $content = '';
 
-    $numHeadings = rand(10, 20);
+    $numHeadings = rand(30, 40);
     $headings = $faker->sentences($numHeadings);
 
     foreach ($headings as $heading) {
