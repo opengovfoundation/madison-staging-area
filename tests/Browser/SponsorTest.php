@@ -319,6 +319,61 @@ class SponsorTest extends DuskTestCase
         });
     }
 
+    public function testSponsorOwnerRedirectedToPendingPageIfSponsorNotApproved()
+    {
+        $owner = factory(User::class)->create();
+        $sponsor = factory(Sponsor::class)->create([
+            'status' => Sponsor::STATUS_PENDING,
+        ]);
+        $sponsor->addMember($owner->id, Sponsor::ROLE_OWNER);
+
+        $this->browse(function ($browser) use ($owner, $sponsor) {
+            $browser
+                ->loginAs($owner)
+                ;
+
+            $sponsorPages = [
+                (new SponsorPages\EditPage($sponsor))->url(),
+                (new SponsorPages\MembersPage($sponsor))->url(),
+                route('sponsors.documents.index', [$sponsor], false),
+            ];
+
+            foreach ($sponsorPages as $page) {
+                $browser
+                    ->visit($page)
+                    ->assertRouteIs('sponsors.awaiting-approval')
+                    ;
+            }
+        });
+    }
+
+    public function testAdminNotRedirectedToPendingPageIfSponsorNotApproved()
+    {
+        $admin = factory(User::class)->create()->makeAdmin();
+        $sponsor = factory(Sponsor::class)->create([
+            'status' => Sponsor::STATUS_PENDING,
+        ]);
+
+        $this->browse(function ($browser) use ($admin, $sponsor) {
+            $browser
+                ->loginAs($admin)
+                ;
+
+            $sponsorPages = [
+                (new SponsorPages\EditPage($sponsor))->url(),
+                (new SponsorPages\MembersPage($sponsor))->url(),
+                route('sponsors.documents.index', [$sponsor], false),
+            ];
+
+            foreach ($sponsorPages as $page) {
+                $browser
+                    ->visit($page)
+                    ->assertPathIs($page)
+                    ;
+            }
+        });
+    }
+
     public function userCanEditSponsor($user, $sponsor)
     {
         $newSponsorData = factory(Sponsor::class)->make();
@@ -413,61 +468,6 @@ class SponsorTest extends DuskTestCase
                 ->assertRouteIs('sponsors.members.index', $sponsor)
                 ->assertSeeIn('tr#user-' . $editor->id, trans('messages.sponsor_member.roles.'.$newRole))
                 ;
-        });
-    }
-
-    public function testSponsorOwnerRedirectedToPendingPageIfSponsorNotApproved()
-    {
-        $owner = factory(User::class)->create();
-        $sponsor = factory(Sponsor::class)->create([
-            'status' => Sponsor::STATUS_PENDING,
-        ]);
-        $sponsor->addMember($owner->id, Sponsor::ROLE_OWNER);
-
-        $this->browse(function ($browser) use ($owner, $sponsor) {
-            $browser
-                ->loginAs($owner)
-                ;
-
-            $sponsorPages = [
-                (new SponsorPages\EditPage($sponsor))->url(),
-                (new SponsorPages\MembersPage($sponsor))->url(),
-                route('sponsors.documents.index', [$sponsor], false),
-            ];
-
-            foreach ($sponsorPages as $page) {
-                $browser
-                    ->visit($page)
-                    ->assertRouteIs('sponsors.awaiting-approval')
-                    ;
-            }
-        });
-    }
-
-    public function testAdminNotRedirectedToPendingPageIfSponsorNotApproved()
-    {
-        $admin = factory(User::class)->create()->makeAdmin();
-        $sponsor = factory(Sponsor::class)->create([
-            'status' => Sponsor::STATUS_PENDING,
-        ]);
-
-        $this->browse(function ($browser) use ($admin, $sponsor) {
-            $browser
-                ->loginAs($admin)
-                ;
-
-            $sponsorPages = [
-                (new SponsorPages\EditPage($sponsor))->url(),
-                (new SponsorPages\MembersPage($sponsor))->url(),
-                route('sponsors.documents.index', [$sponsor], false),
-            ];
-
-            foreach ($sponsorPages as $page) {
-                $browser
-                    ->visit($page)
-                    ->assertPathIs($page)
-                    ;
-            }
         });
     }
 
