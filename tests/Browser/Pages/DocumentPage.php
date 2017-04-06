@@ -44,8 +44,6 @@ class DocumentPage extends BasePage
             '@contentDiv' => '#content #page_content',
             '@likeBtn' => '.activity-actions a[data-action-type="likes"]',
             '@flagBtn' => '.activity-actions a[data-action-type="flags"]',
-            '@likeCount' => '.activity-actions a[data-action-type="likes"] .action-count',
-            '@flagCount' => '.activity-actions a[data-action-type="flags"] .action-count',
             '@newCommentForm' => '.new-comment-form',
             '@addCommentForm' => '.comment-form',
             '@noteReplyForm' => '.add-subcomment-form',
@@ -124,16 +122,18 @@ class DocumentPage extends BasePage
         $commentSelector = static::commentSelector($comment);
         $replySelector = static::commentSelector($reply);
 
-        $browser->with($commentSelector, function ($commentDiv) use ($reply, $replySelector) {
-            $commentDiv->with($replySelector, function ($replyDiv) use ($reply) {
-                $replyDiv
-                    ->assertSee($reply->user->name)
-                    ->assertSeeIn('@likeBtn', (string) $reply->likes_count)
-                    ->assertSeeIn('@flagBtn', (string) $reply->flags_count)
-                    ->assertSee(static::flattenParagraphs($reply->annotationType->content))
-                    ;
-            });
-        })
+        $browser
+            ->with($commentSelector, function ($commentDiv) use ($reply, $replySelector) {
+                $commentDiv
+                    ->with($replySelector, function ($replyDiv) use ($reply) {
+                        $replyDiv
+                            ->assertSee($reply->user->name)
+                            ->assertSeeIn('@likeBtn', (string) $reply->likes_count)
+                            ->assertSeeIn('@flagBtn', (string) $reply->flags_count)
+                            ->assertSee(static::flattenParagraphs($reply->annotationType->content))
+                            ;
+                    });
+            })
         ;
     }
 
@@ -272,6 +272,20 @@ class DocumentPage extends BasePage
                     ->press('Submit')
                     ;
             });
+    }
+
+    public function revealCommentReplies(Browser $browser, $comment) {
+        $commentSelector = static::commentSelector($comment);
+
+        $browser
+            ->with($commentSelector, function ($commentDiv) {
+                $commentDiv
+                    ->pause(500)
+                    ->click('.comment-replies-toggle-show')
+                    ->waitFor('.comment-replies .comment')
+                    ;
+            })
+            ;
     }
 
     public static function noteSelector(Annotation $note)

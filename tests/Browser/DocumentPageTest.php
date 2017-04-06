@@ -101,6 +101,7 @@ class DocumentPageTest extends DuskTestCase
             $browser->visit(new DocumentPage($this->document))
                 ->assertSeeComment($this->comment1)
                 ->assertSeeComment($this->comment2)
+                ->revealCommentReplies($this->comment1)
                 ->assertSeeReplyToComment($this->comment1, $this->commentReply)
                 ;
         });
@@ -417,6 +418,7 @@ class DocumentPageTest extends DuskTestCase
             $browser
                 ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
+                ->revealCommentReplies($this->comment1)
                 ->addActionToComment('like', $reply)
                 ->assertCommentHasActionCount('like', $reply, $replyLikes + 1)
                 ;
@@ -444,6 +446,7 @@ class DocumentPageTest extends DuskTestCase
             $browser
                 ->loginAs($this->user)
                 ->visit(new DocumentPage($this->document))
+                ->revealCommentReplies($this->comment1)
                 ->addActionToComment('flag', $reply)
                 ->assertCommentHasActionCount('flag', $reply, $replyFlags + 1)
                 ;
