@@ -250,6 +250,7 @@ class DocumentPage extends BasePage
 
         $browser
             ->click('@noteAdder')
+            ->pause(500)
             ->with('@annotatorWidget', function ($annotatorWidget) use ($fakeNote) {
                 $annotatorWidget
                     ->keys('#annotator-field-0', str_replace("\n\n", " ", $fakeNote->content)) // newlines seem to cause problems
