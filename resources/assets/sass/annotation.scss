@@ -89,7 +89,7 @@
   bottom: 0;
   right: 0;
   height: 100%;
-  z-index: $zindex-navbar;
+  z-index: ($zindex-navbar + 1);
   background-color: $gray-lighter;
   @extend %simple-shadow;
   padding: 0 0 (2 * $line-height-computed);
@@ -211,14 +211,6 @@
 
 // Mobile phone-sizes
 @media only screen and (max-width: $screen-sm-min) {
-  .annotation-container {
-    left: calc(100% - 2rem);
-  }
-
-  .annotation-title {
-    display: none;
-  }
-
   .mobile-annotation-message {
     display: block;
     margin: $line-height-computed 0;
@@ -226,14 +218,19 @@
   }
 
   // Leave room for annotation numbers
-  .doc-content {
+  #page_content {
     padding-right: 2rem;
   }
 
   .annotation-group {
-    // Hide the details on annotations in the sidebar.
-    .annotation-group-statistics {
+    right: 5px;
+
+    .fa {
       display: none;
+    }
+
+    .annotation-group-count .badge {
+      margin-left: 0;
     }
   }
 
