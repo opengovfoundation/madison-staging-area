@@ -115,6 +115,7 @@ return [
         'comments' => 'Comments',
         'add_comment' => 'Write a comment...',
         'login_to_comment' => 'Login to comment',
+        'see_replies' => 'See replies (:count)',
         'note' => 'Note',
         'note_edit_explanation_prompt' => 'Why did you make this edit?',
         'notes' => 'Notes',

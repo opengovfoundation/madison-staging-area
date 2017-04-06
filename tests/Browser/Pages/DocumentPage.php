@@ -42,6 +42,8 @@ class DocumentPage extends BasePage
             '@notesPane' => '.annotation-list',
             '@commentsDiv' => '#comments.comments',
             '@contentDiv' => '#content #page_content',
+            '@likeBtn' => '.activity-actions a[data-action-type="likes"]',
+            '@flagBtn' => '.activity-actions a[data-action-type="flags"]',
             '@likeCount' => '.activity-actions a[data-action-type="likes"] .action-count',
             '@flagCount' => '.activity-actions a[data-action-type="flags"] .action-count',
             '@newCommentForm' => '.new-comment-form',
@@ -72,8 +74,8 @@ class DocumentPage extends BasePage
             $notesPane->with($noteSelector, function ($noteElement) use ($note) {
                 $noteElement
                     ->assertSee($note->user->name)
-                    ->assertSeeIn('@likeCount', (string) $note->likes_count)
-                    ->assertSeeIn('@flagCount', (string) $note->flags_count)
+                    ->assertSeeIn('@likeBtn', (string) $note->likes_count)
+                    ->assertSeeIn('@flagBtn', (string) $note->flags_count)
                     ->assertSee(static::flattenParagraphs($note->annotationType->content))
                     ;
             });
@@ -90,8 +92,8 @@ class DocumentPage extends BasePage
                 $noteElement->with($replySelector, function ($replyElement) use ($reply) {
                     $replyElement
                         ->assertSee($reply->user->name)
-                        ->assertSeeIn('@likeCount', (string) $reply->likes_count)
-                        ->assertSeeIn('@flagCount', (string) $reply->flags_count)
+                        ->assertSeeIn('@likeBtn', (string) $reply->likes_count)
+                        ->assertSeeIn('@flagBtn', (string) $reply->flags_count)
                         ->assertSee(static::flattenParagraphs($reply->annotationType->content))
                         ;
                 });
@@ -106,8 +108,8 @@ class DocumentPage extends BasePage
         $browser->with($commentSelector, function ($commentDiv) use ($comment) {
             $commentDiv
                 ->assertSee($comment->user->name)
-                ->assertSeeIn('@likeCount', (string) $comment->likes_count)
-                ->assertSeeIn('@flagCount', (string) $comment->flags_count)
+                ->assertSeeIn('@likeBtn', (string) $comment->likes_count)
+                ->assertSeeIn('@flagBtn', (string) $comment->flags_count)
                 ->assertSee(static::flattenParagraphs($comment->annotationType->content))
                 ;
         })
@@ -126,8 +128,8 @@ class DocumentPage extends BasePage
             $commentDiv->with($replySelector, function ($replyDiv) use ($reply) {
                 $replyDiv
                     ->assertSee($reply->user->name)
-                    ->assertSeeIn('@likeCount', (string) $reply->likes_count)
-                    ->assertSeeIn('@flagCount', (string) $reply->flags_count)
+                    ->assertSeeIn('@likeBtn', (string) $reply->likes_count)
+                    ->assertSeeIn('@flagBtn', (string) $reply->flags_count)
                     ->assertSee(static::flattenParagraphs($reply->annotationType->content))
                     ;
             });
@@ -139,7 +141,7 @@ class DocumentPage extends BasePage
     {
         $commentSelector = static::commentSelector($comment);
         $browser->with($commentSelector, function ($commentDiv) use ($action, $count) {
-            $commentDiv->with('@' . $action . 'Count', function ($actionDiv) use ($count) {
+            $commentDiv->with('@' . $action . 'Btn', function ($actionDiv) use ($count) {
                 // Use a wait since it updates after going to server
                 $actionDiv->waitForText($count);
             });
@@ -150,7 +152,7 @@ class DocumentPage extends BasePage
     {
         $noteSelector = static::noteSelector($note);
         $browser->with($noteSelector, function ($noteDiv) use ($action, $count) {
-            $noteDiv->with('@' . $action . 'Count', function ($actionDiv) use ($count) {
+            $noteDiv->with('@' . $action . 'Btn', function ($actionDiv) use ($count) {
                 // Use a wait since it updates after going to server
                 $actionDiv->waitForText($count);
             });
@@ -177,9 +179,9 @@ class DocumentPage extends BasePage
         $browser
             ->with($commentSelector, function ($commentDiv) use ($action) {
                 $commentDiv
-                    ->assertVisible('@' . $action . 'Count')
+                    ->assertVisible('@' . $action . 'Btn')
                     ->pause(500)
-                    ->click('@' . $action . 'Count')
+                    ->click('@' . $action . 'Btn')
                     ;
             })
             ;
@@ -191,9 +193,9 @@ class DocumentPage extends BasePage
         $browser
             ->with($noteSelector, function ($noteElement) use ($action) {
                 $noteElement
-                    ->assertVisible('@' . $action . 'Count')
+                    ->assertVisible('@' . $action . 'Btn')
                     ->pause(500)
-                    ->click('@' . $action . 'Count')
+                    ->click('@' . $action . 'Btn')
                     ;
             })
             ;

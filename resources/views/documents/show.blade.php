@@ -111,7 +111,7 @@
                         showComments();
                     }
 
-                    $('.activity-actions a.comments').click(function(e) {
+                    $('.comment-replies-toggle-show').click(function(e) {
                         e.preventDefault();
                         let commentId = $(e.target).data('comment-id');
                         toggleCommentReplies(commentId);

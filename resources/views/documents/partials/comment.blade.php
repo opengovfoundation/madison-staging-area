@@ -31,15 +31,6 @@
 
                 <span class="action-count">{{ $comment->flags_count }}</span>
             </a>
-
-            @if ($comment->annotatable_type === \App\Models\Doc::ANNOTATABLE_TYPE)
-                <a class="comments" aria-label="{{ trans('messages.document.replies') }}
-                    title="{{ trans('messages.document.replies') }} role="button"
-                    data-comment-id="{{ $comment->str_id }}">
-
-                    <span class="action-count">{{ $comment->comments()->count() }}</span>
-                </a>
-            @endif
         </div>
 
         @if (!empty($comment->data['quote']))
@@ -59,9 +50,21 @@
         @include('documents.partials.new-comment-form', ['route' => ['documents.comments.storeReply', $comment->annotatable_id, $comment->id]])
     @endif
 
-    <div class="comment-replies">
+    <div class="comment-replies hide">
         @if ($comment->comments()->count() > 0)
             @each('documents/partials/comment-div', $comment->comments()->get(), 'comment')
         @endif
     </div>
+
+    @if ($comment->annotatable_type === \App\Models\Doc::ANNOTATABLE_TYPE && $comment->comments()->count() > 0)
+        <div class="comment-replies-toggle text-center">
+            <a class="comment-replies-toggle-show" aria-label="{{ trans('messages.document.replies') }}
+                title="{{ trans('messages.document.replies') }} role="button"
+                data-comment-id="{{ $comment->str_id }}">
+
+                @lang('messages.document.see_replies', ['count' => $comment->comments()->count()])
+            </a>
+        </div>
+    @endif
+
 </div>
