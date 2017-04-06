@@ -3,9 +3,6 @@
 // Actions
 .activity-actions {
   color: $gray;
-  position: absolute;
-  top: 0;
-  right: 0;
 
   a {
     color: $text-muted;
@@ -161,14 +158,13 @@
   }
 }
 
-.annotation, .comment {
+.annotation {
   .author {
     font-weight: bold;
   }
 
   .date, .activity-actions {
     float: right;
-    color: $gray;
   }
 
   .reply-action, .activity-actions {
@@ -183,6 +179,14 @@
 
 .annotation:not(:last-child) {
   @extend .title-underline-medium;
+}
+
+#comments .comment {
+  .activity-actions {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
 }
 
 .subcomment-form {

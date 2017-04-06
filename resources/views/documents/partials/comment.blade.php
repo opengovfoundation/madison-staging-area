@@ -15,7 +15,7 @@
                 </a>
         </h4>
 
-        <div class="activity-actions pull-right">
+        <div class="activity-actions">
             <a class="thumbs-up" onclick="$(this).trigger('madison.addAction')"
                 data-action-type="likes" data-annotation-id="{{ $comment->str_id }}"
                 title="{{ trans('messages.document.like') }}"
