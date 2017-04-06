@@ -202,8 +202,10 @@ class DocumentPage extends BasePage
         $fakeComment = factory(Comment::class)->make();
 
         $browser
-            ->with('@addCommentForm', function ($commentForm) use ($fakeComment) {
+            ->with('@newCommentForm', function ($commentForm) use ($fakeComment) {
                 $commentForm
+                    ->click('.new-comment-form-toggle')
+                    ->waitFor('@submitBtn')
                     ->type('text', static::flattenParagraphs($fakeComment->content))
                     ->click('@submitBtn')
                     ;
@@ -217,6 +219,8 @@ class DocumentPage extends BasePage
 
         $browser->with('.comment#' . $comment->str_id, function ($commentDiv) use ($fakeComment) {
             $commentDiv
+                ->click('.new-comment-form-toggle')
+                ->waitFor('@submitBtn')
                 ->type('text', static::flattenParagraphs($fakeComment->content))
                 ->click('@submitBtn')
                 ;

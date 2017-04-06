@@ -5,7 +5,7 @@
                 <img class="media-object" alt="user profile image" src="{{ Auth::user()->avatar }}">
             </div>
             <div class="media-body media-middle">
-                <button class="btn btn-link" onclick="toggleNewCommentForm(this)">
+                <button class="btn btn-link new-comment-form-toggle" onclick="toggleNewCommentForm(this)">
                     @lang('messages.document.add_comment')
                 </button>
             </div>
