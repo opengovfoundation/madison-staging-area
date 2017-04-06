@@ -178,6 +178,7 @@ class DocumentPage extends BasePage
             ->with($commentSelector, function ($commentDiv) use ($action) {
                 $commentDiv
                     ->assertVisible('@' . $action . 'Count')
+                    ->pause(500)
                     ->click('@' . $action . 'Count')
                     ;
             })
@@ -191,6 +192,7 @@ class DocumentPage extends BasePage
             ->with($noteSelector, function ($noteElement) use ($action) {
                 $noteElement
                     ->assertVisible('@' . $action . 'Count')
+                    ->pause(500)
                     ->click('@' . $action . 'Count')
                     ;
             })
