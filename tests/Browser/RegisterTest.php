@@ -45,7 +45,7 @@ class RegisterTest extends DuskTestCase
         $fakeUser = factory(User::class)->make();
 
         $this->browse(function ($browser) use ($fakeUser) {
-            $redirectPath = '/users/1/settings/account';
+            $redirectPath = route('users.settings.account.edit', ['1'], false);
             $browser
                 ->visit('/register?redirect='.$redirectPath)
                 ->fillAndSubmitRegisterForm($fakeUser)
