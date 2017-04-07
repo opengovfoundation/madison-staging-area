@@ -300,6 +300,7 @@ return [
         'verification_info' => 'Verification Information',
         'make_admin' => 'Make Admin',
         'remove_admin' => 'Remove Admin',
+        'avatar_alt_text' => 'User profile image',
 
         'settings' => 'User Settings',
         'settings_pages' => [

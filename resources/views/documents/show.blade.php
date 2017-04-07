@@ -61,7 +61,7 @@
                     <hr>
                 @endif
 
-                <ui class="media-list">
+                <ul class="media-list">
                     @each('documents.partials.comment-li', $comments, 'comment')
                 </ul>
                 <div class="text-center">
@@ -98,7 +98,7 @@
                         ".annotation-container",
                         {{ $document->id }},
                         {{ request()->user() ? request()->user()->id : 'null' }},
-                        {{ $document->discussion_state === \App\Models\Doc::DISCUSSION_STATE_CLOSED ? 1 : 0 }}
+                        {{ $document->discussion_state !== \App\Models\Doc::DISCUSSION_STATE_OPEN ? 1 : 0 }}
                     );
 
                     // race-y with loading annotaions, so it's called again

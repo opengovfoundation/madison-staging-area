@@ -1,5 +1,5 @@
 <div class="media-left">
-    <img class="media-object" alt="user profile image" src="{{ $comment->user->avatar }}">
+    <img class="media-object" alt="{{ trans('messages.user.avatar_alt_text') }}" src="{{ $comment->user->avatar }}">
 </div>
 
 <div class="media-body">
