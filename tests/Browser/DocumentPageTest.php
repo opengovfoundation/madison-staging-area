@@ -151,7 +151,6 @@ class DocumentPageTest extends DuskTestCase
                 ->visit($this->page)
                 ->pause(500)
                 ->click('@supportBtn')
-                ->pause(500)
                 ->assertPathIs('/login')
                 ->assertLoginRedirectsBackToPage($this->user)
                 ;
@@ -165,7 +164,6 @@ class DocumentPageTest extends DuskTestCase
                 ->visit($this->page)
                 ->pause(500)
                 ->click('@opposeBtn')
-                ->pause(500)
                 ->assertPathIs('/login')
                 ->assertLoginRedirectsBackToPage($this->user)
                 ;
@@ -180,7 +178,6 @@ class DocumentPageTest extends DuskTestCase
                 ->openCommentsTab()
                 ->pause(500)
                 ->addActionToComment('like', $this->comment1)
-                ->pause(500)
                 ->assertPathIs('/login')
                 ->assertLoginRedirectsBackToPage($this->user)
                 ;
@@ -195,7 +192,6 @@ class DocumentPageTest extends DuskTestCase
                 ->openCommentsTab()
                 ->pause(500)
                 ->addActionToComment('flag', $this->comment1)
-                ->pause(500)
                 ->assertPathIs('/login')
                 ->assertLoginRedirectsBackToPage($this->user)
                 ;
@@ -210,7 +206,6 @@ class DocumentPageTest extends DuskTestCase
                 ->openNotesPane()
                 ->pause(500)
                 ->addActionToNote('like', $this->note1)
-                ->pause(500)
                 ->assertPathIs('/login')
                 ->assertLoginRedirectsBackToPage($this->user)
                 ;
@@ -225,7 +220,6 @@ class DocumentPageTest extends DuskTestCase
                 ->openNotesPane()
                 ->pause(500)
                 ->addActionToNote('flag', $this->note1)
-                ->pause(500)
                 ->assertPathIs('/login')
                 ->assertLoginRedirectsBackToPage($this->user)
                 ;
@@ -240,7 +234,6 @@ class DocumentPageTest extends DuskTestCase
                 ->openCommentsTab()
                 ->pause(500)
                 ->clickLink(trans('messages.document.login_to_comment'))
-                ->pause(500)
                 ->assertPathIs('/login')
                 ->assertLoginRedirectsBackToPage($this->user)
                 ;
