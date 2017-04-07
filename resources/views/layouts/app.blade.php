@@ -10,6 +10,15 @@
 
     <title>@yield('pageTitle') | {{ config('app.name', 'Madison') }}</title>
 
+    <!-- Social -->
+    <meta property="og:site_name" content="{{ config('app.name', 'Madison') }}">
+    <meta property="og:title" content="@yield('pageTitle')">
+    <meta property="og:url" content="{{ Request::url() }}">
+
+    <!-- TODO: these will vary per page -->
+    <meta property="og:description" content="@yield('pageTitle')">
+    <meta property="og:image" content="@yield('pageTitle')">
+
     <!-- Icons -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
