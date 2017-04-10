@@ -107,7 +107,6 @@ return [
         'introtext' => 'Introduction',
         'content' => 'Content',
         'sponsor' => 'Sponsor',
-        'sponsor_others' => 'and others',
 
         'activity' => 'Activity',
         'participants' => 'Participants',
