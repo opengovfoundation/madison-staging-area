@@ -47,7 +47,7 @@ window.showCommentReplies = function(commentId) {
 };
 
 window.showComments = function () {
-  $('a[href="#comments"]').tab('show');
+  $('#comments')[0].scrollIntoView();
 };
 
 window.anchorToHighlight = function (id) {
