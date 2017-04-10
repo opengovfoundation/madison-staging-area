@@ -30,7 +30,7 @@
         @if (!empty($document->introtext))
             <hr>
             <div class="introtext">
-                {!! $document->introtext !!}
+                {!! $document->introtext_html !!}
             </div>
         @endif
     </div>
