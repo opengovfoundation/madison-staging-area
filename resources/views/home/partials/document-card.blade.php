@@ -1,5 +1,5 @@
 <div class="col-md-4">
-    <div class="thumbnail doc-card">
+    <div class="thumbnail document-card">
         <a href="{{ route('documents.show', $document) }}">
             <img src="{{ $document->getFeaturedImageUrl() }}" class="img-responsive">
         </a>
