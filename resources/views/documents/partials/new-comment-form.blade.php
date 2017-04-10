@@ -6,7 +6,7 @@
             </div>
             <div class="media-body media-middle">
                 <button class="btn btn-link new-comment-form-toggle" onclick="toggleNewCommentForm(this)">
-                    @lang('messages.document.add_comment')
+                    @lang($message)
                 </button>
             </div>
         </div>
@@ -26,7 +26,7 @@
             {{ Form::mInput(
                 'textarea',
                 'text',
-                trans('messages.document.add_comment'),
+                trans($message),
                 null,
                 [ 'rows' => 3, 'label-sr-only' => true ]
             ) }}

@@ -129,7 +129,7 @@ return [
         'featured_image_removed' => 'Featured Image Removed',
         'replies_count' => ':count replies',
         'replies' => 'Replies',
-        'add_reply' => 'Add your reply',
+        'add_reply' => 'Write a reply...',
         'note_reply' => 'Reply to this note',
         'support_prompt' => 'What do you think of this document?',
         'support' => 'Support',

@@ -54,7 +54,7 @@
                 @include('documents.partials.support-btns')
                 @if ($document->discussion_state === \App\Models\Doc::DISCUSSION_STATE_OPEN)
                     @if (Auth::user())
-                        @include('documents.partials.new-comment-form', ['route' => ['documents.comments.store', $document]])
+                        @include('documents.partials.new-comment-form', ['route' => ['documents.comments.store', $document], 'message' => 'messages.document.add_comment'])
                     @else
                         {{ Html::linkRoute('login', trans('messages.document.login_to_comment'), ['redirect' => $document->url]) }}
                     @endif
