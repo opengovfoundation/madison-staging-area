@@ -1,0 +1,16 @@
+.document-row {
+  margin-top: 2rem;
+}
+
+.document-card img, .document-row img {
+  width: 100%;
+  height: auto;
+}
+
+@media only screen and (min-width: 992px) {
+  .document-row {
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #ecf0f1;
+  }
+}
