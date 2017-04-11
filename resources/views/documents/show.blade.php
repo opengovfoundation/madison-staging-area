@@ -98,6 +98,8 @@
                 'messages.submit'
             ])
             .done(function () {
+                window.buildDocumentOutline('#document-outline', '#page_content');
+
                 @if ($document->discussion_state !== \App\Models\Doc::DISCUSSION_STATE_HIDDEN)
                     loadAnnotations(
                         "#page_content",
@@ -106,8 +108,6 @@
                         {{ request()->user() ? request()->user()->id : 'null' }},
                         {{ $document->discussion_state !== \App\Models\Doc::DISCUSSION_STATE_OPEN ? 1 : 0 }}
                     );
-
-                    window.buildDocumentOutline('#document-outline', '#page_content');
 
                     // race-y with loading annotaions, so it's called again
                     // in annotator-madison.js after annotator.js has loaded
