@@ -41,11 +41,11 @@
     <div class="tab-content">
         <div class="active tab-pane row" id="content" role="tabpanel">
 
-            <div id="document-outline" class="col-md-4 panel hidden-sm">
+            <div id="document-outline" class="col-md-3 panel hidden-sm hidden-xs small">
                 <ul class="nav"></ul>
             </div>
 
-            <div class="col-md-7 col-sm-11">
+            <div class="col-md-8 col-sm-11">
                 @if ($document->discussion_state !== \App\Models\Doc::DISCUSSION_STATE_HIDDEN)
                     <div class="support-btns pull-right text-center">
                         <div>
@@ -144,6 +144,8 @@
                 'messages.submit'
             ])
             .done(function () {
+                window.buildDocumentOutline('#document-outline', '#page_content');
+
                 @if ($document->discussion_state !== \App\Models\Doc::DISCUSSION_STATE_HIDDEN)
                     loadAnnotations(
                         "#page_content",
@@ -152,8 +154,6 @@
                         {{ request()->user() ? request()->user()->id : 'null' }},
                         {{ $document->discussion_state === \App\Models\Doc::DISCUSSION_STATE_CLOSED ? 1 : 0 }}
                     );
-
-                    window.buildDocumentOutline('#document-outline', '#page_content');
 
                     // race-y with loading annotaions, so it's called again
                     // in annotator-madison.js after annotator.js has loaded

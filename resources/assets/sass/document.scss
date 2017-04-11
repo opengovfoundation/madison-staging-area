@@ -31,7 +31,7 @@
 #document-outline {
   ul.nav li {
     a {
-      padding: 5px 15px;
+      padding: 5px;
     }
 
     ul.nav {
@@ -50,7 +50,7 @@
   }
 
   .affix, .affix-bottom, .affix-top {
-    width: 360px;
+    width: 273px;
   }
 
   .affix-top { position: relative; }
@@ -67,7 +67,7 @@
 @media only screen and (max-width: $screen-lg-min) {
   #document-outline {
     .affix, .affix-bottom, .affix-top {
-      width: 300px;
+      width: 227px;
     }
   }
 }
