@@ -227,7 +227,6 @@ class DocumentPageTest extends DuskTestCase
         $this->browse(function ($browser) {
             $browser
                 ->visit($this->page)
-                ->openCommentsTab()
                 ->pause(500)
                 ->clickLink(trans('messages.document.login_to_comment'))
                 ->assertPathIs('/login')
@@ -258,7 +257,7 @@ class DocumentPageTest extends DuskTestCase
                 ->with(DocumentPage::noteSelector($this->note1), function($commentDiv) {
                     $commentDiv
                         ->assertDontSee('@noteReplyForm')
-                        ->clickLink('Add your reply')
+                        ->clickLink(trans('messages.document.add_reply'))
                         ->assertPathIs('/login')
                         ;
                 })
