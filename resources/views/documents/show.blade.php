@@ -2,10 +2,6 @@
 
 @section('pageTitle', $document->title)
 
-@push('styles')
-    <link href="{{ elixir('css/annotator.min.css') }}" rel="stylesheet">
-@endpush
-
 @section('content')
     @include('components.errors')
 
