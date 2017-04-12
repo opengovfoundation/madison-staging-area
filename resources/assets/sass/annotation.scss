@@ -201,12 +201,14 @@
   }
 }
 
+.annotator-hide { display: none; }
+
 .annotator-adder, .annotator-outer, .annotator-notice, .annotator-filter {
   z-index: 1000 !important;
 }
 
 .annotator-wrapper .annotator-adder {
-  background: none;
+  position: absolute;
   padding-left: 15px;
   padding-top: 7px;
 
@@ -226,18 +228,27 @@
       left: 8px;
     }
 
+    text-indent: -9999px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     margin-left: 5px;
     height: 30px;
     width: 30px;
     position: absolute;
-    top: 0;
-    left: 0;
+    top: -40px;
+    left: -20px;
   }
+}
+
+.annotator-outer.annotator-editor {
+  position: absolute;
 }
 
 .annotator-wrapper .annotator-widget {
   @extend .panel;
+
+  position: absolute;
+  top: -180px;
+  left: -150px;
 
   border: 1px solid #eee;
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
@@ -247,33 +258,38 @@
   .annotator-listing {
     @extend .panel-body;
 
-    .annotator-item textarea {
-      font-style: normal;
-      padding: 0;
+    list-style: none;
 
-      &:focus {
-        background: none;
-      }
+    .annotator-item textarea {
+      padding: 0;
+      border: none;
+      width: 300px;
+      min-height: 80px;
+
+      &:focus { outline: none; }
     }
   }
 
   .annotator-controls {
     @extend .panel-footer;
-    background-image: none;
 
     a {
       @extend .btn;
       @extend .btn-xs;
 
-      text-shadow: none;
-
-      &:after { background: none; }
-
-      &.annotator-save { @extend .btn-primary; }
-      &.annotator-cancel { @extend .btn-danger; }
+      &.annotator-save {
+        @extend .btn-primary;
+        float: right;
+      }
+      &.annotator-cancel {
+        @extend .btn-default;
+      }
     }
   }
 
+  /**
+   * TODO: use this?
+   */
   span.annotator-resize {
     top: -15px;
     right: -15px;
@@ -281,7 +297,20 @@
 }
 
 .annotator-hl {
+  background: rgba(255,255,10,0.3);
   cursor: pointer;
+}
+
+.annotator-hl-temporary {
+  background: rgba(0,124,255,0.3);
+}
+
+.annotator-hl-active {
+  background: rgba(255,255,10,0.8);
+}
+
+.annotator-hl-filtered {
+  background-color: transparent;
 }
 
 .mobile-annotation-message {

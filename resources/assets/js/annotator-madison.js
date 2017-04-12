@@ -1,5 +1,4 @@
 /*global Annotator*/
-/*global diff_match_patch*/
 /*jslint newcap: true*/
 Annotator.Plugin.Madison = function (element, options) {
   Annotator.Plugin.apply(this, arguments);
@@ -131,6 +130,23 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
     // Clicking a highlight opens the panel for that annotation group
     $('.annotator-wrapper').delegate('.annotator-hl', 'click', function (event) {
       $(event.target).trigger('madison.showNotes');
+    });
+
+    // If the area outside of the editor is clicked, close it.
+    this.annotator.subscribe('annotationEditorShown', function () {
+      setTimeout(function() {
+        $(document).one('click.annotationEditor', function (e) {
+          let clickIsOutsideEditor = !$(event.target).closest('.annotator-editor').length;
+          if (clickIsOutsideEditor) {
+            $('.annotator-editor:not(.annotator-hide) .annotator-controls .annotator-cancel').trigger('click');
+          }
+        });
+      }, 500);
+    });
+
+    // Just in case we close the editor with "cancel", clean up the single event binding
+    this.annotator.subscribe('annotationEditorHidden', function () {
+      $(document).off('click.annotationEditor');
     });
 
     this.onAdderClickOld = this.annotator.onAdderClick;
