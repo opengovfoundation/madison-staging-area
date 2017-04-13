@@ -113,6 +113,12 @@
                         <a href="{{ route('documents.show', $document) }}" class="btn btn-default btn-xs" role="button">
                             @lang('messages.document.read')
                         </a>
+                        @can('viewManage', $document)
+                            <br>
+                            <a href="{{ route('documents.show', $document) }}" class="btn btn-default btn-xs" role="button">
+                                @lang('messages.document.edit')
+                            </a>
+                        @endcan
                     </div>
                 </div>
             </div>
