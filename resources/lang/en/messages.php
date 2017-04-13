@@ -166,7 +166,7 @@ return [
             \App\Models\Doc::PUBLISH_STATE_UNPUBLISHED => 'Unpublished',
             \App\Models\Doc::PUBLISH_STATE_PRIVATE => 'Private',
             \App\Models\Doc::PUBLISH_STATE_DELETED_ADMIN => 'Deleted (by admin)',
-            \App\Models\Doc::PUBLISH_STATE_DELETED_USER => 'Deleted (by user)',
+            \App\Models\Doc::PUBLISH_STATE_DELETED_USER => 'Deleted',
         ],
 
         'discussion_state' => 'Discussion State',
@@ -188,6 +188,9 @@ return [
         'save' => 'Save Document',
         'view' => 'View Document',
         'manage' => 'Manage Document',
+
+        'view_deleted' => 'View deleted documents',
+        'view_documents' => 'View documents',
     ],
 
     // Sponsor Stuff

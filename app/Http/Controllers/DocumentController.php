@@ -388,7 +388,7 @@ class DocumentController extends Controller
             'restoreLinkOpen' => "<a href='$restoreUrl'>",
             'restoreLinkClosed' => '</a>',
         ]))->important();
-        return redirect()->route('documents.index');
+        return back();
     }
 
     public function restore(Requests\Edit $request, Document $document)
@@ -408,7 +408,7 @@ class DocumentController extends Controller
         $document->save();
 
         flash(trans('messages.document.restored'));
-        return redirect()->route('documents.manage.settings', $document);
+        return back();
     }
 
     public function storePage(Requests\Edit $request, Document $document)
