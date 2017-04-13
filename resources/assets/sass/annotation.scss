@@ -292,11 +292,11 @@
 .annotator-notice {
   @extend .alert;
 
-	position: fixed;
-	top: -54px;
-	left: 0;
+  position: fixed;
+  top: -54px;
+  left: 0;
 
-	width: 100%;
+  width: 100%;
   text-align: center;
 
   .ie6 & {
@@ -314,7 +314,7 @@
 }
 
 .annotator-notice-show {
-	top: 0;
+  top: 0;
 }
 
 
