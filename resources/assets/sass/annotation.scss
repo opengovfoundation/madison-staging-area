@@ -258,6 +258,7 @@
   .annotator-listing {
     @extend .panel-body;
 
+    padding-bottom: 0;
     list-style: none;
 
     .annotator-item textarea {
@@ -275,7 +276,6 @@
 
     a {
       @extend .btn;
-      @extend .btn-xs;
 
       &.annotator-save {
         @extend .btn-primary;
@@ -287,14 +287,37 @@
     }
   }
 
-  /**
-   * TODO: use this?
-   */
-  span.annotator-resize {
-    top: -15px;
-    right: -15px;
-  }
 }
+
+.annotator-notice {
+  @extend .alert;
+
+	position: fixed;
+	top: -54px;
+	left: 0;
+
+	width: 100%;
+  text-align: center;
+
+  .ie6 & {
+    position: absolute;
+  }
+
+}
+
+.annotator-notice-success {
+  @extend .alert-success;
+}
+
+.annotator-notice-error {
+  @extend .alert-danger;
+}
+
+.annotator-notice-show {
+	top: 0;
+}
+
+
 
 .annotator-hl {
   background: rgba(255,255,10,0.3);
