@@ -97,18 +97,14 @@ class DocumentPageTest extends DuskTestCase
             'content' => $content,
         ]));
 
+        // Just checking that the outline is built correctly
         $this->browse(function ($browser) {
             $browser->visit(new DocumentPage($this->document))
                 ->waitFor('#document-outline ul li')
                 ->assertSeeIn('@outline', 'Heading 1')
                 ->assertSeeIn('@outline', 'Heading 2')
-                ->assertDontSeeIn('@outline', 'Subheading 1')
-                ->assertDontSeeIn('@outline', 'Subheading 2')
-                ->assertDontSeeIn('@outline', 'Subheading 3')
-                ->clickLink('Heading 1')
                 ->assertSeeIn('@outline', 'Subheading 1')
                 ->assertSeeIn('@outline', 'Subheading 2')
-                ->clickLink('Heading 2')
                 ->assertSeeIn('@outline', 'Subheading 3')
                 ;
         });
