@@ -136,7 +136,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
     this.annotator.subscribe('annotationEditorShown', function () {
       setTimeout(function() {
         $(document).one('click.annotationEditor', function (e) {
-          let clickIsOutsideEditor = !$(event.target).closest('.annotator-editor').length;
+          let clickIsOutsideEditor = !$(e.target).closest('.annotator-editor').length;
           if (clickIsOutsideEditor) {
             $('.annotator-editor:not(.annotator-hide) .annotator-controls .annotator-cancel').trigger('click');
           }
