@@ -136,30 +136,35 @@ window.toggleNewCommentForm = function (elem) {
 window.buildDocumentOutline = function (outlineContainer, documentContent) {
   var contentHeadings = $(documentContent).find('h1,h2,h3,h4,h5,h6').toArray();
   var outlineTree = contentHeadings.reduce(buildOutlineTree, []);
+  var $affixedOutlineList = $(outlineContainer).children('ul');
 
   // Create HTML from the outline tree and put into container
   $(outlineContainer).find('ul').append(outlineTree.reduce(buildItemHtml, ''));
 
   // Set the outline to be affixed
   $(outlineContainer).children('ul').affix({
-    offset: { top: $('#document-outline').position().top - 5 }
+    offset: {
+      top: $(outlineContainer).position().top - 5,
+      bottom: $(document).height() - $('#comments').position().top + 50
+    }
   });
 
-  // Prevents affixed outline from overlapping footer
   $(window).scroll(function (e) {
-    var $affixedOutlineList = $(outlineContainer).children('ul');
+    if (!$affixedOutlineList.hasClass('affix')) return;
 
-    var scrollBottom = $(this).scrollTop() + $(window).height();
-    var viewportHeight = $(window).height();
+    // get current position in #page_content as a %
+    var topOfContent = $(documentContent).offset().top;
+    var contentHeight = $(documentContent).height();
+    var contentPosition = $(document).scrollTop() - topOfContent;
+    var contentPositionDecimal = (contentPosition / contentHeight);
 
-    var footerHeight = $('footer.nav').outerHeight() + 40; // 40 for hr margin above footer
-    var footerTop = $(document).height() - footerHeight;
+    // get equivalent percentage position in outline content
+    var outerOutlineHeight = $affixedOutlineList.height();
+    var innerOutlineHeight = $affixedOutlineList[0].scrollHeight;
+    var outlineScrollPosition = (innerOutlineHeight * contentPositionDecimal);
 
-    if (scrollBottom > footerTop) {
-      $affixedOutlineList.height(viewportHeight - (footerHeight - ($(document).height() - scrollBottom)) - 15);
-    } else {
-      $affixedOutlineList.height(viewportHeight - 30);
-    }
+    // set the scroll to that position
+    $affixedOutlineList.scrollTop(outlineScrollPosition - (outerOutlineHeight / 2));
   });
 
   // Set scrollspy on the outline

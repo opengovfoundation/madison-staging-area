@@ -73,7 +73,6 @@ blockquote {
     }
 
     ul.nav {
-      display: none;
       padding-left: 20px;
     }
 
@@ -89,17 +88,13 @@ blockquote {
 
   .affix, .affix-bottom, .affix-top {
     width: 273px;
+    height: 95vh;
+    overflow-y: hidden;
   }
 
   .affix-top { position: relative; }
-  .affix {
-    position: fixed;
-    top: 15px;
-    overflow-y: scroll;
-  }
-  .affix-bottom {
-    position: absolute;
-  }
+  .affix { top: 15px; }
+  .affix-bottom { position: absolute; }
 }
 
 @media only screen and (max-width: $screen-lg-min) {
