@@ -158,7 +158,7 @@ class DocumentController extends Controller
 
         // execute the query
         $documents = null;
-        $limit = $request->input('limit', 10);
+        $limit = $request->input('limit', 12);
         $page = $request->input('page', 1);
         $orderedAndLimitedDocuments = collect([]);
         $totalCount = 0;

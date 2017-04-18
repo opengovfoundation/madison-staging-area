@@ -91,6 +91,8 @@ return [
         'placeholder' => 'Search documents',
     ],
 
+    'advanced_search' => 'Advanced Search',
+
     'user_greeting' => 'Hi :name',
 
     'activelegislation' => 'Active Legislation',
