@@ -1,12 +1,8 @@
-.document-card.thumbnail {
-  padding: 0;
-
-  .caption { padding: 13px; }
-  img { border-radius: 4px 4px 0 0; }
-}
-
-@media only screen and (min-width: 992px) {
-  .document-card .intro {
-    min-height: 14rem;
+.featured .document-card {
+  h3 {
+    font-size: $font-size-h3 + ($font-size-h3 * 0.2);
+  }
+  .document-info {
+    font-size: $font-size-base;
   }
 }

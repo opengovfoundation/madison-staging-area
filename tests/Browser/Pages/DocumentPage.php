@@ -34,7 +34,7 @@ class DocumentPage extends BasePage
     public function elements()
     {
         return [
-            '@sponsorList' => '.jumbotron .sponsors',
+            '@sponsorList' => '#doc-header .sponsors',
             '@stats' => '.document-stats',
             '@supportBtn' => '.support-btn button',
             '@opposeBtn' => '.oppose-btn button',
@@ -43,8 +43,8 @@ class DocumentPage extends BasePage
             '@notesPane' => '.annotation-list',
             '@commentsDiv' => '#comments.comments',
             '@contentDiv' => '#content #page_content',
-            '@likeBtn' => '.activity-actions a[data-action-type="likes"]',
-            '@flagBtn' => '.activity-actions a[data-action-type="flags"]',
+            '@likeBtn' => '[data-action-type="likes"]',
+            '@flagBtn' => '[data-action-type="flags"]',
             '@newCommentForm' => '.new-comment-form',
             '@addCommentForm' => '.comment-form',
             '@noteReplyForm' => '.add-subcomment-form',

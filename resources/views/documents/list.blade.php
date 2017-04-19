@@ -82,7 +82,7 @@
     </div>
 
     <ul class="document-grid row">
-        @foreach ($documents as $idx => $document)
+        @foreach ($documents->values() as $idx => $document)
             <li class="col-md-4 col-sm-6 col-xs-12">
                 @include('components/document-card', ['document' => $document])
             </li>
