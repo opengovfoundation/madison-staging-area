@@ -408,7 +408,7 @@ class DocumentController extends Controller
         $document->save();
 
         flash(trans('messages.document.restored'));
-        return back();
+        return redirect()->route('documents.manage.settings', $document);
     }
 
     public function storePage(Requests\Edit $request, Document $document)
