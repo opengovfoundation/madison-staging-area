@@ -30,7 +30,6 @@
         @foreach ($popularDocuments->values() as $idx => $document)
             <li class="col-md-4 col-sm-6 col-xs-12">
                 @include('components/document-card', ['document' => $document])
-                {{ $idx }}
             </li>
 
             @if (($idx+1) % 3 == 0)
