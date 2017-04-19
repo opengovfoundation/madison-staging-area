@@ -126,9 +126,7 @@ return [
         'download_comments_csv' => 'Download Comments (as CSV)',
         'sponsoredby' => 'Shared for feedback by :sponsors',
         'featured' => 'Featured',
-        'featured_image' => 'Featured Image',
-        'featured_image_remove' => 'Remove Featured Image',
-        'featured_image_removed' => 'Featured Image Removed',
+        'replies_count' => ':count replies',
         'replies' => 'Replies',
         'add_reply' => 'Write a reply...',
         'note_reply' => 'Reply to this note',
@@ -187,6 +185,9 @@ return [
         'save' => 'Save Document',
         'view' => 'View Document',
         'manage' => 'Manage Document',
+        'manage_comments' => 'Manage Comments',
+        'view_deleted' => 'View deleted documents',
+        'view_documents' => 'View documents',
     ],
 
     // Sponsor Stuff
