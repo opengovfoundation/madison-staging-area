@@ -14,7 +14,7 @@
     @endif
 
     <p class="document-info">
-        <small>{{ $document->created_at->diffForHumans()}}</small>
+        <small>@include('components/relative-time', ['datetime' => $document->created_at])</small>
         <small>
             <i class="fa fa-thumbs-up"></i>
             {{ $document->support }}

@@ -15,7 +15,7 @@
         <ul class="document-grid row featured">
             @foreach ($featuredDocuments->values() as $idx => $document)
                 <li class="col-sm-6 col-xs-12">
-                    @include('components/document-card', ['document' => $document])
+                    @include('components/document-card', ['document' => $document, 'showIntro' => true])
                 </li>
 
                 @if (($idx+1) % 2 == 0)
