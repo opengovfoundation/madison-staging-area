@@ -83,12 +83,16 @@
     <script>
         autoHeightTextarea($('textarea[name="title"]')[0]);
         autoHeightTextarea($('textarea[name="introtext"]')[0]);
-        autoHeightTextarea($('textarea[name="page_content"]')[0]);
 
-        let $settingsSidebar = $('.settings-sidebar');
+        // Only set side affix and auto content height on md+ screens
+        if (['xs', 'sm'].indexOf(window.screenSize()) === -1) {
+            let $settingsSidebar = $('.settings-sidebar');
 
-        $settingsSidebar.affix({
-            offset: { top: $settingsSidebar.parent().position().top - 10 }
-        });
+            $settingsSidebar.affix({
+                offset: { top: $settingsSidebar.parent().position().top - 10 }
+            });
+
+            autoHeightTextarea($('textarea[name="page_content"]')[0]);
+        }
     </script>
 @endpush

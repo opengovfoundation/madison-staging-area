@@ -52,3 +52,11 @@ window.autoHeightTextarea = function(textarea) {
     $(ctrl).css({'height':'auto','overflow-y':'hidden'}).height(ctrl.scrollHeight);
   }
 };
+
+// https://www.lullabot.com/articles/importing-css-breakpoints-into-javascript
+window.screenSize = function () {
+  return window
+    .getComputedStyle(document.querySelector('body'), ':before')
+    .getPropertyValue('content')
+    .replace(/\"/g, '');
+};
