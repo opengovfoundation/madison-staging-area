@@ -65,7 +65,7 @@
     @include('documents.partials.new-comment-form', ['route' => ['documents.comments.storeReply', $comment->annotatable_id, $comment->id], 'message' => 'messages.document.add_reply'])
 @endif
 
-<div class="comment-replies hide">
+<div class="comment-replies hidden">
     @if ($comment->comments()->count() > 0)
         @each('documents/partials/comment-div', $comment->comments()->get(), 'comment')
     @endif

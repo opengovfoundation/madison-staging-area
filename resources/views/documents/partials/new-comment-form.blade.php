@@ -12,7 +12,7 @@
         </div>
     </div>
 
-    <div class="expanded-content hide">
+    <div class="expanded-content hidden">
         <div class="media">
             <div class="media-left">
                 <img class="media-object" alt="{{ trans('messages.user.avatar_alt_text') }}" src="{{ Auth::user()->avatar }}">

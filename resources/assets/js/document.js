@@ -30,7 +30,7 @@ window.toggleCommentReplies = function(commentId) {
   var $commentDiv = $('#' + commentId);
   var $commentReplyDiv = $commentDiv.find('.comment-replies');
   if ($commentReplyDiv) {
-    $commentReplyDiv.toggleClass('hide');
+    $commentReplyDiv.toggleClass('hidden');
   }
 };
 
@@ -38,7 +38,7 @@ window.showCommentReplies = function(commentId) {
   var $commentDiv = $('#' + commentId);
   var $commentReplyDiv = $commentDiv.find('.comment-replies');
   if ($commentReplyDiv) {
-    $commentReplyDiv.removeClass('hide');
+    $commentReplyDiv.removeClass('hidden');
   }
 };
 
@@ -124,8 +124,8 @@ window.toggleNewCommentForm = function (elem) {
     var $collapsedContent = $(parents[0]).find('.collapsed-content');
     var $expandedContent = $(parents[0]).find('.expanded-content');
 
-    $collapsedContent.toggleClass('hide');
-    $expandedContent.toggleClass('hide');
+    $collapsedContent.toggleClass('hidden');
+    $expandedContent.toggleClass('hidden');
   }
 };
 
