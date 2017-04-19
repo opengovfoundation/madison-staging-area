@@ -45,7 +45,7 @@
 }
 
 .btn-simple {
-  color: $text-muted;
+  color: lighten($gray-light, 20%);
   background: transparent;
 
   &:hover,
@@ -54,8 +54,10 @@
     text-decoration: none;
   }
 
-  &:active {
+  &:active,
+  &.active {
     box-shadow: none;
+    color: $link-color;
   }
 }
 

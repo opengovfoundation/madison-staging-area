@@ -14,7 +14,7 @@
             <small>@include('components/relative-time', [ 'datetime' => $comment->created_at ])</small>
                 </a>
 
-            <button class="btn btn-simple like-btn" onclick="$(this).trigger('madison.addAction')"
+            <button class="btn btn-simple like-btn thumbs-up" onclick="$(this).trigger('madison.addAction')"
                 data-action-type="likes" data-annotation-id="{{ $comment->str_id }}"
                 title="{{ trans('messages.document.like') }}"
                 aria-label="{{ trans('messages.document.like') }}">
@@ -46,13 +46,12 @@
                 </div>
             @endif
 
-            <button class="btn btn-simple pull-right" onclick="$(this).trigger('madison.addAction')"
+            <button class="btn btn-simple flag pull-right {{ $comment->flags_count ? 'active' : ''}}" onclick="$(this).trigger('madison.addAction')"
                 data-action-type="flags" data-annotation-id="{{ $comment->str_id }}"
                 title="{{ trans('messages.document.flag') }}"
                 aria-label="{{ trans('messages.document.flag') }}">
 
                 <i class="fa fa-flag" aria-hidden="true"></i>
-                <span class="action-count">{{ $comment->flags_count }}</span>
             </button>
         </div>
     </div>
