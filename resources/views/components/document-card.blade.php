@@ -1,9 +1,5 @@
 <div class="document-card">
-    @if (isset($featured) && $featured)
-        <h2>
-    @else
-        <h3>
-    @endif
+    <h3>
         <a href="{{ route('documents.show', $document) }}">
             {{ $document->title }}
         </a>
@@ -11,13 +7,9 @@
         <small class="text-muted">
             @lang('messages.document.sponsoredby', ['sponsors' => $document->sponsors->implode('display_name', ', ')])
         </small>
-    @if (isset($featured) && $featured)
-        </h2>
-    @else
-        </h3>
-    @endif
+    </h3>
 
-    @if (isset($featured) && $featured)
+    @if (isset($showIntro) && $showIntro)
         <p>{{ $document->shortIntroText() }}</p>
     @endif
 
