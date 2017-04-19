@@ -172,7 +172,7 @@ blockquote {
 
 .floating-card {
   min-height: 20px;
-  padding: 19px;
+  padding: 30px;
   margin-bottom: $line-height-computed;
   background-color: white;
 
@@ -206,6 +206,7 @@ blockquote {
 #doc-content {
   background-color: white;
   padding: 0;
+  padding-bottom: $line-height-computed;
 
   .document-title {
     margin-top: $jumbotron-padding * 2;
@@ -284,10 +285,21 @@ blockquote {
 #comments {
   background-color: $ogf-blue-white;
   padding-top: $line-height-computed;
+  padding-bottom: $line-height-computed;
 
   #all-comments-count {
     @extend .h1;
     margin-bottom: $line-height-computed;
+  }
+
+  .comment {
+    a small {
+      font-family: $font-family-serif;
+    }
+
+    .media-heading {
+      font-size: 90%;
+    }
   }
 
   .like-btn {
