@@ -49,6 +49,11 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
               flagAction.element.removeClass('active');
             }
 
+            let flagCountElement = flagAction.element.children('.action-count');
+            if (flagCountElement.length) {
+              flagCountElement.text(flagAction.value);
+            }
+
             // update data for later redrawing if needed
             let annotation = this.findAnnotation(annotationId);
             if (typeof annotation !== 'undefined') {
