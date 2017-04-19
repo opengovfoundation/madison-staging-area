@@ -297,9 +297,32 @@ blockquote {
       font-family: $font-family-serif;
     }
 
+    .media-body {
+      position: relative;
+    }
+
     .media-heading {
       font-size: 90%;
     }
+
+    .comment-content {
+      margin-top: $line-height-computed;
+    }
+  }
+
+  .comment-replies {
+    border-left: 8px solid $gray-lighter;
+    padding-left: 30px;
+
+    .comment {
+      margin-top: 15px;
+      border-bottom: 1px solid $gray-lighter;
+    }
+  }
+
+  .comment-replies-toggle {
+    font-size: 90%;
+    font-family: $font-family-sans-serif;
   }
 
   .like-btn {
