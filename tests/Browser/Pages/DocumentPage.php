@@ -288,7 +288,9 @@ class DocumentPage extends BasePage
     {
         $browser
             ->on(new LoginPage)
+            ->pause(500)
             ->fillAndSubmitLoginForm($user)
+            ->pause(500)
             ->assertPathIs($this->url())
             ->assertAuthenticatedAs($user)
             ;
