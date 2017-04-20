@@ -99,7 +99,7 @@
                         @endforeach
 
                         <li>
-                            <span class="divider hidden-xs"></span>
+                            <span class="separator hidden-xs" role="separator"></span>
                             <hr class="visible-xs">
                         </li>
 

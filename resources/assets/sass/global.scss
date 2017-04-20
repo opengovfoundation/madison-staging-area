@@ -3,7 +3,7 @@
   font-weight: bold;
 }
 
-.nav li .divider {
+.nav li .separator {
   margin: 0 $nav-link-padding;
   border-right: 1px solid lighten($gray-light, 20%);
   line-height: 3em;
@@ -77,6 +77,10 @@ form {
   &:active {
     color: $ogf-yellow;
   }
+}
+
+.breadcrumb {
+  font-family: $font-family-sans-serif;
 }
 
 footer.nav {
