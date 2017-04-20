@@ -67,6 +67,7 @@ class DocumentsPage extends Page
         $browser
             ->clickRestoreDocumentButton($document)
             ->assertVisible('.alert.alert-info') // Success flash
+            ->visit(route('sponsors.documents.index', [$this->sponsor, 'deleted' => true], false))
             ->assertDontSee($document->title) // Document not in main list
             ->clickLink(trans('messages.document.view_documents')) // Go to deleted page
             ->assertSee($document->title) // See in deleted list
