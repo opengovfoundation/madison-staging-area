@@ -287,8 +287,9 @@ class DocumentPage extends BasePage
     public function assertLoginRedirectsBackToPage(Browser $browser, $user)
     {
         $browser
-            ->on(new LoginPage)
             ->pause(500)
+            ->assertPathIs('/login')
+            ->on(new LoginPage)
             ->fillAndSubmitLoginForm($user)
             ->pause(500)
             ->assertPathIs($this->url())
