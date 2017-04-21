@@ -52,13 +52,6 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
             if (flagCountElement.length) {
               flagCountElement.text(flagAction.value);
             }
-
-            // update data for later redrawing if needed
-            let annotation = this.findAnnotation(annotationId);
-            if (typeof annotation !== 'undefined') {
-              annotation.likes = data.likes;
-              annotation.flags = data.flags;
-            }
           }.bind(this))
           .fail(function (data) {
             console.error(data);
@@ -191,24 +184,6 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
     this.annotations = annotations;
     this.annotationGroups = annotationGroups;
     this.drawNotesSideBubbles(annotations, annotationGroups);
-  },
-
-  findAnnotation: function (annotationId) {
-    for (var i = 0; i < this.annotations.length; i++) {
-      let annotation = this.annotations[i];
-
-      if (annotationId === annotation.id) {
-        return annotation;
-      }
-
-      for (var j = 0; j < annotation.comments.length; j++) {
-        let comment = annotation.comments[j];
-
-        if (annotationId === comment.id) {
-          return comment;
-        }
-      }
-    }
   },
 
   addAnnotation: function (annotation) {
@@ -376,7 +351,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       }
 
       // Count replies
-      annotationGroups[annotationParentId].commentCount += annotation.comments.length;
+      annotationGroups[annotationParentId].commentCount += annotation.comments_count;
 
       annotationGroups[annotationParentId].annotations.push(annotation);
     }, this);
