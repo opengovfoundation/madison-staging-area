@@ -68,14 +68,7 @@ class Comments
         $item['id'] = $comment->str_id;
         $item['annotator_schema_version'] = 'v1.0';
         $item['ranges'] = [];
-        $item['tags'] = [];
         $item['comments'] = [];
-        $item['permissions'] = [
-            'read' => [],
-            'update' => [],
-            'delete' => [],
-            'admin' => [],
-        ];
 
         $item['text'] = $includeContent ? $comment->annotationType->content : '';
 
@@ -113,24 +106,8 @@ class Comments
 
         $item['consumer'] = Annotation::ANNOTATION_CONSUMER;
 
-        foreach ($comment->tags as $tag) {
-            $item['tags'][] = $tag->annotationType->tag;
-        }
-
-        $permissions = AnnotationPermission::where('annotation_id', '=', $comment->id)->get();
-        foreach ($permissions as $perm) {
-            if ($perm->read) {
-                $item['permissions']['read'][] = $perm['user_id'];
-            }
-
-            $item['permissions']['update'][] = $perm->update ? $perm['user_id'] : '0';
-            $item['permissions']['delete'][] = $perm->update ? $perm['user_id'] : '0';
-            $item['permissions']['admin'][] = $perm->admin ? $perm['user_id'] : '0';
-        }
-
         $item['likes'] = $comment->likes_count;
         $item['flags'] = $comment->flags_count;
-        $item['seen'] = (bool) $comment->seens_count;
         $item['created_at'] = $comment->created_at->toRfc3339String();
         $item['created_at_relative'] = $comment->created_at->diffForHumans();
         $item['updated_at'] = $comment->updated_at->toRfc3339String();
@@ -145,9 +122,9 @@ class Comments
         $item = array_intersect_key($item, array_flip([
             'id', 'annotator_schema_version', 'created_at',
             'created_at_relative', 'updated_at', 'updated_at_relative',
-            'text', 'quote', 'uri', 'ranges', 'user', 'consumer', 'tags',
-            'permissions', 'likes', 'flags', 'seen', 'comments',
-            'comments_count', 'old_id', 'old_permalink_type',
+            'text', 'quote', 'uri', 'ranges', 'user', 'consumer', 'likes',
+            'flags', 'comments', 'comments_count', 'old_id',
+            'old_permalink_type',
         ]));
 
         return $item;
