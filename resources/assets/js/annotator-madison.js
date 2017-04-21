@@ -420,10 +420,6 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       var annotationParentId;
       if (annotationParent.prop('id')) {
         annotationParentId = annotationParent.prop('id');
-        var existingGroupNumber = /annotationGroup-(\d+)/.exec(annotationParentId);
-        if (existingGroupNumber !== null) {
-          annotationGroupCount = Math.max(annotationGroupCount, parseInt(existingGroupNumber[1]));
-        }
       } else {
         annotationGroupCount++;
         annotationParentId = 'annotationGroup-' + annotationGroupCount;
