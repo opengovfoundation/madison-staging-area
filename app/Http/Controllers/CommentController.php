@@ -61,9 +61,17 @@ class CommentController extends Controller
             ;
         }
 
-        $commentsQuery
-            ->whereNotIn('user_id', $excludeUserIds)
-            ;
+        if (!empty($request->input('ids'))) {
+            $commentsQuery
+                ->whereIn('str_id', $request->input('ids'))
+                ;
+        }
+
+        if (!empty($excludeUserIds)) {
+            $commentsQuery
+                ->whereNotIn('user_id', $excludeUserIds)
+                ;
+        }
 
         if ($request->query('only_notes') && $request->query('only_notes') !== 'false') {
             $commentsQuery->onlyNotes();
@@ -83,7 +91,7 @@ class CommentController extends Controller
             $csv = $this->commentService->toCsv($comments);
             $csv->output('comments.csv');
             return;
-        } elseif ($request->expectsJson()) {
+        } elseif ($request->wantsJson()) {
             $includeReplies = !$request->exists('include_replies') || $request->query('include_replies') && $request->query('include_replies') !== 'false';
             $results = $comments->map(function ($item) use ($includeReplies) {
                 return $this->commentService->toAnnotatorArray($item, $includeReplies);
@@ -91,7 +99,11 @@ class CommentController extends Controller
 
             return Response::json($results);
         } else {
-            // TODO: html view?
+            if ($request->input('partial')) {
+                return view('documents.partials.comments', ['view' => 'card', 'comments' => $comments]);
+            }
+
+            return view('documents.comments-page', ['view' => 'card', 'comments' => [$comment]]);
         }
     }
 
@@ -183,13 +195,17 @@ class CommentController extends Controller
      */
     public function show(DocumentViewRequest $request, Document $document, Annotation $comment)
     {
-        if ($request->expectsJson()) {
+        if ($request->wantsJson()) {
             $includeReplies = !$request->exists('include_replies') || $request->query('include_replies') && $request->query('include_replies') !== 'false';
             $results = $this->commentService->toAnnotatorArray($comment, $includeReplies);
 
             return Response::json($results);
         } else {
-            // TODO: html view?
+            if ($request->input('partial')) {
+                return view('documents.partials.comment-card', ['comment' => $comment]);
+            }
+
+            return view('documents.comments-page', ['view' => 'card', 'comments' => [$comment]]);
         }
     }
 

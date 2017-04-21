@@ -10,10 +10,9 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
   pluginInit: function () {
     $(document).on('madison.showNotes', function (e) {
       let annotationGroup = this.annotationGroups[$(e.target).data('groupId')];
-      this.drawNotesPane(annotationGroup);
-      window.setTimeout(function () {
+      this.drawNotesPane(annotationGroup).done(function () {
         $('.annotation-pane').addClass('active');
-      }, 100);
+      });
     }.bind(this));
 
     $(document).on('madison.addAction', function (e) {
@@ -320,87 +319,18 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
     pane += '</a>';
     pane += '</header>';
 
-    pane += '<section class="annotation-list">'
-    annotationGroup.annotations.forEach(function (annotation) {
-      pane += '<article class="annotation" id="' + annotation.htmlId + '">';
+    pane += '<ul class="annotation-list media-list">'
+    return $.get('/documents/'+this.options.docId+'/comments/',
+          {'partial': true,
+           'ids': annotationGroup.annotations.map(function (ann) { return ann.id; })
+          }, null, "html")
+      .done(function (data) {
+        pane += data;
+        pane += '</ul>'; // comments
+        pane += '</aside>';
 
-      pane += '<blockquote>&quot;';
-      annotation.highlights.forEach(function (highlight) {
-        pane += '<span>';
-        pane += highlight.textContent;
-        pane += '</span>';
-      });
-      pane += '&quot;</blockquote>';
-
-      pane += '<div class="comment-body">'
-
-      pane += '<header class="annotation-header">'
-      pane += '<span class="author">'+annotation.user.display_name+'</span>';
-      pane += '<time class="date" datetime="'+annotation.created_at+'">'+annotation.created_at_relative+'</time>'
-      pane += '</header>';
-
-      pane += '<section class="content">';
-      pane += annotation.text;
-      pane += '</section>';
-
-      pane += '</div>'; // comment-body
-
-      if (!this.annotator.options.discussionClosed) {
-        pane += '<div>';
-        pane += this.noteActionsString(annotation);
-        pane += '<footer>';
-        pane += '<div class="reply-action">';
-        pane += '<a onclick="showNoteReplyForm('+this.options.userId+', \''+annotation.id+'\')">';
-        pane += window.trans['messages.document.add_reply'];
-        pane += '</a>';
-        pane += '</div>';
-        pane += '</footer>';
-        pane += '</div>';
-      }
-
-      pane += '<section class="comments">';
-      annotation.comments.forEach(function (comment) {
-        pane += '<article class="comment"'
-          + 'id="'+comment.htmlId+'"'
-          + '>';
-
-        pane += '<header class="comment-header">';
-        pane += '<span class="author">'+comment.user.display_name+'</span>';
-        pane += '<time class="date" datetime="'+comment.created_at+'">'+comment.created_at_relative+'</time>'
-        pane += '</header>'
-
-        pane += '<section class="content">';
-        pane += comment.text;
-        pane += '</section>';
-
-        if (!this.annotator.options.discussionClosed) {
-          pane += this.noteActionsString(comment);
-        }
-
-        pane += '</article>'; // comment
+        $(this.options.annotationContainerElem).append(pane);
       }.bind(this));
-      pane += '</section>'; // comments
-
-      pane += '<section class="subcomment-form">';
-      if (!this.annotator.options.discussionClosed && this.options.userId) {
-        let url = '/documents/'+this.options.docId+'/comments/'+annotation.id+'/comments';
-        pane += '<form name="add-subcomment-form" action="'+url+'" method="POST">';
-        pane += '<h4>'+window.trans['messages.document.note_reply']+'</h4>';
-        pane += '<input type="hidden" name="_token"' + ' value='+window.Laravel.csrfToken+' >';
-        pane += '<textarea id="comment-form-field-'+annotation.id+'" name="text" class="form-control centered" required></textarea>';
-        pane += '<button class="comment-button" type="submit">'+window.trans['messages.submit']+'</button>'; //TODO: trans
-        pane += '</form>';
-      }
-      pane += '</section>'; // subcomment-form
-
-      pane += '</article>';
-    }.bind(this));
-
-    pane += '</section>';
-    pane += '</aside>';
-
-    // insert new content
-    $(this.options.annotationContainerElem).append(pane);
   },
 
   groupAnnotations: function (annotations) {

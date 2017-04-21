@@ -296,23 +296,23 @@ blockquote {
     @extend .h1;
     margin-bottom: $line-height-computed;
   }
+}
 
-  .comment {
-    a small {
-      font-family: $font-family-serif;
-    }
+.comment {
+  a small {
+    font-family: $font-family-serif;
+  }
 
-    .media-body {
-      position: relative;
-    }
+  .media-body {
+    position: relative;
+  }
 
-    .media-heading {
-      font-size: 90%;
-    }
+  .media-heading {
+    font-size: 90%;
+  }
 
-    .comment-content {
-      margin-top: $line-height-computed;
-    }
+  .comment-content {
+    margin-top: $line-height-computed;
   }
 
   .comment-replies {

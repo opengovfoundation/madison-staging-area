@@ -85,9 +85,7 @@
                         </div>
                     @endif
 
-                    <ul class="media-list">
-                        @each('documents.partials.comment-card', $comments, 'comment')
-                    </ul>
+                    @include('documents.partials.comments', ['view' => 'card', 'comments' => $comments])
                     <div class="text-center">
                         @include('components.pagination', ['collection' => $comments])
                     </div>
