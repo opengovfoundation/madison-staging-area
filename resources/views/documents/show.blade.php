@@ -86,7 +86,7 @@
                     @endif
 
                     <ul class="media-list">
-                        @each('documents.partials.comment-li', $comments, 'comment')
+                        @each('documents.partials.comment-card', $comments, 'comment')
                     </ul>
                     <div class="text-center">
                         @include('components.pagination', ['collection' => $comments])

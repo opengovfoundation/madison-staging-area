@@ -67,6 +67,6 @@
 
 <div class="comment-replies hidden">
     @if ($comment->comments()->count() > 0)
-        @each('documents/partials/comment-div', $comment->comments()->get(), 'comment')
+        @each('documents/partials/comment-reply', $comment->comments()->get(), 'comment')
     @endif
 </div>
