@@ -93,8 +93,10 @@ class CommentController extends Controller
             return;
         } elseif ($request->wantsJson()) {
             $includeReplies = !$request->exists('include_replies') || $request->query('include_replies') && $request->query('include_replies') !== 'false';
-            $results = $comments->map(function ($item) use ($includeReplies) {
-                return $this->commentService->toAnnotatorArray($item, $includeReplies);
+            $includeContent = !$request->exists('include_content') || $request->query('include_content') && $request->query('include_content') !== 'false';
+
+            $results = $comments->map(function ($item) use ($includeReplies, $includeContent) {
+                return $this->commentService->toAnnotatorArray($item, $includeReplies, $includeContent);
             });
 
             return Response::json($results);

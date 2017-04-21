@@ -18,7 +18,7 @@ window.loadAnnotations = function (contentElem, annotationContainerElem, docId, 
     prefix: '/documents/' + docId + '/comments',
     urls: {
       create: '',
-      read: '/:id?only_notes=true&include_replies=false',
+      read: '/:id?only_notes=true&include_replies=false&include_content=false',
       update: '/:id',
       destroy: '/:id',
       search: '/search'

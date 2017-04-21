@@ -55,7 +55,7 @@ class Comments
         return $csv;
     }
 
-    public function toAnnotatorArray(Annotation $comment, $includeChildren = true, $userId = null)
+    public function toAnnotatorArray(Annotation $comment, $includeChildren = true, $includeContent = true, $userId = null)
     {
         if ($comment->annotation_type_type !== Annotation::TYPE_COMMENT) {
             throw new InvalidArgumentException('Can only handle Annotations of type Comment');
@@ -77,14 +77,14 @@ class Comments
             'admin' => [],
         ];
 
-        $item['text'] = $comment->annotationType->content;
+        $item['text'] = $includeContent ? $comment->annotationType->content : '';
 
         if ($includeChildren) {
             $childComments = $comment->comments;
             foreach ($childComments as $childComment) {
                 $item['comments'][] = [
                     'id' => $childComment->str_id,
-                    'text' => $childComment->annotationType->content,
+                    'text' => $includeContent ? $childComment->annotationType->content : '',
                     'created_at' => $childComment->created_at->toRfc3339String(),
                     'created_at_relative' => $childComment->created_at->diffForHumans(),
                     'updated_at' => $childComment->updated_at->toRfc3339String(),
