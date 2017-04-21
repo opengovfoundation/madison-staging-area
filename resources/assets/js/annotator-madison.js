@@ -19,7 +19,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
     $(document).on('madison.addAction', function (e) {
       let annotationId = $(e.target).data('annotationId');
       let action = $(e.target).data('actionType');
-      let element = $(e.target);
+      let sourceElement = $(e.target);
       let data = {
         _token: window.Laravel.csrfToken
       };
@@ -27,17 +27,17 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       if (this.options.userId) {
         $.post('/documents/' + this.options.docId + '/comments/' + annotationId + '/' + action, data)
           .done(function (data) {
-            element = $(element);
+            sourceElement = $(sourceElement);
 
             let likeAction = { element: '', value: data.likes };
             let flagAction = { element: '', value: data.flags };
 
             if (action === 'likes') {
-              likeAction.element = element;
-              flagAction.element = element.siblings('.flag');
+              likeAction.element = sourceElement;
+              flagAction.element = sourceElement.siblings('.flag');
             } else {
-              flagAction.element = element;
-              likeAction.element = element.siblings('.thumbs-up');
+              flagAction.element = sourceElement;
+              likeAction.element = sourceElement.siblings('.thumbs-up');
             }
 
             // update live display
@@ -182,7 +182,6 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       comment.link = window.location.pathname+'#'+comment.htmlId;
     });
 
-    annotation.commentsCollapsed = true;
     annotation.label = 'annotation';
     annotation.htmlId = annotation.id;
     annotation.link = window.location.pathname+'#'+annotation.htmlId;
@@ -421,7 +420,10 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       var annotationParentId;
       if (annotationParent.prop('id')) {
         annotationParentId = annotationParent.prop('id');
-        annotationGroupCount = parseInt(annotationParentId.replace('annotationGroup-', ''));
+        var existingGroupNumber = /annotationGroup-(\d+)/.exec(annotationParentId);
+        if (existingGroupNumber !== null) {
+          annotationGroupCount = Math.max(annotationGroupCount, parseInt(existingGroupNumber[1]));
+        }
       } else {
         annotationGroupCount++;
         annotationParentId = 'annotationGroup-' + annotationGroupCount;
