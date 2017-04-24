@@ -199,28 +199,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
     }
   },
 
-  noteActionsString: function (comment) {
-    let actions = '<div class="activity-actions">';
-    actions += '<a class="thumbs-up" onclick=$(this).trigger("madison.addAction")'
-      + ' data-action-type="likes" data-annotation-id="'+comment.id+'"'
-      + ' title="'+window.trans['messages.document.like']+'"'
-      + ' aria-label="'+window.trans['messages.document.like']+'" role="button"'
-      + ' ><span class="action-count">'+comment.likes+'</span></a>';
-
-    actions += '<a class="flag" onclick=$(this).trigger("madison.addAction")'
-      + ' data-action-type="flags" data-annotation-id="'+comment.id+'"'
-      + ' title="'+window.trans['messages.document.flag']+'"'
-      + ' aria-label="'+window.trans['messages.document.flag']+'" role="button"'
-      + ' ><span class="action-count">'+comment.flags+'</span></a>';
-
-    actions += '<a class="link" href="'+comment.link+'"'
-      + ' aria-label="'+window.trans['messages.permalink']+'" role="button"'
-      + ' title="'+window.trans['messages.permalink']+'">&nbsp;</a>';
-    actions += '</div>';
-
-    return actions;
-  },
-
+  // TODO: remove or use
   createComment: function (textElement, annotation) {
     var userId = this.options.userId;
     var docId = this.options.docId;
@@ -362,12 +341,4 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
 window.hideNotes = function () {
   $('.annotation-click-capture').remove();
   $('.annotation-pane').removeClass('active');
-};
-
-window.showNoteReplyForm = function (userId, annotationId) {
-  if (!userId) {
-    window.redirectToLogin();
-  }
-
-  $('#comment-form-field-'+annotationId).focus();
 };
