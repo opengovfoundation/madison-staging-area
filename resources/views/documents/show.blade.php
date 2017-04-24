@@ -98,17 +98,11 @@
         <script>
             loadTranslations([
                 'messages.close',
-                'messages.document.add_reply',
-                'messages.document.flag',
-                'messages.document.like',
-                'messages.document.note',
-                'messages.document.note_reply',
                 'messages.document.notes',
                 'messages.none',
-                'messages.permalink',
-                'messages.submit'
             ])
             .done(function () {
+                window.documentId = {{ $document->id }};
                 window.buildDocumentOutline('#document-outline', '#page_content');
 
                 @if ($document->discussion_state !== \App\Models\Doc::DISCUSSION_STATE_HIDDEN)

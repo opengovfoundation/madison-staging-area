@@ -128,6 +128,38 @@ window.toggleNewCommentForm = function (elem) {
   }
 };
 
+window.submitNewComment = function (e) {
+  e.preventDefault();
+
+  var $form = $(e.target);
+  var $comment = $form.parents('.comment').first();
+
+  // gray out with loading icon
+  $comment.addClass('pending');
+
+  // submit comment
+  $.post($form.attr('action'), $form.serialize())
+    .done(function (response) {
+      // if success, fetch new markup and swap with existing
+      $.get('/documents/'+window.documentId+'/comments/'+$comment.attr('id'), { 'partial': true }, null, "html")
+        .done(function (html) {
+          $comment.replaceWith(html)
+          // TODO: should we also highlight new comment (response.id)?
+        });
+
+      // TODO: notify annotator of new comment?
+    })
+    .fail(function (response) {
+      // TODO: if error, show error
+    })
+    .always(function () {
+      $comment.removeClass('pending');
+    })
+  ;
+
+  return false;
+};
+
 window.buildDocumentOutline = function (outlineContainer, documentContent) {
   var contentHeadings = $(documentContent).find('h1,h2,h3,h4,h5,h6').toArray();
   var outlineTree = contentHeadings.reduce(buildOutlineTree, []);

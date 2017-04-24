@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        {{ Form::open(['route' => $route, 'class' => 'comment-form']) }}
+        {{ Form::open(['route' => $route, 'class' => 'comment-form', 'onsubmit' => 'return submitNewComment(event)']) }}
             {{ Form::mInput(
                 'textarea',
                 'text',

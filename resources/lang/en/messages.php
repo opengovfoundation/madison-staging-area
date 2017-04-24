@@ -128,7 +128,6 @@ return [
         'replies_count' => ':count replies',
         'replies' => 'Replies',
         'add_reply' => 'Write a reply...',
-        'note_reply' => 'Reply to this note',
         'support' => 'I support this document',
         'oppose' => 'I oppose this document',
         'flag' => 'Flag',
