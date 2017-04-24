@@ -261,7 +261,6 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
           + ' data-group-id='+index+'>';
 
         sideBubbles += '<span class="annotation-group-count">';
-        sideBubbles += '<i class="fa fa-comment fa-lg"></i>';
         sideBubbles += '<span class="badge">';
         sideBubbles += annotationGroup.annotations.length + annotationGroup.commentCount;
         sideBubbles += '</span>';
