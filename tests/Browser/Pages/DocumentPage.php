@@ -74,7 +74,7 @@ class DocumentPage extends BasePage
                 $noteElement
                     ->assertSee($note->user->name)
                     ->assertSeeIn('@likeBtn', (string) $note->likes_count)
-                    ->assertSeeIn('@flagBtn', (string) $note->flags_count)
+                    ->assertVisible('@flagBtn')
                     ->assertSee(static::flattenParagraphs($note->annotationType->content))
                     ;
             });
@@ -92,7 +92,7 @@ class DocumentPage extends BasePage
                     $replyElement
                         ->assertSee($reply->user->name)
                         ->assertSeeIn('@likeBtn', (string) $reply->likes_count)
-                        ->assertSeeIn('@flagBtn', (string) $reply->flags_count)
+                        ->assertVisible('@flagBtn')
                         ->assertSee(static::flattenParagraphs($reply->annotationType->content))
                         ;
                 });
@@ -313,7 +313,7 @@ class DocumentPage extends BasePage
 
     public static function noteSelector(Annotation $note)
     {
-        return '.annotation#' . $note->str_id;
+        return static::commentSelector($note);
     }
 
     public static function commentSelector(Annotation $comment)

@@ -565,15 +565,13 @@ class DocumentPageTest extends DuskTestCase
 
     public function testFlagNoteOnDocument()
     {
-        $noteFlags = $this->note1->flags_count;
-
-        $this->browse(function ($browser) use ($noteFlags) {
+        $this->browse(function ($browser) {
             $browser
                 ->loginAs($this->user)
                 ->visit($this->page)
                 ->openNotesPane()
                 ->addActionToNote('flag', $this->note1)
-                ->assertNoteHasActionCount('flag', $this->note1, $noteFlags +1)
+                ->assertCommentActionActive('flag', $this->note1)
                 ;
 
             //$newFlag = Annotation::where('annotation_type_type', Annotation::TYPE_FLAG)
@@ -621,15 +619,14 @@ class DocumentPageTest extends DuskTestCase
     public function testFlagNoteReply()
     {
         $reply = FactoryHelpers::createComment($this->sponsorUser, $this->note1);
-        $replyFlags = $reply->flags_count;
 
-        $this->browse(function ($browser) use ($reply, $replyFlags) {
+        $this->browse(function ($browser) use ($reply) {
             $browser
                 ->loginAs($this->user)
                 ->visit($this->page)
                 ->openNotesPane()
                 ->addActionToComment('flag', $reply)
-                ->assertCommentHasActionCount('flag', $reply, $replyFlags + 1)
+                ->assertCommentActionActive('flag', $reply)
                 ;
 
             //$newFlag = Annotation::where('annotation_type_type', Annotation::TYPE_FLAG)
