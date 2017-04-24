@@ -219,11 +219,12 @@ blockquote {
   }
 
   .read-the-document-badge {
+    $width: 110px;
     display: inline-block;
-    width: 80px;
-    height: 65px;
-    margin-top: -20px;
-    padding: 13px;
+    width: $width;
+    margin-top: -25px;
+    padding: 20px;
+    padding-bottom: 12px;
     background: $ogf-red;
     font-family: $font-family-sans-serif;
     font-weight: bold;
@@ -232,7 +233,7 @@ blockquote {
     text-align: center;
     color: #fff;
     position: relative;
-    font-size: 12px;
+    font-size: 16px;
 
     &:after {
       content: '';
@@ -242,9 +243,9 @@ blockquote {
       left: 0;
       width: 0;
       height: 0;
-      border-top: 20px solid $ogf-red;
-      border-left: 40px solid transparent;
-      border-right: 40px solid transparent;
+      border-top: 30px solid $ogf-red;
+      border-left: ($width/2) solid transparent;
+      border-right: ($width/2) solid transparent;
     }
 
     // Read
@@ -258,7 +259,7 @@ blockquote {
       width: 100%;
       border-bottom: 1px solid #fff;
       line-height: 0.1em;
-      margin: 7px 0;
+      margin: 12px 0;
       display: block;
 
       span {
