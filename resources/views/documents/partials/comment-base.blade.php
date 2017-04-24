@@ -35,7 +35,7 @@
         </a>
     @endif
 
-    <p>{{ $comment->annotationType->content }}</p>
+    {!! $comment->annotationType->content_html !!}
 </div>
 
 <div class="bottom">
