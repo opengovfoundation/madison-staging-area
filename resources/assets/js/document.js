@@ -26,9 +26,8 @@ window.loadAnnotations = function (contentElem, annotationContainerElem, docId, 
   });
 };
 
-window.toggleCommentReplies = function(commentId) {
-  var $commentDiv = $('#' + commentId);
-  var $commentReplyDiv = $commentDiv.find('.comment-replies');
+window.toggleCommentReplies = function(toggleBtn) {
+  var $commentReplyDiv = toggleBtn.parents('.comment').first().find('.comment-replies').first();
   if ($commentReplyDiv) {
     $commentReplyDiv.toggleClass('hidden');
   }

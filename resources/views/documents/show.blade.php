@@ -131,17 +131,6 @@
                     if (window.getQueryParam('comment_page')) {
                         showComments();
                     }
-
-                    $('.comment-replies-toggle-show').click(function(e) {
-                        e.preventDefault();
-                        let commentId = $(e.target).data('comment-id');
-                        toggleCommentReplies(commentId);
-                    });
-
-                    $('.comment a.action-link').click(function(e) {
-                        e.preventDefault();
-                        $(e.target).trigger('madison.addAction');
-                    });
                 @endif
             });
         </script>

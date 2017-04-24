@@ -43,7 +43,8 @@
         <div class="comment-replies-toggle pull-left">
             <a class="comment-replies-toggle-show" aria-label="{{ trans('messages.document.replies') }}
                 title="{{ trans('messages.document.replies') }} role="button"
-                data-comment-id="{{ $comment->str_id }}">
+                data-comment-id="{{ $comment->str_id }}"
+                onclick="toggleCommentReplies($(this))">
 
                 @choice('messages.document.see_replies', $comment->comments()->count())
             </a>
@@ -65,7 +66,7 @@
     @include('documents.partials.new-comment-form', ['route' => ['documents.comments.storeReply', $comment->annotatable_id, $comment->id], 'message' => 'messages.document.add_reply'])
 @endif
 
-<div class="comment-replies hidden">
+<div class="comment-replies {{ !empty($showReplies) ? '' : 'hidden' }}">
     @if ($comment->comments()->count() > 0)
         @each('documents/partials/comment-reply', $comment->comments()->get(), 'comment')
     @endif

@@ -101,11 +101,17 @@ class CommentController extends Controller
 
             return Response::json($results);
         } else {
+            $args = [
+                'view' => 'card',
+                'comments' => $comments,
+                'showReplies' => true,
+            ];
+
             if ($request->input('partial')) {
-                return view('documents.partials.comments', ['view' => 'card', 'comments' => $comments]);
+                return view('documents.partials.comments', $args);
             }
 
-            return view('documents.comments-page', ['view' => 'card', 'comments' => [$comment]]);
+            return view('documents.comments-page', $args);
         }
     }
 
