@@ -35,8 +35,20 @@
   border-bottom: 1px solid #C4C8CD;
   box-shadow: 0 6px #E8EBED;
 
-  * {
-    display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .support-btn, .oppose-btn {
+    width: 49%;
+  }
+
+  .support-btn button {
+    float: right;
+  }
+
+  .oppose-btn button {
+    float: left;
   }
 
   .separator {
@@ -354,6 +366,16 @@ blockquote {
   .support-btns {
     margin-left: -(floor(($grid-gutter-width / 2)));
     margin-right: -(floor(($grid-gutter-width / 2)));
+
+    flex-direction: column;
+
+    .support-btn, .oppose-btn {
+      width: 100%;
+
+      button {
+        float: none;
+      }
+    }
 
     .separator {
       display: none;
