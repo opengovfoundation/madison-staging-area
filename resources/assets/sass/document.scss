@@ -97,13 +97,34 @@
 
 blockquote {
   color: $text-color;
+  background-color: $ogf-blue-gray;
+  border: none;
+  position: relative;
+
+  &:before, &:after {
+    font-family: FontAwesome;
+    font-size: 12px;
+    position: absolute;
+  }
+
+  &:before {
+    content: $fa-var-quote-left;
+    top: 5px;
+    left: 7px;
+  }
+
+  &:after {
+    content: $fa-var-quote-right;
+    bottom: 5px;
+    right: 7px;
+  }
 
   a & {
     cursor: pointer;
 
     &:hover {
       text-decoration: none;
-      background-color: darken($blockquote-border-color, 5);
+      background-color: darken($ogf-blue-gray, 5);
     }
   }
 }
