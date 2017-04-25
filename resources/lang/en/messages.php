@@ -95,12 +95,6 @@ return [
 
     'user_greeting' => 'Hi :name',
 
-    'activelegislation' => 'Active Legislation',
-    'recentactivity' => 'Recent Activity',
-    'mostactive' => 'Most Active Documents',
-    'recentlegislation' => 'Recent Legislation',
-
-
     // Document Stuff
     'document' => [
         'read' => '<span>Read</span> <span><span>the</span></span> <span>document</span>',
