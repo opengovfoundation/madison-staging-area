@@ -398,7 +398,7 @@ class DocumentPageTest extends DuskTestCase
                 ->loginAs($this->user)
                 ->visit($this->page)
                 ->openNotesPane()
-                ->addReplyToNote($this->note1)
+                ->fillAndSubmitCommentReplyForm($this->note1)
                 ;
 
             $newNote = $this->document->allComments()

@@ -50,6 +50,6 @@ class Comment extends Model
 
     protected static function contentHtmlCacheKey(Comment $comment)
     {
-        return $comment->id.'-html';
+        return $comment->annotation->str_id.'-html';
     }
 }

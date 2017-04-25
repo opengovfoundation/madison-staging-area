@@ -60,10 +60,12 @@
     </button>
 </div>
 
-@if (Auth::user() && $comment->annotatable_type === \App\Models\Doc::ANNOTATABLE_TYPE)
-    <div class="clearfix"></div>
+@if ($comment->annotatable_type === \App\Models\Doc::ANNOTATABLE_TYPE)
+    @if (Auth::user())
+        <div class="clearfix"></div>
 
-    @include('documents.partials.new-comment-form', ['route' => ['documents.comments.storeReply', $comment->annotatable_id, $comment->id], 'message' => 'messages.document.add_reply'])
+        @include('documents.partials.new-comment-form', ['route' => ['documents.comments.storeReply', $comment->annotatable_id, $comment->id], 'message' => 'messages.document.add_reply'])
+    @endif
 @endif
 
 <div class="comment-replies {{ !empty($showReplies) ? '' : 'hidden' }}">
