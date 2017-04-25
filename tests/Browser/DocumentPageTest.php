@@ -309,7 +309,7 @@ class DocumentPageTest extends DuskTestCase
 
             // Should jump to and highlight new comment
             $browser
-                ->waitFor('.comment#' . $newComment->str_id)
+                ->waitFor(DocumentPage::commentSelector($newComment))
                 ->assertSeeComment($newComment)
                 ;
 
@@ -338,7 +338,7 @@ class DocumentPageTest extends DuskTestCase
 
             // Should jump to and highlight new comment
             $browser
-                ->waitFor('.comment#' . $newComment->str_id)
+                ->waitFor(DocumentPage::commentSelector($newComment))
                 ->assertSeeReplyToComment($this->comment1, $newComment)
                 ;
 
@@ -404,6 +404,7 @@ class DocumentPageTest extends DuskTestCase
                 ->first();
 
             $browser
+                ->waitFor(DocumentPage::commentSelector($newNote))
                 ->assertSeeReplyToNote($this->note1, $newNote)
                 ;
 

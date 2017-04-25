@@ -124,9 +124,7 @@ class DocumentPage extends BasePage
 
     public function assertSeeReplyToComment(Browser $browser, Annotation $comment, Annotation $reply)
     {
-        /**
-         * Timestamps end up being off by a second sometimes, so leaving them out.
-         */
+        // Timestamps end up being off by a second sometimes, so leaving them out.
         $commentSelector = static::commentSelector($comment);
         $replySelector = static::commentSelector($reply);
 
@@ -236,13 +234,16 @@ class DocumentPage extends BasePage
     public function fillAndSubmitCommentReplyForm(Browser $browser, Annotation $comment)
     {
         $fakeComment = factory(Comment::class)->make();
+        $commentSelector = static::commentSelector($comment);
 
-        $browser->with('.comment#' . $comment->str_id, function ($commentDiv) use ($fakeComment) {
+        $browser->with($commentSelector, function ($commentDiv) use ($commentSelector, $fakeComment) {
             $commentDiv
                 ->click('.new-comment-form-toggle')
                 ->waitFor('@submitBtn')
                 ->type('text', static::flattenParagraphs($fakeComment->content))
                 ->click('@submitBtn')
+                ->waitUntil("$('".$commentSelector."').hasClass('pending')")
+                ->waitUntil("!$('".$commentSelector."').hasClass('pending')")
                 ;
         });
     }
