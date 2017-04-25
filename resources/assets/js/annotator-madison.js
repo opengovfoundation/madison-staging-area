@@ -47,11 +47,6 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
             } else {
               flagAction.element.removeClass('active');
             }
-
-            let flagCountElement = flagAction.element.children('.action-count');
-            if (flagCountElement.length) {
-              flagCountElement.text(flagAction.value);
-            }
           }.bind(this))
           .fail(function (data) {
             console.error(data);
@@ -73,8 +68,6 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
 
       revealComment(this.options.docId);
 
-      // TODO: support showing notes pane for requested permalink?
-
       this.setAnnotations(annotations);
     }.bind(this));
 
@@ -86,15 +79,6 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       // TODO: show success notification or maybe in addAnnotation
       this.addAnnotation(annotation);
     }.bind(this));
-
-    this.annotator.subscribe('commentCreated', function (comment) {
-      comment = $('<div class="existing-comment"><blockquote>' + comment.text + '<div class="comment-author">' + comment.user.display_name + '</div></blockquote></div>');
-      var currentComments = $('#current-comments');
-      currentComments.append(comment);
-      currentComments.removeClass('hidden');
-
-      $('#current-comments').collapse(true);
-    });
 
     this.annotator.editor.submit = function (e) {
       // Clear previous errors
@@ -197,27 +181,6 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
       this.annotations.push(annotation);
       this.setAnnotations(this.annotations);
     }
-  },
-
-  // TODO: remove or use
-  createComment: function (textElement, annotation) {
-    var userId = this.options.userId;
-    var docId = this.options.docId;
-    var text = textElement.val();
-    textElement.val('');
-
-    var comment = {
-      text: text,
-      user: userId,
-      _token: window.Laravel.csrfToken
-    };
-
-    // Add user's comment
-    $.post('/documents/' + docId + '/comments/' + annotation.id + '/comments', comment, function (commentResponse) {
-      annotation.comments.push(commentResponse);
-
-      return this.annotator.publish('commentCreated', commentResponse);
-    }.bind(this));
   },
 
   drawNotesSideBubbles: function (annotations, annotationGroups) {

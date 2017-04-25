@@ -72,7 +72,16 @@ window.revealComment = function (docId) {
       return;
     }
 
-    // look in comment pane for hash
+    // if note pane is open with content, then we should look there first
+    var note = $('.annotation-container').find('#'+id);
+    if (note.length) {
+      note[0].scrollIntoView();
+      $('.anchor-target').removeClass('anchor-target');
+      $(note[0]).find('.comment-content').first().addClass('anchor-target');
+      return;
+    }
+
+    // look in comments
     var comments = $('#comments').find('#'+id);
     if (comments.length) {
       showComments();
@@ -94,8 +103,6 @@ window.revealComment = function (docId) {
       $(noteHighlight[0]).addClass('anchor-target');
       return;
     }
-
-    // might be a reply to a note or on another page
   });
 
   if (commentHash) {
@@ -134,7 +141,6 @@ window.submitNewComment = function (e) {
   var $form = $(e.target);
   var $comment = $form.parents('.comment').first();
 
-  // gray out with loading icon
   $comment.addClass('pending');
 
   // submit comment
@@ -144,10 +150,10 @@ window.submitNewComment = function (e) {
       $.get('/documents/'+window.documentId+'/comments/'+$comment.attr('id'), { 'partial': true }, null, "html")
         .done(function (html) {
           $comment.replaceWith(html)
-          // TODO: should we also highlight new comment (response.id)?
-        });
 
-      // TODO: notify annotator of new comment?
+          // highlight new comment
+          window.location.hash = '#' + response.id;
+        });
     })
     .fail(function (response) {
       // TODO: if error, show error
