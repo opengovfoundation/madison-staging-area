@@ -75,7 +75,7 @@ class DocumentPage extends BasePage
                     ->assertSee($note->user->name)
                     ->assertSeeIn('@likeBtn', (string) $note->likes_count)
                     ->assertVisible('@flagBtn')
-                    ->assertSee($note->annotationType->content)
+                    ->assertSeeCommentContent($note)
                     ;
             });
         });
@@ -93,7 +93,7 @@ class DocumentPage extends BasePage
                         ->assertSee($reply->user->name)
                         ->assertSeeIn('@likeBtn', (string) $reply->likes_count)
                         ->assertVisible('@flagBtn')
-                        ->assertSee($reply->annotationType->content)
+                        ->assertSeeCommentContent($reply)
                         ;
                 });
             });
@@ -109,10 +109,17 @@ class DocumentPage extends BasePage
                 ->assertSee($comment->user->name)
                 ->assertSeeIn('@likeBtn', (string) $comment->likes_count)
                 ->assertVisible('@flagBtn')
-                ->assertSee($comment->annotationType->content)
+                ->assertSeeCommentContent($comment)
                 ;
         })
         ;
+    }
+
+    public function assertSeeCommentContent(Browser $browser, Annotation $comment)
+    {
+        foreach (preg_split('/\\n\\n/', $comment->annotationType->content) as $line) {
+            $browser->assertSee($line);
+        }
     }
 
     public function assertSeeReplyToComment(Browser $browser, Annotation $comment, Annotation $reply)
@@ -131,7 +138,7 @@ class DocumentPage extends BasePage
                             ->assertSee($reply->user->name)
                             ->assertSeeIn('@likeBtn', (string) $reply->likes_count)
                             ->assertVisible('@flagBtn')
-                            ->assertSee($reply->annotationType->content)
+                            ->assertSeeCommentContent($reply)
                             ;
                     });
             })

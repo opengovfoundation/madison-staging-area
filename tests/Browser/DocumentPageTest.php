@@ -287,9 +287,7 @@ class DocumentPageTest extends DuskTestCase
                 ->openNotesPane()
                 ->with(DocumentPage::noteSelector($this->note1), function($commentDiv) {
                     $commentDiv
-                        ->assertDontSee('@noteReplyForm')
-                        ->clickLink(trans('messages.document.add_reply'))
-                        ->assertPathIs('/login')
+                        ->assertDontSee('@newCommentForm')
                         ;
                 })
                 ;
@@ -406,8 +404,6 @@ class DocumentPageTest extends DuskTestCase
                 ->first();
 
             $browser
-                ->refresh()
-                ->openNotesPane()
                 ->assertSeeReplyToNote($this->note1, $newNote)
                 ;
 

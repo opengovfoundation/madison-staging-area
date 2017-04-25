@@ -132,6 +132,10 @@ window.toggleNewCommentForm = function (elem) {
 
     $collapsedContent.toggleClass('hidden');
     $expandedContent.toggleClass('hidden');
+
+    if (!$expandedContent.hasClass('hidden')) {
+      $expandedContent.find(':input').filter(':visible:first').focus();
+    }
   }
 };
 
@@ -140,28 +144,58 @@ window.submitNewComment = function (e) {
 
   var $form = $(e.target);
   var $comment = $form.parents('.comment').first();
+  var $comments = $form.parents('.comments').first().find('.media-list').first();
 
-  $comment.addClass('pending');
+  // we are replying to an existing comment
+  if ($comment.length) {
+    $comment.addClass('pending');
 
-  // submit comment
-  $.post($form.attr('action'), $form.serialize())
-    .done(function (response) {
-      // if success, fetch new markup and swap with existing
-      $.get('/documents/'+window.documentId+'/comments/'+$comment.attr('id'), { 'partial': true }, null, "html")
-        .done(function (html) {
-          $comment.replaceWith(html)
+    // submit comment
+    $.post($form.attr('action'), $form.serialize())
+      .done(function (response) {
+        // if success, fetch new markup and swap with existing
+        $.get('/documents/'+window.documentId+'/comments/'+$comment.attr('id'), { 'partial': true }, null, "html")
+          .done(function (html) {
+            $comment.replaceWith(html);
 
-          // highlight new comment
-          window.location.hash = '#' + response.id;
-        });
-    })
-    .fail(function (response) {
-      // TODO: if error, show error
-    })
-    .always(function () {
-      $comment.removeClass('pending');
-    })
-  ;
+            // highlight new comment
+            window.location.hash = '#' + response.id;
+          });
+      })
+      .fail(function (response) {
+        // TODO: if error, show error
+      })
+      .always(function () {
+        $comment.removeClass('pending');
+      })
+    ;
+  } else if ($comments.length) {
+    // we are adding a new top level comment
+    $form.addClass('pending');
+
+    // submit comment
+    $.post($form.attr('action'), $form.serialize())
+      .done(function (response) {
+        $form.trigger('reset');
+        toggleNewCommentForm($form);
+
+        $.get('/documents/'+window.documentId+'/comments/'+response.id, { 'partial': true }, null, "html")
+          .done(function (html) {
+            $comments.prepend(html);
+
+            // highlight new comment
+            window.location.hash = '#' + response.id;
+          });
+      })
+      .fail(function (response) {
+        // TODO: if error, show error
+      })
+      .always(function () {
+        $form.removeClass('pending');
+      })
+    ;
+  }
+
 
   return false;
 };

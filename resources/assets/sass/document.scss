@@ -208,6 +208,7 @@ blockquote {
   padding: 30px;
   margin-bottom: $line-height-computed;
   background-color: white;
+  position: relative;
 
   border: 1px solid $gray-lighter;
   box-shadow: 10px 10px 0 rgba(0,0,0,0.03);
@@ -332,21 +333,19 @@ blockquote {
   }
 }
 
+.pending:before {
+  content: "";
+  display: block;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
 .comment {
-  position: relative;
-
-  &.pending:before {
-    content: "";
-    display: block;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.3);
-    z-index: 1;
-  }
-
   a small {
     font-family: $font-family-serif;
   }
