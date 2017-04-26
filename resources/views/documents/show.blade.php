@@ -66,7 +66,7 @@
             <aside class="annotation-container col-md-1">
                 <aside class="annotation-pane">
 
-                <div class="annotation-click-capture" onclick="hideNotes()"></div>
+                <div class="annotation-click-capture hidden" onclick="hideNotes()"></div>
 
                 <header class="title-header navbar navbar-default navbar-static-top">
                 <h2>@lang('messages.document.notes')</h2>

@@ -16,6 +16,7 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
 
       // start showing the pane
       $('.annotation-pane').addClass('active');
+      $('.annotation-click-capture').removeClass('hidden');
 
       this.loadNotesPane(annotationGroup);
     }.bind(this));
@@ -285,6 +286,6 @@ $.extend(Annotator.Plugin.Madison.prototype, new Annotator.Plugin(), {
 });
 
 window.hideNotes = function () {
-  $('.annotation-click-capture').remove();
+  $('.annotation-click-capture').addClass('hidden');
   $('.annotation-pane').removeClass('active');
 };
