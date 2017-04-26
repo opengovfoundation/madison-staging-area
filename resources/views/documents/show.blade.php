@@ -64,17 +64,17 @@
             </div>
 
             <aside class="annotation-container col-md-1">
-                <aside class="annotation-pane">
+                <aside class="annotation-pane" role="dialog">
+                    <div class="annotation-click-capture hidden" onclick="hideNotes()"></div>
 
-                <div class="annotation-click-capture hidden" onclick="hideNotes()"></div>
+                    <header class="title-header navbar navbar-default navbar-static-top">
+                    <h2>@lang('messages.document.notes')</h2>
+                        <a class="close-button navbar-link" onclick="hideNotes()">@lang('messages.close')</a>
+                    </header>
 
-                <header class="title-header navbar navbar-default navbar-static-top">
-                <h2>@lang('messages.document.notes')</h2>
-                    <a class="close-button navbar-link" onclick="hideNotes()"> @lang('messages.close')</a>
-                </header>
-
-                <ul class="annotation-list media-list">
-                </ul>
+                    <ul class="annotation-list media-list">
+                    </ul>
+                </aside>
             </aside>
         </div>
     </div>
