@@ -20,6 +20,7 @@
   bottom: 0;
   right: 0;
   height: 100%;
+  width: 100%;
   z-index: ($zindex-navbar + 1);
   background-color: white;
 
@@ -214,12 +215,6 @@
   // Hide bubbles
   .annotation-group {
     display: none;
-  }
-
-  .annotation-pane {
-    &.active {
-      left: 0;
-    }
   }
 
   // Hide all inline annotations for now.
