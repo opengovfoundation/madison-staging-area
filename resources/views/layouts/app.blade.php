@@ -46,6 +46,9 @@
 
     @if (App::environment('production', 'staging') && !empty(config('services.hotjar.site_id')))
         @include('partials/hotjar-script')
+
+    @if (App::environment('production', 'staging') && !empty(config('services.rollbar.access_token')))
+        @include('partials/rollbar-script')
     @endif
 </head>
 <body>
