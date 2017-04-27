@@ -181,7 +181,10 @@ footer.nav {
 
   h1 {
     color: $ogf-slate;
-    font-size: 60px;
+
+    @media only screen and (min-width: $screen-sm-min) {
+      font-size: 60px;
+    }
   }
 }
 
