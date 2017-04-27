@@ -11,6 +11,7 @@
   bottom: 0;
   left: 0;
   right: 0;
+  background-color: rgba(0,0,0,0.2);
 }
 
 .annotation-pane {
@@ -21,12 +22,12 @@
   height: 100%;
   z-index: ($zindex-navbar + 1);
   background-color: white;
-  @extend %simple-shadow;
 
   // Slide in/out
   @include translate(100%, 0);
   @include transition-transform($transition-duration $transition-easing);
   &.active {
+    @extend %simple-shadow;
     @include translate(0, 0);
   }
 
@@ -64,7 +65,7 @@
   }
 
   @media screen and (min-width: $screen-md-min) {
-    width: 33.3333%;
+    width: 40%;
   }
 }
 
