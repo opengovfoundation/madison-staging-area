@@ -70,7 +70,7 @@
                     <div class="annotation-pane">
                         <header class="title-header navbar navbar-default navbar-static-top">
                         <h2>@lang('messages.document.notes')</h2>
-                            <a class="close-button navbar-link" onclick="hideNotes()">@lang('messages.close')</a>
+                            <a class="close" aria-label="{{ trans('messages.close') }}" onclick="hideNotes()">&times;</a>
                         </header>
 
                         <ul class="annotation-list media-list">
