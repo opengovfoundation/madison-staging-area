@@ -88,6 +88,11 @@ form {
   margin-left: -50vw;
   background-color: $ogf-dark-blue;
   color: white;
+
+  @media only screen and (max-width: $screen-sm-min) {
+    margin-right: -15px;
+    margin-left: -15px;
+  }
 }
 
 footer.nav {
