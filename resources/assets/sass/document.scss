@@ -460,7 +460,7 @@ blockquote {
   }
 }
 
-@media only screen and (max-width: $screen-sm-min) {
+@media only screen and (max-width: $screen-md-min) {
   #doc-content, #comments {
     margin-left: -(floor(($grid-gutter-width / 2)));
     margin-right: -(floor(($grid-gutter-width / 2)));
@@ -471,7 +471,11 @@ blockquote {
   .support-btns {
     margin-left: -(floor(($grid-gutter-width / 2)));
     margin-right: -(floor(($grid-gutter-width / 2)));
+  }
+}
 
+@media only screen and (max-width: $screen-sm-min) {
+  .support-btns {
     -ms-flex-direction: column;
     -webkit-flex-direction: column;
     flex-direction: column;
