@@ -1,10 +1,10 @@
 <script>
 var _rollbarConfig = {
-    accessToken: {{ config('services.rollbar.access_token') }},
+    accessToken: "{{ config('services.rollbar.client_side_access_token') }}",
     captureUncaught: true,
     captureUnhandledRejections: true,
     payload: {
-        environment: {{ App::environment() }}
+        environment: "{{ App::environment() }}"
     }
 };
 
