@@ -432,6 +432,17 @@ blockquote {
     font-family: $font-family-serif;
   }
 
+  span.sponsor-badge {
+    display: inline-block;
+    position: relative;
+    top: -3px;
+    padding: 3px;
+    background: $ogf-red;
+    font-size: 0.6em;
+    text-transform: uppercase;
+    color: white;
+  }
+
   .media-body {
     position: relative;
   }
