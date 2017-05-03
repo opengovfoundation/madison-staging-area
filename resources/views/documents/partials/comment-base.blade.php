@@ -6,6 +6,9 @@
     <div class="media-body media-middle">
         <h4 class="media-heading">
             {{ $comment->user->display_name }}
+            @if ($comment->rootAnnotatable && $comment->rootAnnotatable->userIsSponsor($comment->user))
+                <span class="sponsor-badge">@lang('messages.document.sponsor')</span>
+            @endif
             <br>
 
             <a href="{{ $comment->getLink() }}"
