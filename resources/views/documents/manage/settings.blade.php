@@ -81,19 +81,41 @@
 @endsection
 
 @push('scripts')
+    <script src="{{ elixir('js/document-edit.js') }}"></script>
     <script>
+        var introtextSelector = 'textarea[name=introtext]';
+        var contentSelector = 'textarea[name=page_content]';
+
+        var hideIcons = ['fullscreen', 'side-by-side'];
+        var introMde = new SimpleMDE({
+            element: document.querySelector(introtextSelector),
+            hideIcons: hideIcons
+        });
+        var contentMde = new SimpleMDE({
+            element: document.querySelector(contentSelector),
+            hideIcons: hideIcons
+        });
+
         autoHeightTextarea($('textarea[name="title"]')[0]);
         autoHeightTextarea($('textarea[name="introtext"]')[0]);
 
-        // Only set side affix and auto content height on md+ screens
+        // Only perform these things on md+ screens
         if (['xs', 'sm'].indexOf(window.screenSize()) === -1) {
+            // Affix the settings sidebar
             let $settingsSidebar = $('.settings-sidebar');
-
             $settingsSidebar.affix({
-                offset: { top: $settingsSidebar.parent().position().top - 10 }
+                offset: {
+                    top: $settingsSidebar.parent().offset().top - 10,
+                    bottom: $('#main-footer').outerHeight() + 10
+                }
             });
 
+            // Match content editor height to content length
             autoHeightTextarea($('textarea[name="page_content"]')[0]);
+
+            // Affix the markdown editor toolbars
+            affixMarkdownToolbar(introtextSelector);
+            affixMarkdownToolbar(contentSelector);
         }
     </script>
 @endpush
