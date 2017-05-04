@@ -61,6 +61,25 @@
     }
     &.affix { top: 0; }
     &.affix-bottom { position: absolute; }
+
+    a.smde-preview {
+      float: right;
+      margin-top: 3px;
+      width: 30%;
+      border-radius: 0;
+
+      &:hover,
+      &:focus,
+      &:active {
+        border: 0;
+        outline: 0;
+      }
+
+      &:after {
+        content: attr(title);
+        float: right;
+      }
+    }
   }
 }
 
