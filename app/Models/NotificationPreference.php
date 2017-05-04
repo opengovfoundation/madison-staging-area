@@ -11,10 +11,13 @@ use App\Models\User;
 class NotificationPreference extends Model
 {
     const TYPE_EMAIL = "email";
-    const TYPE_TEXT = "text";
+
+    const FREQUENCY_IMMEDIATELY = 'immediately';
+    const FREQUENCY_DAILY = 'daily';
+    const FREQUENCY_NEVER = null;
 
     protected $table = 'notification_preferences';
-    protected $fillable = ['event', 'type', 'user_id', 'sponsor_id'];
+    protected $fillable = ['event', 'type', 'frequency', 'user_id', 'sponsor_id'];
     public $timestamps = false;
 
     public function sponsor()
@@ -86,6 +89,20 @@ class NotificationPreference extends Model
         ];
 
         return static::buildNotificationsFromEventNames($validNotifications);
+    }
+
+    /**
+     * Return an array of valid notification preference frequencies.
+     *
+     * @return array
+     */
+    public static function getValidFrequencies()
+    {
+        return [
+            static::FREQUENCY_IMMEDIATELY,
+            static::FREQUENCY_DAILY,
+            static::FREQUENCY_NEVER,
+        ];
     }
 
     protected static function buildNotificationsFromEventNames($names)
