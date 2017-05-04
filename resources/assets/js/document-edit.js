@@ -14,7 +14,7 @@ window.affixMarkdownToolbar = function (textareaSelector) {
   var $editArea = $(textareaSelector).siblings('.CodeMirror-wrap');
 
   var bottomOfEditArea = $editArea.height() + $toolbar.offset().top;
-  var offsetBottom = ($(document).height() - bottomOfEditArea) + ($(window).height() - $toolbar.outerHeight() - 100);
+  var offsetBottom = $(document).height() - bottomOfEditArea;
 
   var affixOpts = {
     offset: {
