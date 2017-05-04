@@ -110,7 +110,7 @@
                     {
                         name: 'preview',
                         action: SimpleMDE.togglePreview,
-                        className: 'smde-preview',
+                        className: 'smde-preview no-disable',
                         title: window.trans['messages.preview']
                     }
                 ],
