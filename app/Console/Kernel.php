@@ -24,6 +24,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\DatabaseClear::class,
         \App\Console\Commands\DatabaseRebuild::class,
         \App\Console\Commands\DatabaseRestore::class,
+        \App\Console\Commands\SendDailyNotifications::class,
     ];
 
     /**
@@ -34,7 +35,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //
+        // Runs at midnight
+        $schedule->call('send-daily-notifications')->daily();
     }
 
     protected function bootstrappers()
