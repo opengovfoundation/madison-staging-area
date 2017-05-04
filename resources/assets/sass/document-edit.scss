@@ -29,10 +29,38 @@
   }
 
   .settings-sidebar {
-    &.affix {
+    &.affix,
+    &.affix-bottom {
       width: 360px;
-      top: 5px;
+
+      @media only screen and (max-width: $screen-lg-min) {
+        width: 293px;
+      }
     }
+
+    &.affix { top: 10px; }
+    &.affix-bottom { position: absolute; }
+  }
+
+  .editor-toolbar {
+    border-radius: 0;
+
+    &.affix,
+    &.affix-bottom {
+      position: fixed;
+      z-index: 3;
+      width: 750px;
+      border-bottom: 1px solid #bbb;
+      border-top: 0;
+      background: white;
+      opacity: 1;
+
+      @media only screen and (max-width: $screen-lg-min) {
+        width: 616px;
+      }
+    }
+    &.affix { top: 0; }
+    &.affix-bottom { position: absolute; }
   }
 }
 
