@@ -16,12 +16,14 @@ elixir((mix) => {
        .webpack('annotator-madison.js')
        .webpack('app.js')
        .webpack('document.js')
+       .webpack('document-edit.js')
        .combine(
          [
           'node_modules/jquery/dist/jquery.min.js',
           'node_modules/bootstrap-sass/assets/javascripts/bootstrap.min.js',
           'node_modules/select2/dist/js/select2.min.js',
           'resources/assets/vendor/js/annotator-full.min.js',
+          'node_modules/simplemde/dist/simplemde.min.js',
          ],
          'public/js/vendor.js'
        )
@@ -33,6 +35,7 @@ elixir((mix) => {
          'js/annotator-madison.js',
          'js/app.js',
          'js/document.js',
+         'js/document-edit.js',
          'js/vendor.js'
        ])
   ;
