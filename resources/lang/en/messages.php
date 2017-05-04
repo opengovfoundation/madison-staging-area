@@ -367,6 +367,20 @@ return [
             'admin' => 'Admin Notifications',
         ],
 
+        'frequencies' => [
+            App\Models\NotificationPreference::FREQUENCY_IMMEDIATELY => [
+                'label' => 'Immediately',
+            ],
+            App\Models\NotificationPreference::FREQUENCY_DAILY => [
+                'label' => 'Daily',
+                'subject' => 'Notifications for :dateStr',
+                'intro' => 'Here are you notifications for the day.',
+            ],
+            App\Models\NotificationPreference::FREQUENCY_NEVER => [
+                'label' => 'Never',
+            ],
+        ],
+
         // actual notification content
         'madison' => [
             'comment' => [

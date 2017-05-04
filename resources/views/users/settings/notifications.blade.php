@@ -12,13 +12,22 @@
                 <div class="panel-body">
                     @foreach($notificationPreferences as $notificationClass => $value)
                         @php($targetNotification = request()->input('notification') === $notificationClass::getName())
-                        <div class="{{ $targetNotification ? 'anchor-target' : '' }}">
-                            {{ Form::mInput(
-                                'checkbox',
-                                $notificationClass::getName(),
-                                trans($notificationClass::baseMessageLocation().'.preference_description'),
-                                $value
-                            ) }}
+                        <div class="row">
+                            <div class="col-xs-12 col-md-9 text-right {{ $targetNotification ? 'anchor-target' : '' }}">
+                               @lang($notificationClass::baseMessageLocation().'.preference_description')
+                            </div>
+                            <div class="col-xs-12 col-md-3">
+                                {{ Form::mSelect(
+                                    $notificationClass::getName(),
+                                    null,
+                                    collect($frequencyOptions)->mapWithKeys_v2(function ($f) { return [$f => trans('messages.notifications.frequencies.'.$f.'.label')]; })->toArray(),
+                                    $value,
+                                    [
+                                        'label-sr-only' => true,
+                                        'class' => 'no-select2',
+                                    ]
+                                ) }}
+                            </div>
                         </div>
                     @endforeach
                 </div>
