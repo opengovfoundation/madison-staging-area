@@ -105,7 +105,6 @@
                     '|',
                     'unordered-list',
                     'ordered-list',
-                    'table',
                     '|',
                     'guide',
                     {
