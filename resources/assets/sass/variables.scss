@@ -35,3 +35,7 @@ $breadcrumb-separator: "\00BB";
 
 $jumbotron-color: white;
 $jumbotron-bg: $ogf-dark-blue;
+
+$fa-font-path: "/fonts";
+
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables";
