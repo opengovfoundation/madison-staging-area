@@ -19,6 +19,7 @@
         "predis/predis": "^1.1",
         "roumen/feed": "~2.10",
         "roumen/sitemap": "2.4.*",
+        "watson/active": "^2.0",
         "zizaco/entrust": "dev-master"
     },
     "require-dev": {
