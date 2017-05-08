@@ -13,6 +13,7 @@ const elixir = require('laravel-elixir');
 
 elixir((mix) => {
     mix.sass('app.scss')
+       .sass('mail.scss', 'resources/views/vendor/mail/html/themes/opengov.css')
        .webpack('annotator-madison.js')
        .webpack('app.js')
        .webpack('document.js')
