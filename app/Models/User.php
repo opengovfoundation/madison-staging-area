@@ -314,4 +314,9 @@ class User extends Authenticatable
         $gravatarHash = md5(strtolower(trim($this->email ?: $this->display_name)));
         return "https://www.gravatar.com/avatar/$gravatarHash?s=45&d=mm";
     }
+
+    public function loginTokens()
+    {
+        return $this->hasMany('App\Models\LoginToken');
+    }
 }
