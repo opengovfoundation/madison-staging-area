@@ -4,9 +4,9 @@ namespace App\Notifications;
 
 use App\Models\Doc as Document;
 use App\Models\User;
+use App\Notifications\Messages\MailMessage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 
 class DocumentPublished extends Notification implements ShouldQueue
 {
@@ -47,7 +47,7 @@ class DocumentPublished extends Notification implements ShouldQueue
     {
         $url = $this->document->url;
 
-        return (new MailMessage)
+        return (new MailMessage($this, $notifiable))
                     ->subject(trans(static::baseMessageLocation().'.subject', [
                         'document' => $this->document->title,
                     ]))

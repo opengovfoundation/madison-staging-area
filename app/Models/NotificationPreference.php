@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -202,5 +201,28 @@ class NotificationPreference extends Model
         foreach ($events as $eventName => $eventClass) {
             NotificationPreference::addNotificationForUser($eventName, $user->id);
         }
+    }
+
+    public static function getUnsubscribeText($notification, $notifiable)
+    {
+        // TODO: generate one time use token for user
+
+        // TODO: build link to single notification highlight
+        $specificLink = route('users.settings.notifications.edit', [
+            'user' => $notifiable,
+            'notification' => $notification::getName(),
+        ]);
+
+        // TODO: build link to notification
+        $allLink = route('users.settings.notifications.edit', [
+            'user' => $notifiable
+        ]);
+
+        return trans('messages.notifications.unsubscribe', [
+            'specificOpen' => '<a href="'.$specificLink.'">',
+            'specificClose' => '</a>',
+            'allOpen' => '<a href="'.$allLink.'">',
+            'allClose' => '</a>',
+        ]);
     }
 }

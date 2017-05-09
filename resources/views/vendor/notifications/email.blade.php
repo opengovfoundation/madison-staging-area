@@ -42,13 +42,16 @@
 @endif
 
 <!-- Subcopy -->
-@if (isset($actionText))
 @component('mail::subcopy')
 
+@if (isset($actionText))
 @lang('messages.notifications.having_trouble', ['actionText' => $actionText])
  [{{ $actionUrl }}]({{ $actionUrl }})
-
-@lang('messages.notifications.unsubscribe')
-@endcomponent
 @endif
+
+@if (isset($notification) && isset($notifiable))
+{!! \App\Models\NotificationPreference::getUnsubscribeText($notification, $notifiable) !!}
+@endif
+
+@endcomponent
 @endcomponent
