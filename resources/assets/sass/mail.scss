@@ -1,5 +1,12 @@
 @import "variables";
 
+$laravel-white: #F2F4F6;
+$laravel-gray: #74787E;
+$laravel-gray-light: #9BA2AB;
+$laravel-gray-light-2: #AEAEAE;
+$laravel-gray-lighter: #EDEFF2;
+$laravel-blue: #3869D4;
+
 /* Base */
 body, body *:not(html):not(style):not(br):not(tr):not(code) {
     font-family: Avenir, Helvetica, sans-serif;
@@ -8,7 +15,7 @@ body, body *:not(html):not(style):not(br):not(tr):not(code) {
 
 body {
     background-color: $ogf-dark-blue;
-    color: #74787E;
+    color: $laravel-gray;
     height: 100%;
     line-height: 1.4;
     margin: 0;
@@ -25,7 +32,7 @@ blockquote {
 }
 
 a {
-    color: #3869D4;
+    color: $link-color;
 }
 
 a img {
@@ -134,7 +141,7 @@ img {
 /* Subcopy */
 
 .subcopy {
-    border-top: 1px solid #EDEFF2;
+    border-top: 1px solid $laravel-gray-lighter;
     margin-top: 25px;
     padding-top: 25px;
 }
@@ -156,7 +163,7 @@ img {
 }
 
 .footer p {
-    color: #AEAEAE;
+    color: $laravel-gray-light-2;
     font-size: 12px;
     text-align: center;
 }
@@ -172,12 +179,12 @@ img {
 }
 
 .table th {
-    border-bottom: 1px solid #EDEFF2;
+    border-bottom: 1px solid $laravel-gray-lighter;
     padding-bottom: 8px;
 }
 
 .table td {
-    color: #74787E;
+    color: $laravel-gray;
     font-size: 15px;
     line-height: 18px;
     padding: 10px 0;
@@ -242,7 +249,7 @@ img {
 }
 
 .panel-content {
-    background-color: #EDEFF2;
+    background-color: $laravel-gray-lighter;
     padding: 16px;
 }
 
@@ -259,7 +266,7 @@ img {
 
 .promotion {
     background-color: #FFFFFF;
-    border: 2px dashed #9BA2AB;
+    border: 2px dashed $laravel-gray-light;
     margin: 0;
     margin-bottom: 25px;
     margin-top: 25px;
