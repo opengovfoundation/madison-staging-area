@@ -37,4 +37,16 @@ class SettingsPage extends BasePage
             '@addPageBtn' => '.document-pages-toolbar .add-page',
         ];
     }
+
+    public function setCodeMirrorTextForField(Browser $browser, $field, $text)
+    {
+        $selector = '[name=' . $field . '] + .editor-toolbar + .CodeMirror';
+        $checkScript = '!!document.querySelector("' . $selector . '").CodeMirror';
+        $script = 'document.querySelector("' . $selector . '").CodeMirror.setValue("' . $text . '");';
+
+        return $browser
+            ->waitUntil($checkScript)
+            ->driver->executeScript($script)
+            ;
+    }
 }
