@@ -95,6 +95,7 @@ class SettingsTest extends DuskTestCase
             $browser
                 ->loginAs($user)
                 ->visit($this->page)
+                ->pause(1000)
                 ->type('title', $newData['title'])
                 ->type('introtext', $newData['introtext'])
                 ->select('publish_state', $newData['publish_state'])
