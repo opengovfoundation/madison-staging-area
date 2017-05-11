@@ -186,7 +186,7 @@ class UserTest extends DuskTestCase
             }
 
             foreach (collect(array_keys($events))->diff($activePreferences) as $eventName) {
-                $browser->assertSelected($eventName, NotificationPreference::FREQUENCY_NEVER);
+                $browser->assertSelected($eventName, ''); // FREQUENCY_NEVER is null, which translates to ''
             }
         });
     }

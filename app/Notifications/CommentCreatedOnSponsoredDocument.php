@@ -12,6 +12,7 @@ class CommentCreatedOnSponsoredDocument extends Notification implements ShouldQu
     use Queueable;
 
     public $comment;
+    public $commentType;
 
     /**
      * Create a new notification instance.

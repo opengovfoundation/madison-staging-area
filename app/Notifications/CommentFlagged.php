@@ -12,6 +12,7 @@ class CommentFlagged extends Notification implements ShouldQueue
     use Queueable;
 
     public $flag;
+    public $parentType;
 
     /**
      * Create a new notification instance.

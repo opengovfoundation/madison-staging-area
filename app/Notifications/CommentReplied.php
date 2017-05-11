@@ -13,6 +13,7 @@ class CommentReplied extends Notification implements ShouldQueue
 
     public $comment;
     public $parent;
+    public $parentType;
 
     /**
      * Create a new notification instance.
