@@ -12,6 +12,7 @@ class CommentLiked extends Notification implements ShouldQueue
     use Queueable;
 
     public $like;
+    public $parentType;
 
     /**
      * Create a new notification instance.
