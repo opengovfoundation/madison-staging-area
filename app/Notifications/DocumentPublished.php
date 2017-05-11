@@ -46,12 +46,13 @@ class DocumentPublished extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         $url = $this->document->url;
+        $shareUrl = 'https://twitter.com/intent/tweet/?url=' . urlencode($url) . '&text=' . urlencode($this->document->title);
 
         return (new MailMessage)
                     ->subject(trans(static::baseMessageLocation().'.subject', [
                         'document' => $this->document->title,
                     ]))
-                    ->action(trans('messages.notifications.see_document'), $url)
+                    ->markdown('emails.document_published', compact('url', 'shareUrl'))
                     ;
     }
 
