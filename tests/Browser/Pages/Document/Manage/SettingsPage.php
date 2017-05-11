@@ -34,19 +34,25 @@ class SettingsPage extends BasePage
     {
         return [
             '@submitBtn' => '#content form button[type=submit]',
-            '@addPageBtn' => '.document-pages-toolbar .add-page',
         ];
+    }
+
+    public function waitForCodeMirror(Browser $browser)
+    {
+        $selector = static::codeMirrorSelectorForField('introtext');
+        return $browser->waitUntil('!!document.querySelector("' . $selector . '").CodeMirror;');
     }
 
     public function setCodeMirrorTextForField(Browser $browser, $field, $text)
     {
-        $selector = '[name=' . $field . '] + .editor-toolbar + .CodeMirror';
-        $checkScript = '!!document.querySelector("' . $selector . '").CodeMirror';
+        $selector = static::codeMirrorSelectorForField($field);
         $script = 'document.querySelector("' . $selector . '").CodeMirror.setValue("' . $text . '");';
 
-        return $browser
-            ->waitUntil($checkScript)
-            ->driver->executeScript($script)
-            ;
+        return $browser->driver->executeScript($script);
+    }
+
+    public static function codeMirrorSelectorForField($field)
+    {
+        return '[name=' . $field . '] + .editor-toolbar + .CodeMirror';
     }
 }
