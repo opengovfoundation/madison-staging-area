@@ -378,6 +378,7 @@ return [
                 'published' => [
                     'preference_description' => 'When new documents are published',
                     'subject' => ':document has been published',
+                    'share_on_twitter' => 'Share this document on Twitter',
                 ],
             ],
 
