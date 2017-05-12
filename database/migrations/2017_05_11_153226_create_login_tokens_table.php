@@ -17,7 +17,8 @@ class CreateLoginTokensTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->timestamp('expires_at');
-            $table->integer('token')->unsigned();
+            $table->char('token', 20)->index();
+            $table->integer('user_id')->unsigned();
             $table
                 ->foreign('user_id')
                 ->references('id')

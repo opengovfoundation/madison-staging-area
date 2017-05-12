@@ -35,13 +35,13 @@
 
 @endforeach
 
-<!-- Salutation -->
+{{-- Salutation --}}
 @if (! empty($salutation))
 {{ $salutation }}
 @else
 @endif
 
-<!-- Subcopy -->
+{{-- Subcopy --}}
 @component('mail::subcopy')
 
 @if (isset($actionText))
@@ -49,8 +49,8 @@
  [{{ $actionUrl }}]({{ $actionUrl }})
 @endif
 
-@if (isset($notification) && isset($notifiable))
-{!! \App\Models\NotificationPreference::getUnsubscribeText($notification, $notifiable) !!}
+@if (isset($unsubscribeMarkdown))
+{!! $unsubscribeMarkdown !!}
 @endif
 
 @endcomponent

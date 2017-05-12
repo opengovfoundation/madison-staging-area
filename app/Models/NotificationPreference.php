@@ -203,26 +203,20 @@ class NotificationPreference extends Model
         }
     }
 
-    public static function getUnsubscribeText($notification, $notifiable)
+    public static function getUnsubscribeMarkdown($notification, $notifiable)
     {
-        // TODO: generate one time use token for user
-
-        // TODO: build link to single notification highlight
-        $specificLink = route('users.settings.notifications.edit', [
+        $token = $notifiable->loginTokens()->create([]);
+        $params = [
             'user' => $notifiable,
+            'login_token' => $token->token,
+        ];
+
+        $specificLink = route('users.settings.notifications.edit', $params + [
             'notification' => $notification::getName(),
         ]);
 
-        // TODO: build link to notification
-        $allLink = route('users.settings.notifications.edit', [
-            'user' => $notifiable
-        ]);
+        $allLink = route('users.settings.notifications.edit', $params);
 
-        return trans('messages.notifications.unsubscribe', [
-            'specificOpen' => '<a href="'.$specificLink.'">',
-            'specificClose' => '</a>',
-            'allOpen' => '<a href="'.$allLink.'">',
-            'allClose' => '</a>',
-        ]);
+        return trans('messages.notifications.unsubscribe', compact('specificLink', 'allLink'));
     }
 }
