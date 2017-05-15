@@ -20,15 +20,16 @@ class CheckForLoginToken
     {
         if (!Auth::check()) {
             $maybeToken = $request->input('login_token');
+            $maybeEmail = $request->input('login_email');
 
-            if ($maybeToken) {
+            if ($maybeToken && $maybeEmail) {
                 $token = LoginToken
                     ::where('token', $maybeToken)
                     ->where('expires_at', '>=', Carbon::now())
                     ->first()
                     ;
 
-                if ($token) {
+                if ($token && $maybeEmail === $token->user->email) {
                     Auth::login($token->user);
                     $token->delete();
                 }

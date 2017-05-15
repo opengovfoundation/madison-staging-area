@@ -209,6 +209,7 @@ class NotificationPreference extends Model
         $params = [
             'user' => $notifiable,
             'login_token' => $token->token,
+            'login_email' => $notifiable->email,
         ];
 
         $specificLink = route('users.settings.notifications.edit', $params + [
