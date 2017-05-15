@@ -64,6 +64,10 @@
       color: lighten($ogf-blue, 10%);
     }
 
+    &.active {
+      box-shadow: none;
+    }
+
     &.support:hover,
     &.support.active {
       border-color: $ogf-blue;
