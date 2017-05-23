@@ -294,6 +294,8 @@ class User extends Authenticatable
         $adminRole = Role::adminRole();
         $this->attachRole($adminRole);
 
+        NotificationPreference::setDefaultAdminPreferences($this);
+
         return $this;
     }
 
@@ -305,6 +307,8 @@ class User extends Authenticatable
 
         $adminRole = Role::adminRole();
         $this->detachRole($adminRole);
+
+        NotificationPreference::removeAdminPreferences($this);
 
         return $this;
     }
