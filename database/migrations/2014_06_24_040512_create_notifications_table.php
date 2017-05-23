@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOldNotificationsTable extends Migration
+class CreateNotificationsTable extends Migration
 {
     /**
      * Run the migrations.
