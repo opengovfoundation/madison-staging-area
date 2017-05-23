@@ -64,6 +64,7 @@ class NotificationPreference extends Model
     {
         $validNotifications = [
             'SponsorNeedsApproval',
+            'UserCreated',
         ];
 
         return static::buildNotificationsFromEventNames($validNotifications);
