@@ -42,13 +42,11 @@ class UserCreated extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        // TODO: where to send them?
-        $url = route('admin.sponsors.index');
+        $url = route('admin.users.index');
 
         return (new MailMessage)
                     ->subject(trans(static::baseMessageLocation().'.subject', ['name' => $this->sponsor->name]))
-                    // TODO: what to say?
-                    ->action(trans('messages.notifications.review_sponsor'), $url)
+                    ->action(trans('messages.admin.manage_users'), $url)
                     ;
     }
 
