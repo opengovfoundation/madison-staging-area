@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Models\Sponsor;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -11,7 +11,7 @@ class UserCreated extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected $sponsor;
+    protected $user;
 
     /**
      * Create a new notification instance.
@@ -45,7 +45,7 @@ class UserCreated extends Notification implements ShouldQueue
         $url = route('admin.users.index');
 
         return (new MailMessage)
-                    ->subject(trans(static::baseMessageLocation().'.subject', ['name' => $this->sponsor->name]))
+                    ->subject(trans(static::baseMessageLocation().'.subject', ['name' => $this->user->name]))
                     ->action(trans('messages.admin.manage_users'), $url)
                     ;
     }
