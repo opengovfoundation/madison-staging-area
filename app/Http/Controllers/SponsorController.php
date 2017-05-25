@@ -55,7 +55,7 @@ class SponsorController extends Controller
 
         if ($sponsor->save()) {
             $sponsor->addMember(Auth::user()->id, Sponsor::ROLE_OWNER);
-            event(new SponsorCreated($sponsor));
+            event(new SponsorCreated($sponsor, Auth::user()));
 
             flash(trans('messages.sponsor.created'));
             return redirect()->route('sponsors.awaiting-approval', $sponsor->id);
