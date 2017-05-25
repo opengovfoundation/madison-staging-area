@@ -58,7 +58,7 @@ class SponsorController extends Controller
             event(new SponsorCreated($sponsor, Auth::user()));
 
             flash(trans('messages.sponsor.created'));
-            return redirect()->route('sponsors.awaiting-approval', $sponsor->id);
+            return redirect()->route('sponsors.awaiting-approval');
         } else {
             flash(trans('messages.sponsor.create_failed'));
             return back()->withInput();
