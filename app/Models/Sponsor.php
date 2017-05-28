@@ -15,6 +15,7 @@ use App\Models\SponsorMember;
 use App\Models\Role;
 use App\Models\Permission;
 use App\Models\User;
+use App\Services\SearchQueryCompiler;
 
 use Log;
 
@@ -379,8 +380,8 @@ class Sponsor extends Model
                 MATCH (sponsors.address1) AGAINST (? IN BOOLEAN MODE) as address1_relevance,
                 MATCH (sponsors.address2) AGAINST (? IN BOOLEAN MODE) as address2_relevance,
                 MATCH (sponsors.city) AGAINST (? IN BOOLEAN MODE) as city_relevance,
-                MATCH (sponsors.state) AGAINST (? IN BOOLEAN MODE) as state_relevance
-                MATCH (sponsors.postal_code) AGAINST (? IN BOOLEAN MODE) as postal_code_relevance
+                MATCH (sponsors.state) AGAINST (? IN BOOLEAN MODE) as state_relevance,
+                MATCH (sponsors.postal_code) AGAINST (? IN BOOLEAN MODE) as postal_code_relevance,
                 MATCH (sponsors.phone) AGAINST (? IN BOOLEAN MODE) as phone_relevance
             ', [$search, $search, $search, $search, $search, $search, $search, $search])
             ->having('name_relevance', '>', '0')

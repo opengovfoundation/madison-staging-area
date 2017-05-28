@@ -45,16 +45,9 @@ class AdminController extends Controller
             $usersQuery->orderBy($orderField, $orderDir);
         }
 
-        $totalCount = with(clone $usersQuery)
-            ->addSelect(\DB::raw('count(*) as count'))
-            ->first()
-            ;
-        $totalCount = $totalCount ? $totalCount->count : 0;
-
-        $orderedAndLimitedUsers = $usersQuery
-            ->forPage($page, $limit)
-            ->get()
-            ;
+        $orderedUsers = $usersQuery->get();
+        $totalCount = $orderedUsers->count();
+        $orderedAndLimitedUsers = $orderedUsers->forPage($page, $limit);
 
         $users = new LengthAwarePaginator(
             $orderedAndLimitedUsers,
@@ -99,16 +92,9 @@ class AdminController extends Controller
             $sponsorsQuery->orderBy($orderField, $orderDir);
         }
 
-        $totalCount = with(clone $sponsorsQuery)
-            ->addSelect(\DB::raw('count(*) as count'))
-            ->first()
-            ;
-        $totalCount = $totalCount ? $totalCount->count : 0;
-
-        $orderedAndLimitedSponsors = $sponsorsQuery
-            ->forPage($page, $limit)
-            ->get()
-            ;
+        $orderedSponsors = $sponsorsQuery->get();
+        $totalCount = $orderedSponsors->count();
+        $orderedAndLimitedSponsors = $orderedSponsors->forPage($page, $limit);
 
         $sponsors = new LengthAwarePaginator(
             $orderedAndLimitedSponsors,
