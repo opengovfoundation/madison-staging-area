@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Config\Models\Config as ConfigModel;
+use App\Mail\SponsorOnboarding;
 use App\Models\Doc as Document;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Sponsor;
 use App\Http\Requests\Admin as Requests;
+use Mail;
 use SiteConfigSaver;
 
 class AdminController extends Controller
@@ -35,6 +37,13 @@ class AdminController extends Controller
     {
         $sponsor->status = $request->input('status');
         $sponsor->save();
+
+        if ($request->input('status') === Sponsor::STATUS_ACTIVE) {
+            foreach ($sponsor->members->pluck('user') as $member) {
+                Mail::to($member)
+                    ->send(new SponsorOnboarding\Prepare($member));
+            }
+        }
 
         flash(trans('messages.sponsor.status_updated'));
         return redirect()->route('admin.sponsors.index');
