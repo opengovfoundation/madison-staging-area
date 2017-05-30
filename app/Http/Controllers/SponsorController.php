@@ -33,6 +33,14 @@ class SponsorController extends Controller
     }
 
     /**
+     * Information page on becoming a sponsor.
+     */
+    public function guide(Request $request)
+    {
+        return view('sponsors.guide');
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

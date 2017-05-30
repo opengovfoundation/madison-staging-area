@@ -252,8 +252,7 @@ return [
         'onboarding' => [
             'salutation' => 'Hello :name,',
             'learn_more' => 'Want to learn more?',
-            // TODO: link to something here
-            'complete_guide' => 'You can read our complete guide to successful engagement',
+            'complete_guide' => 'You can read our [complete guide](:guideLink) to successful engagement',
 
             'prepare' => [
                 'subject' => 'Request to become a sponsor received',
