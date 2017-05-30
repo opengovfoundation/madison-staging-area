@@ -47,7 +47,7 @@ abstract class Notification
      */
     public function toLine()
     {
-        return '<a href="' . $this->actionUrl . '">' . $this->subjectText . '</a>';
+        return '[' . $this->subjectText . '](' . $this->actionUrl . ')';
     }
 
 }
