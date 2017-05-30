@@ -30,4 +30,4 @@ audience that can help promote engagement? *We suggest*:
 
 - **Who** exactly is asking the public for their opinion? This is communicated on your document by saying "Shared for feedback by [sponsor name]". *We suggest*:
   - Make the sponsor the person or organization that would be most appropriate and influential. For example, this could be a person like the Mayor or Chief Data Officer, or an organization like a city, a department, or nonprofit.
-  - Make sure that you have buy-in from everyone involved. For example, don’t attribute the engagement without getting the proper sign-offs.
+  - Make sure that you have buy-in from everyone involved. For example, don't attribute the engagement without getting the proper sign-offs.

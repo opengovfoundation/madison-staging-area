@@ -9,7 +9,7 @@
 @lang('messages.sponsor.onboarding.prepare.opening_2')
 
 
-@include('sponsors.onboarding.'.\Lang::getLocale().'.prepare')
+@includeLocale('sponsors.onboarding.$locale.prepare')
 
 
 # @lang('messages.sponsor.onboarding.learn_more')

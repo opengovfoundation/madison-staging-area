@@ -6,7 +6,7 @@
 @lang('messages.sponsor.onboarding.participate.opening')
 
 
-@include('sponsors.onboarding.'.\Lang::getLocale().'.participate')
+@includeLocale('sponsors.onboarding.$locale.participate')
 
 
 # @lang('messages.sponsor.onboarding.learn_more')

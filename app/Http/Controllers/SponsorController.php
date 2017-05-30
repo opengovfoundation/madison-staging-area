@@ -10,6 +10,7 @@ use App\Models\Sponsor;
 use App\Models\User;
 use Auth;
 use Illuminate\Http\Request;
+use GrahamCampbell\Markdown\Facades\Markdown;
 
 class SponsorController extends Controller
 {
@@ -20,8 +21,8 @@ class SponsorController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->except(['info']);
-        $this->middleware(UnapprovedSponsorRedirect::class)->except(['info', 'awaitingApproval']);
+        $this->middleware('auth')->except(['info', 'guide']);
+        $this->middleware(UnapprovedSponsorRedirect::class)->except(['info', 'awaitingApproval', 'guide']);
     }
 
     /**
@@ -37,7 +38,8 @@ class SponsorController extends Controller
      */
     public function guide(Request $request)
     {
-        return view('sponsors.guide');
+        $content = Markdown::convertToHtml(view('sponsors.onboarding.combined'));
+        return view('sponsors.guide', compact('content'));
     }
 
     /**
