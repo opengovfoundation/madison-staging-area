@@ -39,8 +39,11 @@ class SendDailyNotifications extends Command
     {
         User::all()->each(function ($user) {
             if ($user->notifications()->count() > 0) {
-                Mail::to($user)->send(new DailyNotifications($user));
-                $user->notifications()->delete();
+                // Make sure email exists and is verified
+                if ($user->email && empty($user->token)) {
+                    Mail::to($user)->send(new DailyNotifications($user));
+                    $user->notifications()->delete();
+                }
             }
         });
     }
