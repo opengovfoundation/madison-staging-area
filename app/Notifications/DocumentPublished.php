@@ -52,7 +52,8 @@ class DocumentPublished extends Notification implements ShouldQueue
                     ->subject(trans(static::baseMessageLocation().'.subject', [
                         'document' => $this->document->title,
                     ]))
-                    ->markdown('emails.document_published', compact('url', 'shareUrl'))
+                    ->action(trans('messages.notifications.see_document'), $url)
+                    ->line('[' . trans('messages.notifications.madison.document.published.share_on_twitter') . '](' . $shareUrl . ')')
                     ;
     }
 
