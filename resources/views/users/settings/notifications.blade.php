@@ -17,14 +17,14 @@
                                    @lang($notificationClass::baseMessageLocation().'.preference_description')
                                 </label>
                                 <div class="col-xs-12 col-md-3">
-                                    {{ Form::mSelect(
+                                    {{ Form::select(
                                         $notificationClass::getName(),
-                                        null,
                                         collect($frequencyOptions)->mapWithKeys_v2(function ($f) { return [$f => trans('messages.notifications.frequencies.'.$f.'.label')]; })->toArray(),
                                         $value,
                                         [
                                             'label-sr-only' => true,
-                                            'class' => 'no-select2',
+                                            'class' => 'no-select2 form-control',
+                                            'autocomplete' => 'off',
                                         ]
                                     ) }}
                                 </div>
