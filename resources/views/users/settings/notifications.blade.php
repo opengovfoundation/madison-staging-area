@@ -23,7 +23,7 @@
                                         collect($frequencyOptions)->mapWithKeys_v2(function ($f) { return [$f => trans('messages.notifications.frequencies.'.$f.'.label')]; })->toArray(),
                                         $value,
                                         [
-                                            'label-sr-only' => true,
+                                            'id' => $notificationClass::getName(),
                                             'class' => 'no-select2 form-control',
                                             'autocomplete' => 'off',
                                         ]
