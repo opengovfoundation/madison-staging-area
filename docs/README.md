@@ -156,8 +156,10 @@ These options include:
 
 * We're using Laravel's i18n system, language files are located in
   `resources/lang/`.
+  * We also have sponsor onboarding localized in lang-code specific folders in
+    `resources/views/sponsor/onboarding/`.
 * Make a new directory for the language code you wish to support in
-  `resources/lang/`, then copy over `messages.php` from the `en/` folder.
+  `resources/lang/`, then copy over each file from the `en/` folder.
 * Open each PHP file in the new directory and translate the values of each array
   element into the language you're interested in. Note, only translate the
   *values*, do not change the keys of the elements as that will break the

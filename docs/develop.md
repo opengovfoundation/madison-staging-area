@@ -75,15 +75,6 @@ This will run gulp in watch mode. To see what all is running, look at the
 
 All log output goes to `storage/logs/laravel.log`.
 
-### Running Queued Jobs
-
-During local development it's easiest to have the queue driver set to `sync` and
-running a command to watch for queue jobs and process them as they come in is..
-
-```
-$ php artisan queue:work
-```
-
 ### Application Consoles
 
 Accessing the database console with the default Vagrant setup can be done with:

@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/opengovfoundation/madison/tree/master.svg?style=svg)](https://circleci.com/gh/opengovfoundation/madison/tree/master)
 
-Madison is an open-source, collaborative document editing platform.  While
+Madison is an open-source document engagement and feedback platform.  While
 Madison can be used to collaborate on many different kinds of documents, the
 official version is being built legislative and policy documents in mind.
 
@@ -19,8 +19,7 @@ As of 4.0, Madison is a generally plain Laravel (PHP) application.
 
 ## User Guide
 
-Visit our [Engagement
-Guide](https://docs.google.com/document/d/1Kf_g6eqQlCiCn7p68kxPQLMP7sk7IZKFqf6hyJ118AY/edit)
+Visit our [Engagement Guide](https://mymadison.io/sponsors/guide)
 for information on using Madison to run engagement rounds.
 
 ## How to Help
