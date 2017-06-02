@@ -7,4 +7,9 @@
 @endforeach
 
 @lang('messages.notifications.salutation', ['name' => config('app.name')])
+
+@component('mail::subcopy')
+{!! $unsubscribeMarkdown !!}
+@endcomponent
+
 @endcomponent

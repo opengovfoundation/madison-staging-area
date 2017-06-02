@@ -24,6 +24,7 @@ class DailyNotifications extends Mailable
     public function __construct(User $user)
     {
         $this->user = $user;
+        $this->unsubscribeMarkdown = NotificationPreference::getUnsubscribeMarkdown(null, $user);
     }
 
     /**
@@ -38,6 +39,9 @@ class DailyNotifications extends Mailable
                 'messages.notifications.frequencies.' . NotificationPreference::FREQUENCY_DAILY . '.subject',
                 ['dateStr' => Carbon::now()->toFormattedDateString()]
             )
-        )->markdown('emails.daily_notifications', ['notifications' => $this->user->notifications]);
+        )->markdown('emails.daily_notifications', [
+            'notifications' => $this->user->notifications,
+            'unsubscribeMarkdown' => $this->unsubscribeMarkdown,
+        ]);
     }
 }

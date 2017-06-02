@@ -359,7 +359,8 @@ return [
         'salutation' => 'Regards,<br>:name',
         'having_trouble' => 'If you\'re having trouble clicking the ":actionText" button, copy and paste the URL below into your web browser:',
         'thank_you' => 'Thank you for using our application!',
-        'unsubscribe' => 'You can unsubscribe from these types of notifications [here](:specificLink) or manage all your notification preferences [here](:allLink).',
+        'unsubscribe_specific' => 'You can unsubscribe from these types of notifications [here](:specificLink).',
+        'unsubscribe_all' => 'You can manage all of your notification preferences [here](:allLink).',
 
         'groups' => [
             'user' => 'User Notifications',

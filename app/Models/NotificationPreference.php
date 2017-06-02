@@ -222,6 +222,8 @@ class NotificationPreference extends Model
 
     public static function getUnsubscribeMarkdown($notification, $notifiable)
     {
+        $markdown = '';
+
         $token = $notifiable->loginTokens()->create([]);
         $params = [
             'user' => $notifiable,
@@ -229,12 +231,17 @@ class NotificationPreference extends Model
             'login_email' => $notifiable->email,
         ];
 
-        $specificLink = route('users.settings.notifications.edit', $params + [
-            'notification' => $notification::getName(),
-        ]);
+        if ($notification) {
+            $specificLink = route('users.settings.notifications.edit', $params + [
+                'notification' => $notification::getName(),
+            ]);
+
+            $markdown = trans('messages.notifications.unsubscribe_specific', compact('specificLink')) . ' ';
+        }
 
         $allLink = route('users.settings.notifications.edit', $params);
+        $markdown .= trans('messages.notifications.unsubscribe_all', compact('allLink'));
 
-        return trans('messages.notifications.unsubscribe', compact('specificLink', 'allLink'));
+        return $markdown;
     }
 }
