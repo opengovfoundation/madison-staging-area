@@ -63,6 +63,7 @@ class CommentLiked extends Notification implements ShouldQueue
             'line' => $this->toLine(),
             'name' => static::getName(),
             'like_id' => $this->like->id,
+            'comment_type' => $this->parentType,
         ];
     }
 

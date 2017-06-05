@@ -66,6 +66,7 @@ class CommentReplied extends Notification implements ShouldQueue
             'name' => static::getName(),
             'parent_id' => $this->parent->id,
             'comment_id' => $this->comment->id,
+            'comment_type' => $this->parentType,
         ];
     }
 

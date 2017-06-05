@@ -62,6 +62,7 @@ class CommentFlagged extends Notification implements ShouldQueue
             'line' => $this->toLine(),
             'name' => static::getName(),
             'flag_id' => $this->flag->id,
+            'comment_type' => $this->parentType,
         ];
     }
 

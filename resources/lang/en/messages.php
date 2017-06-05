@@ -382,6 +382,21 @@ return [
             ],
         ],
 
+        'grouped' => [
+            'document' => [
+                'support_vote_changed' => [
+                    'support' => ':count users have voted in support of :document.',
+                    'oppose' => ':count users have voted in opposition of :document.',
+                ],
+            ],
+            'comment' => [
+                'created_on_sponsored' => ':count new comments have been created on :document.',
+                'liked' => ':count users have liked your :comment_type on :document.',
+                'flagged' => ':count users have flagged your :comment_type on :document.',
+                'replied' => ':count users have replied to your :comment_type on :document.',
+            ],
+        ],
+
         // actual notification content
         'madison' => [
             'comment' => [

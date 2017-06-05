@@ -4,6 +4,7 @@ namespace App\Mail;
 
 use App\Models\User;
 use App\Models\NotificationPreference;
+use App\Notifications\Notification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -34,13 +35,15 @@ class DailyNotifications extends Mailable
      */
     public function build()
     {
+        $groupedAndFormattedNotifications = Notification::groupAndFormatNotifications($this->user->notifications);
+
         return $this->subject(
             trans(
                 'messages.notifications.frequencies.' . NotificationPreference::FREQUENCY_DAILY . '.subject',
                 ['dateStr' => Carbon::now()->toFormattedDateString()]
             )
         )->markdown('emails.daily_notifications', [
-            'notifications' => $this->user->notifications,
+            'groupedAndFormattedNotifications' => $groupedAndFormattedNotifications,
             'unsubscribeMarkdown' => $this->unsubscribeMarkdown,
         ]);
     }

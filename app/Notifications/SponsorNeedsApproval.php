@@ -23,6 +23,7 @@ class SponsorNeedsApproval extends Notification implements ShouldQueue
     public function __construct(Sponsor $sponsor, User $instigator)
     {
         $this->sponsor = $sponsor;
+        $this->instigator = $instigator;
         $this->actionUrl = route('admin.sponsors.index');
         $this->subjectText = trans(static::baseMessageLocation().'.subject', ['name' => $this->sponsor->name]);
     }
