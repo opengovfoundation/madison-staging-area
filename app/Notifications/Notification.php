@@ -15,14 +15,6 @@ abstract class Notification
     public $actionUrl;
     public $subjectText;
 
-    public static $groupedNotificationTypes = [
-        'App\Notifications\SupportVoteChanged',
-        'App\Notifications\CommentCreatedOnSponsoredDocument',
-        'App\Notifications\CommentLiked',
-        'App\Notifications\CommentFlagged',
-        'App\Notifications\CommentReplied',
-    ];
-
     public static function baseMessageLocation()
     {
         return 'messages.notifications.'.static::getName();
@@ -95,7 +87,13 @@ abstract class Notification
         });
 
         $nonGroupedNotifications = $notifications->filter(function ($n) {
-            return !in_array($n->type, static::$groupedNotificationTypes);
+            return !in_array($n->type, [
+                'App\Notifications\SupportVoteChanged',
+                'App\Notifications\CommentCreatedOnSponsoredDocument',
+                'App\Notifications\CommentLiked',
+                'App\Notifications\CommentFlagged',
+                'App\Notifications\CommentReplied',
+            ]);
         });
 
         return collect([
