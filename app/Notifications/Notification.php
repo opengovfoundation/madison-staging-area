@@ -110,11 +110,22 @@ abstract class Notification
     {
         // Grouped by document
         return $notifications->map(function ($documentGroup, $documentId) {
-            $supports = $documentGroup->filter(function ($notification) {
+            $latestVotesByUniqueUsers = $documentGroup
+                ->sortByDesc('created_at') // Newest first
+                ->reduce(function ($filtered, $current) {
+                    // Only count the latest by each user
+                    if ($filtered->where('data.user_id', $current->data['user_id'])->count() > 0) {
+                        return $filtered;
+                    }
+                    return $filtered->push($current);
+                }, collect([]))
+                ;
+
+            $supports = $latestVotesByUniqueUsers->filter(function ($notification) {
                 return $notification->data['new_value'] === true;
             });
 
-            $opposes = $documentGroup->filter(function ($notification) {
+            $opposes = $latestVotesByUniqueUsers->filter(function ($notification) {
                 return $notification->data['new_value'] === false;
             });
 

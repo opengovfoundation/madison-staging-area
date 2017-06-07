@@ -375,7 +375,7 @@ return [
             App\Models\NotificationPreference::FREQUENCY_DAILY => [
                 'label' => 'Daily',
                 'subject' => 'Notifications for :dateStr',
-                'intro' => 'Here are you notifications for the day.',
+                'intro' => 'Here are your notifications for the day.',
             ],
             App\Models\NotificationPreference::FREQUENCY_NEVER => [
                 'label' => 'Never',
