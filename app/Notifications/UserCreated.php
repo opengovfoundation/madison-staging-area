@@ -3,9 +3,9 @@
 namespace App\Notifications;
 
 use App\Models\User;
+use App\Notifications\Messages\MailMessage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 
 class UserCreated extends Notification implements ShouldQueue
 {
@@ -21,17 +21,8 @@ class UserCreated extends Notification implements ShouldQueue
     public function __construct(User $user)
     {
         $this->user = $user;
-    }
-
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function via($notifiable)
-    {
-        return ['mail'];
+        $this->actionUrl = route('admin.users.index');
+        $this->subjectText = trans(static::baseMessageLocation().'.subject', ['name' => $this->user->name]);
     }
 
     /**
@@ -42,12 +33,10 @@ class UserCreated extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        $url = route('admin.users.index');
-
-        return (new MailMessage)
-                    ->subject(trans(static::baseMessageLocation().'.subject', ['name' => $this->user->name]))
-                    ->action(trans('messages.admin.manage_users'), $url)
-                    ;
+        return (new MailMessage($this, $notifiable))
+            ->subject($this->subjectText)
+            ->action(trans('messages.admin.manage_users'), $this->actionUrl)
+            ;
     }
 
     /**
@@ -59,6 +48,7 @@ class UserCreated extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
+            'line' => $this->toLine(),
             'name' => static::getName(),
             'user_id' => $this->user->id,
         ];
