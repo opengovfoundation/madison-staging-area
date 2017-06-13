@@ -33,6 +33,10 @@ class ShouldSendNotification
         $recipient = $event->notifiable;
         $notification = $event->notification;
 
+        if (!method_exists($notification, 'getName')) {
+            return;
+        }
+
         // determine if the recipient *is allowed to receive* notifications from
         // this kind of event, i.e., if the event is not in the set of valid
         // notifications for the recipient, then skip it
