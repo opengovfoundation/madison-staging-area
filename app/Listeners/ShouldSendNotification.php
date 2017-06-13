@@ -33,7 +33,7 @@ class ShouldSendNotification
         $recipient = $event->notifiable;
         $notification = $event->notification;
 
-        if (!method_exists($notification, 'getName')) {
+        if (!($notification instanceof \App\Contracts\Notification)) {
             return;
         }
 
